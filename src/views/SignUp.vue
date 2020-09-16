@@ -18,12 +18,12 @@ import {signUp} from '@/api/user'
 export default {
   data () {
     return {
-        login: '',
-        password: '',
-        firstName: '',
-        lastName: '',
-        group: '',
-        vkRef: '',
+        login: 'makin',
+        password: 'qwerty',
+        firstName: 'Макс',
+        lastName: 'Овчинников',
+        group: 'ИУ5-228',
+        vkRef: 'https://vk.com/janmakin',
         errorMessage: ''
     }
   },
