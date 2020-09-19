@@ -1,0 +1,35 @@
+.layout {
+    margin: auto;
+    padding: 3rem;
+    max-width: 350px;
+    background-color: #eeca95c4;
+  }
+  @media screen and (max-width: 480px) { 
+      .layout {
+        margin: 0 auto;
+      }
+  }
+  .layout__item {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+
+  .layout__title {
+    text-align: center;
+    color: white;
+  }
+
+  .layout__actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+  @media screen and (max-width: 480px) { 
+    .layout__actions {
+      flex-direction: column;
+    }
+    .layout__action {
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+  }
