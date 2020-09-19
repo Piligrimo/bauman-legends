@@ -55,6 +55,8 @@ export default {
       }
       try {
         await signUp(args)
+        this.$store.commit('setAuth', true)
+        this.$router.push('/team')
       } catch (e) {
         this.errorMessage = e.response.data.message
         console.error(e)
