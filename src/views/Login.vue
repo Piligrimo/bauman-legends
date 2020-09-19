@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import {signIn} from '@/api/user'
+import {signIn, getUser} from '@/api/user'
+import store from '@/store'
 
 export default {
   data () {
@@ -24,6 +25,7 @@ export default {
         errorMessage: ''
     }
   },
+  store,
   computed: {
     isDisabled () {
       const fields = [this.login, this.password]
@@ -39,6 +41,9 @@ export default {
       }
       try {
         await signIn(args)
+        const response = await getUser()
+        console.log(response)
+        // this.store.commit('setAuth',)
       } catch (e) {
         this.errorMessage = e.message
         console.error(e)
