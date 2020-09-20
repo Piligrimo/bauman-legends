@@ -19,9 +19,22 @@
       <h3 class="layout__title">Команда № {{team.team_id}}</h3>
       <h3>Капитан: </h3><p>{{captain.first_name}} {{captain.last_name}}</p>
       <h3>Участники:</h3>
-      <p v-for="(member, i) in members" :key="i"> {{i+1}}. {{member.first_name}} {{member.last_name}}</p>
+      <div class="member" v-for="(member, i) in members" :key="i">
+        <p> {{i+1}}. {{member.first_name}} {{member.last_name}}</p>
+        <div v-if="isCaptain">
+          <font-awesome-icon
+            class="icon set-leader"
+            :icon="['fas', 'crown']"/>
+          <font-awesome-icon
+            class="icon kick-member"
+            :icon="['fas', 'user-minus']"
+          />
+        </div> 
+      </div>
       <h3>Баллы:</h3>
       <p>{{team.score}}</p>
+      <h3>Эсктра-баллы:</h3>
+      <p>{{team.money}}</p>
     </div>
   </div>
 </template>
@@ -59,6 +72,9 @@ export default {
   computed:{
     isAuth () {
       return this.$store.state.isAuth
+    },
+    isCaptain () {
+      return this.$store.state.user?.role === 'CAPTAIN'
     }
   },
   watch: {
@@ -92,6 +108,20 @@ export default {
 </script>
 
 <style scoped>
-  
+  .member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .icon {
+    margin: 3px;
+  }
+  .set-leader {
+    color: #ffa600;
+  }
+
+  .kick-member {
+    color: red;
+  }
 </style>
  
