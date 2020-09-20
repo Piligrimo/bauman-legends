@@ -92,41 +92,6 @@ export default {
 </script>
 
 <style scoped>
-  .login {
-    margin: auto;
-    padding: 3rem;
-    max-width: 350px;
-    background-color: #eeca95c4;
-  }
-  @media screen and (max-width: 480px) { 
-      .login {
-        margin: 0 auto;
-      }
-  }
-  .login__item {
-    margin-top: 0.5rem;
-    width: 100%;
-  }
-
-  .login__title {
-    text-align: center;
-    color: white;
-  }
-
-  .login__actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-  }
-  @media screen and (max-width: 480px) { 
-    .login__actions {
-      flex-direction: column;
-    }
-    .login__action {
-      margin-top: 0.5rem;
-      width: 100%;
-    }
-  }
   
 </style>
  

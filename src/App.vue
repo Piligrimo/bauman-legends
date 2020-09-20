@@ -27,7 +27,7 @@
 
 <script>
 import store from '@/store'
-import {logOut, getUser} from '@/api/user'
+import {logOut} from '@/api/user'
 export default {
   data () {
     return {
@@ -35,16 +35,8 @@ export default {
     }
   },
   async created () {
-    try {
-      const {data} = await getUser()
-      console.log(data) 
-      if (data?.user_id) 
-        this.$store.commit('setAuth', true) 
-      else
-        this.$store.commit('setAuth', false)
-    } catch (e) {
-        this.$store.commit('setAuth', false)
-    }
+    console.log('created')
+    await store.dispatch('getUser')
   },
   store,
   methods: {
