@@ -1,8 +1,21 @@
 <template>
   <div id="app">
     <div v-if="$store.state.isAuth" class="header">
-      <i class="el-icon-more"></i>
+      <i class="el-icon-more" @click="collapsed = !collapsed"></i>
       <p @click="logOut">Выйти</p>
+    </div>
+    <div v-if="$store.state.isAuth" class="sidebar">
+      <el-menu 
+      router
+        class="menu"
+        :collapse="collapsed"
+        background-color="#20245c"
+        active-text-color="#ffffff"
+        text-color="#ffca85"
+      >
+        <el-menu-item index="team">Моя команда</el-menu-item>
+        <el-menu-item index="game">Задание</el-menu-item>
+      </el-menu>
     </div>
     <div class="content">
       <router-view/>  
@@ -16,11 +29,12 @@ import {logOut, getUser} from '@/api/user'
 export default {
   data () {
     return {
+      collapsed: true
     }
   },
   async created () {
     try {
-      const {data} = getUser()
+      const {data} = await getUser()
       console.log(data) 
       if (data?.user_id) 
         this.$store.commit('setAuth', true)
@@ -53,11 +67,21 @@ export default {
  .header {
    min-height: 60px;
    padding: 0 1rem;
-   background-color: #854114;
+   background-color: #141744;
    display: flex;
    justify-content: space-between;
    align-items: center;
    color: white;
+ }
+ .sidebar {
+   position: absolute;
+   height: 100%;
+ }
+ .el-menu--collapse {
+   width: 0;
+ }
+ .menu {
+   height: 100%;
  }
  body {
    margin: 0;
