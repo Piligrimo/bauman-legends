@@ -4,19 +4,21 @@
       <i class="el-icon-more" @click="collapsed = !collapsed"></i>
       <p @click="logOut">Выйти</p>
     </div>
-    <div v-if="$store.state.isAuth" class="sidebar">
-      <el-menu 
-      router
-        class="menu"
-        :collapse="collapsed"
-        background-color="#20245c"
-        active-text-color="#ffffff"
-        text-color="#ffca85"
-      >
-        <el-menu-item index="team">Моя команда</el-menu-item>
-        <el-menu-item index="game">Задание</el-menu-item>
-      </el-menu>
-    </div>
+    <transition name="slide">
+      <div v-if="$store.state.isAuth && !collapsed" class="sidebar">
+        <el-menu 
+          router
+          :default-active="$route.path"
+          class="menu"
+          background-color="#20245c"
+          active-text-color="#ffffff"
+          text-color="#ffca85"
+        >
+          <el-menu-item index="/team" @click="collapsed = true">Моя команда</el-menu-item>
+          <el-menu-item index="/game" @click="collapsed = true">Задание</el-menu-item>
+        </el-menu>
+      </div>
+    </transition>
     <div class="content">
       <router-view/>  
     </div>
@@ -37,7 +39,7 @@ export default {
       const {data} = await getUser()
       console.log(data) 
       if (data?.user_id) 
-        this.$store.commit('setAuth', true)
+        this.$store.commit('setAuth', true) 
       else
         this.$store.commit('setAuth', false)
     } catch (e) {
@@ -82,6 +84,7 @@ export default {
  }
  .menu {
    height: 100%;
+   width: 300px;
  }
  body {
    margin: 0;
@@ -90,5 +93,15 @@ export default {
  html {
    height: 100%; 
  }
+ .slide-enter-active {
+  transition: all .3s ease;
+}
+.slide-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-enter, .slide-leave-to {
+  transform: translateX(-200px);
+  opacity: 0;
+}
  
 </style>
