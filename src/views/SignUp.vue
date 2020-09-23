@@ -8,7 +8,7 @@
     <el-input class="layout__item" placeholder="Учебная группа" v-model="group"/>
     <el-input class="layout__item" placeholder="Ссылка ВК" v-model="vkRef"/>
     <el-button class="layout__item" :disabled="isDisabled" @click="submitForm">Зарегистрироваться</el-button>
-    <p v-if="errorMessage">{{errorMessage}}</p>
+    <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
   </div>
 </template>
 
@@ -18,12 +18,12 @@ import {signUp} from '@/api/user'
 export default {
   data () {
     return {
-        login: 'makin',
-        password: 'qwerty',
-        firstName: 'Макс',
-        lastName: 'Овчинников',
-        group: 'ИУ5-228',
-        vkRef: 'https://vk.com/janmakin',
+        login: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        group: '',
+        vkRef: '',
         errorMessage: ''
     }
   },

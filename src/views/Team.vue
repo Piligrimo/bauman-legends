@@ -50,6 +50,7 @@
         Покинуть команду
       </el-button>
     </div>
+    <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
     <el-dialog
       title="Назначить капитана"
       :visible.sync="leaderDialogVisible"
@@ -113,7 +114,8 @@ export default {
       },
       leaderDialogVisible: false,
       kickDialogVisible: false,
-      leaveDialogVisible: false
+      leaveDialogVisible: false,
+      errorMessage: ''
     }
   },
   async created () {
@@ -138,22 +140,35 @@ export default {
   },
   methods: {
     async getTeam () {
+      this.errorMessage= ''
       try {
         const {data} = await getTeam()
         this.setTeam(data)
       } catch (e) {
-        console.log(e.response)
         if (e.response.status === 404)
-          this.team = null
+         {this.team = null}
+         else{
+           console.error(e)
+           this.errorMessage=e.response.data.message
+         }
       }
     },
     async joinTeam () {
-      const {data} = await joinTeam({team_id: this.teamIdInput, invite_code: this.inviteCode})
-      this.setTeam(data)
+      try {
+       const {data} = await joinTeam({team_id: this.teamIdInput, invite_code: this.inviteCode})
+        this.setTeam(data)
+      } catch (e) {
+        this.errorMessage=e.response.data.message
+      }
     },
     async createTeam () {
-      const {data} = await createTeam({team_name: this.teamNameInput})
-      this.setTeam(data)
+      console.log('create invalid')
+      try {
+        const {data} = await createTeam({team_name: this.teamNameInput})
+        this.setTeam(data)
+      } catch (e) {
+        this.errorMessage=e.response.data.message
+      }
     },
     async setTeam (team) {
       const {data} = await getTeamMembers()

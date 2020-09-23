@@ -1,7 +1,13 @@
+@import "./theme/index.css";
+
 @font-face {
   font-family: 'Cool jazz';
   src: url('./17632.ttf');
 
+}
+
+.error-message {
+  color: red;
 }
 
 .dialog-body {

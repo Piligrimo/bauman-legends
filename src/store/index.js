@@ -19,7 +19,6 @@ export default new Vuex.Store({
   actions: {
     async getUser({commit}) {
       try {
-        console.log('action')
         const {data} = await getUser()
         commit('setUser', data)
         if (data?.user_id) 
