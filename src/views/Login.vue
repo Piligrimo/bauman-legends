@@ -9,7 +9,7 @@
         <el-button class="layout__action" type="primary">Зарегистрироваться</el-button>
       </router-link>
     </div>
-    <p v-if="errorMessage">{{errorMessage}}</p>
+    <p  class="error-message" v-if="errorMessage">{{errorMessage}}</p>
   </div>
 </template>
 
