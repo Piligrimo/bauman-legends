@@ -15,19 +15,84 @@
       </div>
     </div>
     <div v-else-if="team">
-      <h3 class="layout__title">"{{team.team_name}}"</h3>
-      <h3 class="layout__title">Команда № {{team.team_id}}</h3>
+      <h2 class="layout__title">"{{team.team_name}}"</h2>
+      <h2 class="layout__title">Команда № {{team.team_id}}</h2>
       <h3>Капитан: </h3><p>{{captain.first_name}} {{captain.last_name}}</p>
       <h3>Участники:</h3>
-      <p v-for="(member, i) in members" :key="i"> {{i+1}}. {{member.first_name}} {{member.last_name}}</p>
-      <h3>Баллы:</h3>
-      <p>{{team.score}}</p>
+      <div class="team__member" v-for="(member, i) in members" :key="i">
+        <p> {{i+1}}. {{member.first_name}} {{member.last_name}}
+          <span v-if="member.user_id===$store.state.user.user_id">(ты)</span>
+        </p>
+        <div v-if="isCaptain">
+          <font-awesome-icon
+            class="icon set-leader"
+            :icon="['fas', 'crown']"
+            @click="openLeaderDialog(member)"
+          />
+          <font-awesome-icon
+            class="icon kick-member"
+            :icon="['fas', 'user-minus']"
+            @click="openKickDialog(member)"
+          />
+        </div> 
+      </div>
+      <p><span class="team__stat">Баллы: </span>{{team.score}}</p>
+      <p><span class="team__stat">Эсктра-баллы: </span>{{team.money}}</p>
+      <template v-if="isCaptain">
+        <p><span class="team__stat">Пригласительный код: </span>{{team.invite_code}}</p>
+        <p class="hint">сообщи этот код членам своей команды, чтоб они могли присоединиться</p>
+      </template>
+      <el-button
+        v-if="!isCaptain"
+        type="danger"
+        @click="openLeaveDialog"
+      >
+        Покинуть команду
+      </el-button>
     </div>
+    <el-dialog
+      title="Назначить капитана"
+      :visible.sync="leaderDialogVisible"
+      :before-close="closeDialog">
+      <p class="dialog-body">
+        {{chosenUser.first_name}} {{chosenUser.last_name}} станет капитаном вместо тебя. Продолжить?
+      </p>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="button" type="primary" @click="setLeader">Назначить</el-button>
+        <el-button class="button" @click="closeDialog">Отменить</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="Удалить члена команды"
+      :visible.sync="kickDialogVisible"
+      :before-close="closeDialog"
+    >
+      <p class="dialog-body">
+        {{chosenUser.first_name}} {{chosenUser.last_name}} покинет команду. Продолжить?
+      </p>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="button" type="primary" @click="kickMember">Удалить</el-button>
+        <el-button class="button" @click="closeDialog">Отменить</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="Покинуть команду"
+      :visible.sync="leaveDialogVisible"
+      :before-close="closeDialog"
+    >
+      <p class="dialog-body">
+        Ты действительно собираешься покинуть команду?
+      </p>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="button" type="primary" @click="leave">Покинуть</el-button>
+        <el-button class="button" @click="closeDialog">Отменить</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {getTeam, getTeamMembers, joinTeam, createTeam} from '@/api/team'
+import {getTeam, getTeamMembers, joinTeam, createTeam, setLeader, kickMember, leave} from '@/api/team'
 import store from '@/store'
 
 export default {
@@ -40,25 +105,29 @@ export default {
       teamNameInput: '',
       inviteCode: '',
       captain: '',
-      members: []
+      members: [],
+      chosenUser: {
+        first_name: '',
+        last_name: '',
+        user_id: ''
+      },
+      leaderDialogVisible: false,
+      kickDialogVisible: false,
+      leaveDialogVisible: false
     }
   },
   async created () {
     if (!this.$store.state.isAuth)
       this.$router.push('/login')
-    try {
-      const {data} = await this.getTeam()
-      this.setTeam(data)
-    } catch (e) {
-      console.log(e.response)
-      if (e.response.status === 404)
-        this.team = null
-    }
+    await this.getTeam()
   },
   store,
   computed:{
     isAuth () {
       return this.$store.state.isAuth
+    },
+    isCaptain () {
+      return this.$store.state.user?.user_id === this.team?.leader_id
     }
   },
   watch: {
@@ -69,12 +138,18 @@ export default {
   },
   methods: {
     async getTeam () {
-      return await getTeam()
+      try {
+        const {data} = await getTeam()
+        this.setTeam(data)
+      } catch (e) {
+        console.log(e.response)
+        if (e.response.status === 404)
+          this.team = null
+      }
     },
     async joinTeam () {
       const {data} = await joinTeam({team_id: this.teamIdInput, invite_code: this.inviteCode})
       this.setTeam(data)
-      
     },
     async createTeam () {
       const {data} = await createTeam({team_name: this.teamNameInput})
@@ -85,48 +160,75 @@ export default {
       this.team = team
       this.captain = data.find(member => member?.user_id === team?.leader_id)
       this.members = data.filter(member => member?.user_id !== team?.leader_id)
-      console.log(data)
+    },
+    openLeaderDialog(member) {
+      this.chosenUser = member
+      this.leaderDialogVisible = true
+    },
+    openKickDialog(member) {
+      this.chosenUser = member
+      this.kickDialogVisible = true
+    },
+    openLeaveDialog() {
+      this.leaveDialogVisible = true
+    },
+    closeDialog() {
+      this.chosenUser = {
+        first_name: '',
+        last_name: '',
+        user_id: ''
+      }
+      this.kickDialogVisible = false
+      this.leaderDialogVisible = false
+      this.leaveDialogVisible = false
+    },
+    async setLeader() {
+      const {data} = await setLeader(this.chosenUser.user_id)
+      this.setTeam(data)
+      this.closeDialog()
+    },
+    async kickMember() {
+      await kickMember(this.chosenUser.user_id)
+      await this.getTeam()
+      this.closeDialog()
+    },
+    async leave() {
+      await leave()
+      await this.getTeam()
+      this.closeDialog()
     }
   }
 }
 </script>
 
 <style scoped>
-  .login {
-    margin: auto;
-    padding: 3rem;
-    max-width: 350px;
-    background-color: #eeca95c4;
-  }
-  @media screen and (max-width: 480px) { 
-      .login {
-        margin: 0 auto;
-      }
-  }
-  .login__item {
-    margin-top: 0.5rem;
-    width: 100%;
-  }
-
-  .login__title {
-    text-align: center;
-    color: white;
-  }
-
-  .login__actions {
+  .team__member {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+  }
+  .icon {
+    margin: 3px;
+  }
+  .set-leader {
+    color: #ffa600;
+  }
+
+  .kick-member {
+    color: red;
+  }
+  .team__stat {
+    font-weight: bold;
+  }
+  .hint {
+    margin-top: -1rem;
+    font-size: 0.8rem;
+    line-height: 0.9rem;
+    color: #5f5f5f
+  }
+  .button {
+    width: 110px;
     margin-top: 0.5rem;
   }
-  @media screen and (max-width: 480px) { 
-    .login__actions {
-      flex-direction: column;
-    }
-    .login__action {
-      margin-top: 0.5rem;
-      width: 100%;
-    }
-  }
-  
 </style>
  

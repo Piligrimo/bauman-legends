@@ -55,7 +55,8 @@ export default {
       }
       try {
         await signUp(args)
-        this.$store.commit('setAuth', true)
+        await this.$store.dispatch('getUser')
+
         this.$router.push('/team')
       } catch (e) {
         this.errorMessage = e.response.data.message

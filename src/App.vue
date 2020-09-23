@@ -1,10 +1,34 @@
 <template>
   <div id="app">
     <div v-if="$store.state.isAuth" class="header">
-      <i class="el-icon-more"></i>
-      <p @click="logOut">Выйти</p>
+      <font-awesome-icon
+        class="icon"
+        :icon="['fas', 'bars']"
+        @click="collapsed = !collapsed"
+      />
+      <div class='logo'/>
+      <font-awesome-icon
+        class="icon"
+        :icon="['fas', 'sign-out-alt']"
+        @click="logOut"
+      />
     </div>
-    <div class="content">
+    <transition name="slide">
+      <div v-if="$store.state.isAuth && !collapsed" class="sidebar">
+        <el-menu 
+          router
+          :default-active="$route.path"
+          class="menu"
+          background-color="#20245c"
+          active-text-color="#ffffff"
+          text-color="#ffca85"
+        >
+          <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
+          <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
+        </el-menu>
+      </div>
+    </transition>
+    <div class="content info-bg">
       <router-view/>  
     </div>
   </div>
@@ -12,23 +36,15 @@
 
 <script>
 import store from '@/store'
-import {logOut, getUser} from '@/api/user'
+import {logOut} from '@/api/user'
 export default {
   data () {
     return {
+      collapsed: true
     }
   },
   async created () {
-    try {
-      const {data} = getUser()
-      console.log(data) 
-      if (data?.user_id) 
-        this.$store.commit('setAuth', true)
-      else
-        this.$store.commit('setAuth', false)
-    } catch (e) {
-        this.$store.commit('setAuth', false)
-    }
+    await this.$store.dispatch('getUser')
   },
   store,
   methods: {
@@ -44,20 +60,47 @@ export default {
   #app {
     height: 100%; 
   }
+  .default-bg {
+    background-image: url('./assets/bg.jpg');
+  }
+  .info-bg {
+    background-image: url('./assets/info-bg.png');
+  }
+  .logo {
+    background-image: url('./assets/logo.png');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
   .content{
     height: 100%; 
-    background-image: url('./assets/bg.jpg');
     background-size: cover;
-    padding: 3rem;
+    padding: 1rem;
   }
  .header {
    min-height: 60px;
    padding: 0 1rem;
-   background-color: #854114;
+   background-color: #141744;
    display: flex;
    justify-content: space-between;
    align-items: center;
    color: white;
+ }
+ .sidebar {
+   position: absolute;
+   font-family: 'Cool jazz';
+   height: 100%;
+ }
+ .el-menu--collapse {
+   width: 0;
+ }
+ .menu {
+   height: 100%;
+   width: 300px;
+ }
+ .menu-item {
+   font-size: 18px;
  }
  body {
    margin: 0;
@@ -66,5 +109,15 @@ export default {
  html {
    height: 100%; 
  }
+ .slide-enter-active {
+  transition: all .3s ease;
+}
+.slide-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-enter, .slide-leave-to {
+  transform: translateX(-200px);
+  opacity: 0;
+}
  
 </style>
