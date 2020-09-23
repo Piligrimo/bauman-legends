@@ -142,7 +142,6 @@ export default {
         const {data} = await getTeam()
         this.setTeam(data)
       } catch (e) {
-        console.log(e.response)
         if (e.response.status === 404)
           this.team = null
       }

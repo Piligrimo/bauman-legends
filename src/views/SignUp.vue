@@ -46,12 +46,12 @@ export default {
     async submitForm() {
       this.errorMessage = ''
       const args = {
-        login: this.login,
-        password: this.password,
-        first_name: this.firstName,
-        last_name: this.lastName,
-        group: this.group,
-        vk_ref: this.vkRef,
+        login: '',
+        password: '',
+        first_name: '',
+        last_name: '',
+        group: '',
+        vk_ref: ''
       }
       try {
         await signUp(args)
