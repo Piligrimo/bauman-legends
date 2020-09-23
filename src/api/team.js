@@ -16,3 +16,15 @@ export const joinTeam = async (args) => {
 export const createTeam = async (args) => {
     return await Axios.post(BASEURL+'/team/create', args, {withCredentials: true})
 }
+
+export const setLeader = async (args) => {
+    return await Axios.get(BASEURL+'/team/change?new_captain='+args, {withCredentials: true})
+}
+
+export const kickMember = async (args) => {
+    return await Axios.delete(BASEURL+'/team/kick?user_id='+args, {withCredentials: true})
+}
+
+export const leave =  async () => {
+    return await Axios.delete(BASEURL+'/team/leave', {withCredentials: true})
+}

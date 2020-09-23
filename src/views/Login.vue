@@ -50,9 +50,10 @@ export default {
       }
       try {
         await signIn(args)
-        this.$store.commit('setAuth', true)
-        this.$router.push('/team')
+        await this.$store.dispatch('getUser')
 
+        this.$router.push('/team')
+    
       } catch (e) {
         this.errorMessage = e.response.data.message
       }

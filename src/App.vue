@@ -1,8 +1,17 @@
 <template>
   <div id="app">
     <div v-if="$store.state.isAuth" class="header">
-      <i class="el-icon-more" @click="collapsed = !collapsed"></i>
-      <p @click="logOut">Выйти</p>
+      <font-awesome-icon
+        class="icon"
+        :icon="['fas', 'bars']"
+        @click="collapsed = !collapsed"
+      />
+      <div class='logo'/>
+      <font-awesome-icon
+        class="icon"
+        :icon="['fas', 'sign-out-alt']"
+        @click="logOut"
+      />
     </div>
     <transition name="slide">
       <div v-if="$store.state.isAuth && !collapsed" class="sidebar">
@@ -14,12 +23,12 @@
           active-text-color="#ffffff"
           text-color="#ffca85"
         >
-          <el-menu-item index="/team" @click="collapsed = true">Моя команда</el-menu-item>
-          <el-menu-item index="/game" @click="collapsed = true">Задание</el-menu-item>
+          <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
+          <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
         </el-menu>
       </div>
     </transition>
-    <div class="content">
+    <div class="content info-bg">
       <router-view/>  
     </div>
   </div>
@@ -35,8 +44,7 @@ export default {
     }
   },
   async created () {
-    console.log('created')
-    await store.dispatch('getUser')
+    await this.$store.dispatch('getUser')
   },
   store,
   methods: {
@@ -52,11 +60,23 @@ export default {
   #app {
     height: 100%; 
   }
+  .default-bg {
+    background-image: url('./assets/bg.jpg');
+  }
+  .info-bg {
+    background-image: url('./assets/info-bg.png');
+  }
+  .logo {
+    background-image: url('./assets/logo.png');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
   .content{
     height: 100%; 
-    background-image: url('./assets/bg.jpg');
     background-size: cover;
-    padding: 3rem;
+    padding: 1rem;
   }
  .header {
    min-height: 60px;
@@ -69,6 +89,7 @@ export default {
  }
  .sidebar {
    position: absolute;
+   font-family: 'Cool jazz';
    height: 100%;
  }
  .el-menu--collapse {
@@ -77,6 +98,9 @@ export default {
  .menu {
    height: 100%;
    width: 300px;
+ }
+ .menu-item {
+   font-size: 18px;
  }
  body {
    margin: 0;

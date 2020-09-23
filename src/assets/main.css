@@ -1,8 +1,18 @@
+@font-face {
+  font-family: 'Cool jazz';
+  src: url('./17632.ttf');
+
+}
+
+.dialog-body {
+  word-break: normal;
+}
 .layout {
+    font-family: 'Cool jazz';
     margin: auto;
-    padding: 3rem;
+    padding: 2rem;
     max-width: 350px;
-    background-color: #eeca95c4;
+    background-color: #ffffffd5;
   }
   @media screen and (max-width: 480px) { 
       .layout {
@@ -16,7 +26,7 @@
 
   .layout__title {
     text-align: center;
-    color: white;
+    color: #080D38;
   }
 
   .layout__actions {
