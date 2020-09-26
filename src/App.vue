@@ -62,6 +62,7 @@ export default {
 
   #mop {
     background-size: contain;
+    background-position-x: center;
     position: absolute;
     height: 100%; 
     width: 100%;
