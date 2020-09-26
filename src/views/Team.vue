@@ -2,8 +2,8 @@
   <div class="layout">
     <div v-if="team===null">
       <h3 class="layout__title">У вас пока нет команды</h3>
-      <el-radio v-model="toJoinTeam" :label="true">Присоединиться к команде</el-radio>
-      <el-radio v-model="toJoinTeam" :label="false">Создать команду</el-radio>
+      <el-radio v-model="toJoinTeam" size="medium" :label="true">Присоединиться к команде</el-radio>
+      <el-radio v-model="toJoinTeam" size="medium" :label="false">Создать команду</el-radio>
       <div v-if="toJoinTeam">
         <el-input class="layout__item" placeholder="ID команды" v-model="teamIdInput"/>
         <el-input class="layout__item" placeholder="Секретный код" v-model="inviteCode"/>
@@ -39,7 +39,9 @@
       <p><span class="team__stat">Баллы: </span>{{team.score}}</p>
       <p><span class="team__stat">Эсктра-баллы: </span>{{team.money}}</p>
       <template v-if="isCaptain">
-        <p><span class="team__stat">Пригласительный код: </span>{{team.invite_code}}</p>
+        <p>
+          <span class="team__stat">Пригласительный код: </span>
+          <span class="team__code">{{team.invite_code}}</span></p>
         <p class="hint">сообщи этот код членам своей команды, чтоб они могли присоединиться</p>
       </template>
       <el-button
@@ -221,6 +223,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: -1em;
   }
   .icon {
     margin: 3px;
@@ -233,6 +236,11 @@ export default {
     color: red;
   }
   .team__stat {
+    font-weight: bold;
+  }
+  .team__code {
+    font-family: monospace;
+    color: #5f5f5f;
     font-weight: bold;
   }
   .hint {

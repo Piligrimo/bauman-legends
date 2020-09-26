@@ -86,11 +86,13 @@ export default {
    justify-content: space-between;
    align-items: center;
    color: white;
+   z-index: 2;
  }
  .sidebar {
    position: absolute;
    font-family: 'Cool jazz';
    height: 100%;
+   z-index: 1;
  }
  .el-menu--collapse {
    width: 0;

@@ -1,7 +1,9 @@
 <template>
   <div class="layout">
     <div>
-      <h3 class="layout__title">Текущее задание</h3>
+      <h3 class="layout__title">Игра</h3>
+      <p>Тут будет отображаться ваше текущее задание, когда начнется игра</p>
+    </div>
   </div>
 </template>
 
