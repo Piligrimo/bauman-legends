@@ -342,6 +342,7 @@ export default {
   td {
     vertical-align: top;
     word-break: break-word;
+    min-width: 35px;
   }
   td:not(:first-child) {
     padding: 0 0.5rem;
