@@ -2,8 +2,8 @@
   <div class="layout">
     <div v-if="team===null">
       <h3 class="layout__title">У вас пока нет команды</h3>
-      <el-radio v-model="toJoinTeam" :label="true">Присоединиться к команде</el-radio>
-      <el-radio v-model="toJoinTeam" :label="false">Создать команду</el-radio>
+      <el-radio v-model="toJoinTeam" size="medium" :label="true">Присоединиться к команде</el-radio>
+      <el-radio v-model="toJoinTeam" size="medium" :label="false">Создать команду</el-radio>
       <div v-if="toJoinTeam">
         <el-input class="layout__item" placeholder="ID команды" v-model="teamIdInput"/>
         <el-input class="layout__item" placeholder="Секретный код" v-model="inviteCode"/>
@@ -223,6 +223,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: -1em;
   }
   .icon {
     margin: 3px;
@@ -239,6 +240,8 @@ export default {
   }
   .team__code {
     font-family: monospace;
+    color: #5f5f5f;
+    font-weight: bold;
   }
   .hint {
     margin-top: -1rem;
