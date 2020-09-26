@@ -14,38 +14,56 @@
   word-break: normal;
 }
 .layout {
-    font-family: 'Cool jazz';
-    margin: auto;
-    padding: 2rem;
-    max-width: 350px;
-    background-color: #ffffffd5;
+  font-family: 'Cool jazz';
+  margin: auto;
+  padding: 2rem;
+  max-width: 350px;
+  background-color: #ffffffd5;
+}
+@media screen and (max-width: 480px) { 
+    .layout {
+      margin: 0 auto;
+    }
+}
+.layout__item {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.layout__title {
+  text-align: center;
+  color: #080D38;
+}
+
+.layout__actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+@media screen and (max-width: 480px) { 
+  .layout__actions {
+    flex-direction: column;
   }
-  @media screen and (max-width: 480px) { 
-      .layout {
-        margin: 0 auto;
-      }
-  }
-  .layout__item {
+  .layout__action {
     margin-top: 0.5rem;
     width: 100%;
   }
+}
 
-  .layout__title {
-    text-align: center;
-    color: #080D38;
-  }
+.content{
+  height: 100%; 
+  background-size: cover;
+  padding: 1rem;
+}
 
-  .layout__actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-  }
-  @media screen and (max-width: 480px) { 
-    .layout__actions {
-      flex-direction: column;
-    }
-    .layout__action {
-      margin-top: 0.5rem;
-      width: 100%;
-    }
-  }
+.info-bg {
+  background-image: url('./info-bg.jpg');
+  background-color: #EFEAE2;
+}
+
+.login-bg {
+  background-image: url('./login-bg.jpg');
+  background-position: center bottom;
+  background-color: #080D38;
+}

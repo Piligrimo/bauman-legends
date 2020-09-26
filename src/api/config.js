@@ -1,1 +1,1 @@
-export const BASEURL = 'https://testing.legends.bmstu.ru'
+export const BASEURL = 'https://legends.bmstu.ru:450'

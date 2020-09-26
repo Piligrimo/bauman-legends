@@ -28,9 +28,7 @@
         </el-menu>
       </div>
     </transition>
-    <div class="content info-bg">
-      <router-view/>  
-    </div>
+    <router-view/>  
   </div>
 </template>
 
@@ -63,20 +61,13 @@ export default {
   .default-bg {
     background-image: url('./assets/bg.jpg');
   }
-  .info-bg {
-    background-image: url('./assets/info-bg.png');
-  }
+
   .logo {
-    background-image: url('./assets/logo.png');
+    background-image: url('./assets/smol-logo.jpg');
     background-size: cover;
     width: 50px;
     height: 50px;
     border-radius: 50%;
-  }
-  .content{
-    height: 100%; 
-    background-size: cover;
-    padding: 1rem;
   }
  .header {
    min-height: 60px;

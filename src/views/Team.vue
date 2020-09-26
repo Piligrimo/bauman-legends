@@ -1,96 +1,102 @@
 <template>
-  <div class="layout">
-    <div v-if="team===null">
-      <h3 class="layout__title">У вас пока нет команды</h3>
-      <el-radio v-model="toJoinTeam" size="medium" :label="true">Присоединиться к команде</el-radio>
-      <el-radio v-model="toJoinTeam" size="medium" :label="false">Создать команду</el-radio>
-      <div v-if="toJoinTeam">
-        <el-input class="layout__item" placeholder="ID команды" v-model="teamIdInput"/>
-        <el-input class="layout__item" placeholder="Секретный код" v-model="inviteCode"/>
-        <el-button class="layout__item"  @click="joinTeam">Присоединиться</el-button>
+  <div class="content info-bg">
+    <div class="layout">
+      <div v-if="team===null">
+        <h3 class="layout__title">У вас пока нет команды</h3>
+        <el-radio v-model="toJoinTeam" size="medium" :label="true">Присоединиться к команде</el-radio>
+        <el-radio v-model="toJoinTeam" size="medium" :label="false">Создать команду</el-radio>
+        <div v-if="toJoinTeam">
+          <el-input class="layout__item" placeholder="ID команды" v-model="teamIdInput"/>
+          <el-input class="layout__item" placeholder="Секретный код" v-model="inviteCode"/>
+          <el-button class="layout__item"  @click="joinTeam">Присоединиться</el-button>
+        </div>
+        <div v-else>
+          <el-input class="layout__item" placeholder="Название команды" v-model="teamNameInput"/>
+          <el-button class="layout__item"  @click="createTeam">Создать</el-button>
+        </div>
       </div>
-      <div v-else>
-        <el-input class="layout__item" placeholder="Название команды" v-model="teamNameInput"/>
-        <el-button class="layout__item"  @click="createTeam">Создать</el-button>
+      <div v-else-if="team">
+        <h2 class="layout__title">"{{team.team_name}}"</h2>
+        <h2 class="layout__title">Команда № {{team.team_id}}</h2>
+        <h3>Капитан: </h3><p>{{captain.first_name}} {{captain.last_name}}</p>
+        <h3>Участники:</h3>
+        <div class="team__member" v-for="(member, i) in members" :key="i">
+          <p> {{i+1}}. {{member.first_name}} {{member.last_name}}
+            <span v-if="member.user_id===$store.state.user.user_id">(ты)</span>
+          </p>
+          <div v-if="isCaptain">
+            <font-awesome-icon
+              class="icon set-leader"
+              :icon="['fas', 'crown']"
+              @click="openLeaderDialog(member)"
+            />
+            <font-awesome-icon
+              class="icon kick-member"
+              :icon="['fas', 'user-minus']"
+              @click="openKickDialog(member)"
+            />
+          </div> 
+        </div>
+        <p><span class="team__stat">Баллы: </span>{{team.score}}</p>
+        <p><span class="team__stat">Эсктра-баллы: </span>{{team.money}}</p>
+        <template v-if="isCaptain">
+          <p>
+            <span class="team__stat">Пригласительный код: </span>
+            <span class="team__code">{{team.invite_code}}</span></p>
+          <p class="hint">сообщи этот код членам своей команды, чтоб они могли присоединиться</p>
+        </template>
+        <el-button
+          v-if="!isCaptain"
+          type="danger"
+          @click="openLeaveDialog"
+        >
+          Покинуть команду
+        </el-button>
       </div>
-    </div>
-    <div v-else-if="team">
-      <h2 class="layout__title">"{{team.team_name}}"</h2>
-      <h2 class="layout__title">Команда № {{team.team_id}}</h2>
-      <h3>Капитан: </h3><p>{{captain.first_name}} {{captain.last_name}}</p>
-      <h3>Участники:</h3>
-      <div class="team__member" v-for="(member, i) in members" :key="i">
-        <p> {{i+1}}. {{member.first_name}} {{member.last_name}}
-          <span v-if="member.user_id===$store.state.user.user_id">(ты)</span>
-        </p>
-        <div v-if="isCaptain">
-          <font-awesome-icon
-            class="icon set-leader"
-            :icon="['fas', 'crown']"
-            @click="openLeaderDialog(member)"
-          />
-          <font-awesome-icon
-            class="icon kick-member"
-            :icon="['fas', 'user-minus']"
-            @click="openKickDialog(member)"
-          />
-        </div> 
-      </div>
-      <p><span class="team__stat">Баллы: </span>{{team.score}}</p>
-      <p><span class="team__stat">Эсктра-баллы: </span>{{team.money}}</p>
-      <template v-if="isCaptain">
-        <p>
-          <span class="team__stat">Пригласительный код: </span>
-          <span class="team__code">{{team.invite_code}}</span></p>
-        <p class="hint">сообщи этот код членам своей команды, чтоб они могли присоединиться</p>
-      </template>
-      <el-button
-        v-if="!isCaptain"
-        type="danger"
-        @click="openLeaveDialog"
+      <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
+      <el-dialog
+        title="Назначить капитана"
+        :visible.sync="leaderDialogVisible"
+        :before-close="closeDialog"
+        width="300px"
       >
-        Покинуть команду
-      </el-button>
+        <p class="dialog-body">
+          {{chosenUser.first_name}} {{chosenUser.last_name}} станет капитаном вместо тебя. Продолжить?
+        </p>
+        <span slot="footer" class="dialog-footer">
+          <el-button class="button" type="primary" @click="setLeader">Назначить</el-button>
+          <el-button class="button" @click="closeDialog">Отменить</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="Удалить члена команды"
+        :visible.sync="kickDialogVisible"
+        :before-close="closeDialog"
+        width="300px"
+      >
+        <p class="dialog-body">
+          {{chosenUser.first_name}} {{chosenUser.last_name}} покинет команду. Продолжить?
+        </p>
+        <span slot="footer" class="dialog-footer">
+          <el-button class="button" type="primary" @click="kickMember">Удалить</el-button>
+          <el-button class="button" @click="closeDialog">Отменить</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="Покинуть команду"
+        :visible.sync="leaveDialogVisible"
+        :before-close="closeDialog"
+        width="300px"
+      >
+        <p class="dialog-body">
+          Ты действительно собираешься покинуть команду?
+        </p>
+        <span slot="footer" class="dialog-footer">
+          <el-button class="button" type="primary" @click="leave">Покинуть</el-button>
+          <el-button class="button" @click="closeDialog">Отменить</el-button>
+        </span>
+      </el-dialog>
     </div>
-    <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
-    <el-dialog
-      title="Назначить капитана"
-      :visible.sync="leaderDialogVisible"
-      :before-close="closeDialog">
-      <p class="dialog-body">
-        {{chosenUser.first_name}} {{chosenUser.last_name}} станет капитаном вместо тебя. Продолжить?
-      </p>
-      <span slot="footer" class="dialog-footer">
-        <el-button class="button" type="primary" @click="setLeader">Назначить</el-button>
-        <el-button class="button" @click="closeDialog">Отменить</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog
-      title="Удалить члена команды"
-      :visible.sync="kickDialogVisible"
-      :before-close="closeDialog"
-    >
-      <p class="dialog-body">
-        {{chosenUser.first_name}} {{chosenUser.last_name}} покинет команду. Продолжить?
-      </p>
-      <span slot="footer" class="dialog-footer">
-        <el-button class="button" type="primary" @click="kickMember">Удалить</el-button>
-        <el-button class="button" @click="closeDialog">Отменить</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog
-      title="Покинуть команду"
-      :visible.sync="leaveDialogVisible"
-      :before-close="closeDialog"
-    >
-      <p class="dialog-body">
-        Ты действительно собираешься покинуть команду?
-      </p>
-      <span slot="footer" class="dialog-footer">
-        <el-button class="button" type="primary" @click="leave">Покинуть</el-button>
-        <el-button class="button" @click="closeDialog">Отменить</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
