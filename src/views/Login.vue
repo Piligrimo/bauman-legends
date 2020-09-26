@@ -2,8 +2,8 @@
   <div class="content login-bg">
     <div class="layout">
       <h3 class="layout__title">Логин</h3>
-      <el-input class="layout__item" placeholder="Логин" v-model="login"/>
-      <el-input class="layout__item" placeholder="Пароль" v-model="password" show-password/>
+      <el-input class="layout__item" disabled placeholder="Логин" v-model="login"/>
+      <el-input class="layout__item" disabled placeholder="Пароль" v-model="password" show-password/>
       <div  class="layout__actions">
         <el-button class="layout__action" type="primary" :disabled="isDisabled" @click="submitForm">Войти</el-button>
         <router-link to="/sign-up">
