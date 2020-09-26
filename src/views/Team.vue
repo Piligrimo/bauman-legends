@@ -6,9 +6,22 @@
         <el-radio v-model="toJoinTeam" size="medium" :label="true">Присоединиться к команде</el-radio>
         <el-radio v-model="toJoinTeam" size="medium" :label="false">Создать команду</el-radio>
         <div v-if="toJoinTeam">
-          <el-input class="layout__item" placeholder="ID команды" v-model="teamIdInput"/>
-          <el-input class="layout__item" placeholder="Секретный код" v-model="inviteCode"/>
-          <el-button class="layout__item"  @click="joinTeam">Присоединиться</el-button>
+          <el-input class="layout__item" placeholder="Поиск по названию или номеру" v-model="search"/>
+          <div class="team__list">
+            <table v-if="filteredTeams.length">
+              <tr v-for="item in filteredTeams" :key="item.team_id">
+                <td>{{item.team_id}}.</td>
+                <td> 
+                  <p class="team__list-title">{{item.team_name}}
+                  <p class="hint">{{pluralize(item.size)}}</p>
+                </td>
+                <td> 
+                  <el-button type="primary" size="mini" @click="openJoinDialog(item)">Вступить</el-button>
+                </td>
+              </tr>
+            </table>       
+            <p v-else>Команды не найдены :(</p> 
+          </div>
         </div>
         <div v-else>
           <el-input class="layout__item" placeholder="Название команды" v-model="teamNameInput"/>
@@ -96,12 +109,27 @@
           <el-button class="button" @click="closeDialog">Отменить</el-button>
         </span>
       </el-dialog>
+      <el-dialog
+        :title="`Вступить в команду «${chosenTeam.team_name}»`"
+        :visible.sync="joinDialogVisible"
+        :before-close="closeDialog"
+        width="300px"
+      >
+        <div class="dialog-body">
+          <p>Чтоб присоединиться к команде, введи пригласительный код</p>
+          <el-input class="layout__item" placeholder="Пригласительный код" v-model="inviteCode"/>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button class="button" type="primary" @click="joinTeam" :disabled="!inviteCode">Вступить</el-button>
+          <el-button class="button" @click="closeDialog">Отменить</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import {getTeam, getTeamMembers, joinTeam, createTeam, setLeader, kickMember, leave} from '@/api/team'
+import {getTeam, getAllTeams, getTeamMembers, joinTeam, createTeam, setLeader, kickMember, leave} from '@/api/team'
 import store from '@/store'
 
 export default {
@@ -109,20 +137,27 @@ export default {
   data () {
     return {
       team: undefined,
+      teamList: [],
       toJoinTeam: true,
       teamIdInput: '',
       teamNameInput: '',
       inviteCode: '',
       captain: '',
       members: [],
+      search: '',
       chosenUser: {
         first_name: '',
         last_name: '',
         user_id: ''
       },
+      chosenTeam: {
+        team_name: '',
+        team_id: ''
+      },
       leaderDialogVisible: false,
       kickDialogVisible: false,
       leaveDialogVisible: false,
+      joinDialogVisible: false,
       errorMessage: ''
     }
   },
@@ -138,6 +173,15 @@ export default {
     },
     isCaptain () {
       return this.$store.state.user?.user_id === this.team?.leader_id
+    },
+    filteredTeams () {
+      if (!this.search) return this.teamList
+      return this.teamList.filter(team => {
+        const name = team?.team_name.toUpperCase()
+        const search = this.search.toUpperCase()
+        const id = String(team?.team_id)
+        return name.indexOf(search) >=0 || id.indexOf(search) >=0
+      })
     }
   },
   watch: {
@@ -154,7 +198,13 @@ export default {
         this.setTeam(data)
       } catch (e) {
         if (e.response.status === 404)
-         {this.team = null}
+        {
+          this.team = null
+          const {data} = await getAllTeams()
+
+          this.teamList = data.sort((a,b) => a.team_id - b.team_id)
+          console.log(this.teamList)
+        }
          else{
            console.error(e)
            this.errorMessage=e.response.data.message
@@ -163,10 +213,12 @@ export default {
     },
     async joinTeam () {
       try {
-       const {data} = await joinTeam({team_id: this.teamIdInput, invite_code: this.inviteCode})
+       const {data} = await joinTeam({team_id: this.chosenTeam.team_id, invite_code: this.inviteCode})
         this.setTeam(data)
       } catch (e) {
         this.errorMessage=e.response.data.message
+      } finally {
+        this.closeDialog()
       }
     },
     async createTeam () {
@@ -195,15 +247,25 @@ export default {
     openLeaveDialog() {
       this.leaveDialogVisible = true
     },
+    openJoinDialog(team) {
+      this.chosenTeam = team
+      this.joinDialogVisible = true
+    },
     closeDialog() {
       this.chosenUser = {
         first_name: '',
         last_name: '',
         user_id: ''
       }
+      this.chosenTeam = {
+        team_name: '',
+        team_id: ''
+      }
+      this.inviteCode = ''
       this.kickDialogVisible = false
       this.leaderDialogVisible = false
       this.leaveDialogVisible = false
+      this.joinDialogVisible = false
     },
     async setLeader() {
       const {data} = await setLeader(this.chosenUser.user_id)
@@ -219,6 +281,15 @@ export default {
       await leave()
       await this.getTeam()
       this.closeDialog()
+    },
+    pluralize(num) {
+      switch (num % 10) {
+        case 1: return num + ' участник'
+        case 2: return num + ' участника'
+        case 3: return num + ' участника'
+        case 4: return num + ' участника'
+        default: return num + ' участников'
+      }
     }
   }
 }
@@ -258,6 +329,30 @@ export default {
   .button {
     width: 110px;
     margin-top: 0.5rem;
+  }
+  .team__list {
+    max-height: 300px;
+    overflow: hidden scroll;
+    margin-top: 1rem;
+  }
+  .team__list-title {
+    max-width: 130px;
+    margin-top: 0;
+  }
+  td {
+    vertical-align: top;
+    word-break: break-word;
+    min-width: 35px;
+  }
+  td:not(:first-child) {
+    padding: 0 0.5rem;
+  }
+  td:last-child {
+    text-align: end;
+    width: auto;
+  }
+  table {
+    width: 100%;
   }
 </style>
  
