@@ -56,7 +56,9 @@
     <el-dialog
       title="Назначить капитана"
       :visible.sync="leaderDialogVisible"
-      :before-close="closeDialog">
+      :before-close="closeDialog"
+      width="300px"
+    >
       <p class="dialog-body">
         {{chosenUser.first_name}} {{chosenUser.last_name}} станет капитаном вместо тебя. Продолжить?
       </p>
@@ -69,6 +71,7 @@
       title="Удалить члена команды"
       :visible.sync="kickDialogVisible"
       :before-close="closeDialog"
+      width="300px"
     >
       <p class="dialog-body">
         {{chosenUser.first_name}} {{chosenUser.last_name}} покинет команду. Продолжить?
@@ -82,6 +85,7 @@
       title="Покинуть команду"
       :visible.sync="leaveDialogVisible"
       :before-close="closeDialog"
+      width="300px"
     >
       <p class="dialog-body">
         Ты действительно собираешься покинуть команду?
