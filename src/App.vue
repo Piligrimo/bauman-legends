@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div id="mop"/>
     <div v-if="$store.state.isAuth" class="header">
       <font-awesome-icon
         class="icon"
@@ -58,6 +59,17 @@ export default {
   #app {
     height: 100%; 
   }
+
+  #mop {
+    background-size: contain;
+    position: absolute;
+    height: 100%; 
+    width: 100%;
+    background-repeat: no-repeat;
+    background-image: url('./assets/mop.png');
+    z-index: 10;
+  }
+
   .default-bg {
     background-image: url('./assets/bg.jpg');
   }
