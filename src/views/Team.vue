@@ -39,7 +39,9 @@
       <p><span class="team__stat">Баллы: </span>{{team.score}}</p>
       <p><span class="team__stat">Эсктра-баллы: </span>{{team.money}}</p>
       <template v-if="isCaptain">
-        <p><span class="team__stat">Пригласительный код: </span>{{team.invite_code}}</p>
+        <p>
+          <span class="team__stat">Пригласительный код: </span>
+          <span class="team__code">{{team.invite_code}}</span></p>
         <p class="hint">сообщи этот код членам своей команды, чтоб они могли присоединиться</p>
       </template>
       <el-button
@@ -234,6 +236,9 @@ export default {
   }
   .team__stat {
     font-weight: bold;
+  }
+  .team__code {
+    font-family: monospace;
   }
   .hint {
     margin-top: -1rem;
