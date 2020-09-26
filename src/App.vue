@@ -64,10 +64,10 @@ export default {
     background-image: url('./assets/bg.jpg');
   }
   .info-bg {
-    background-image: url('./assets/info-bg.png');
+    background-image: url('./assets/info-bg.jpg');
   }
   .logo {
-    background-image: url('./assets/logo.png');
+    background-image: url('./assets/smol-logo.jpg');
     background-size: cover;
     width: 50px;
     height: 50px;
