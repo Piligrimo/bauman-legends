@@ -1,14 +1,16 @@
 <template>
-  <div class="layout">
-    <h3 class="layout__title">Регистрация</h3>
-    <el-input class="layout__item" placeholder="Логин" v-model="login"/>
-    <el-input class="layout__item" placeholder="Пароль" v-model="password" show-password/>
-    <el-input class="layout__item" placeholder="Имя" v-model="firstName"/>
-    <el-input class="layout__item" placeholder="Фамилия" v-model="lastName"/>
-    <el-input class="layout__item" placeholder="Учебная группа" v-model="group"/>
-    <el-input class="layout__item" placeholder="Ссылка ВК" v-model="vkRef"/>
-    <el-button class="layout__item" :disabled="isDisabled" @click="submitForm">Зарегистрироваться</el-button>
-    <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
+  <div class="content login-bg">
+    <div class="layout">
+      <h3 class="layout__title">Регистрация</h3>
+      <el-input class="layout__item" placeholder="Логин" v-model="login"/>
+      <el-input class="layout__item" placeholder="Пароль" v-model="password" show-password/>
+      <el-input class="layout__item" placeholder="Имя" v-model="firstName"/>
+      <el-input class="layout__item" placeholder="Фамилия" v-model="lastName"/>
+      <el-input class="layout__item" placeholder="Учебная группа" v-model="group"/>
+      <el-input class="layout__item" placeholder="Ссылка ВК" v-model="vkRef"/>
+      <el-button class="layout__item" :disabled="isDisabled" @click="submitForm">Зарегистрироваться</el-button>
+      <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
+    </div>
   </div>
 </template>
 
