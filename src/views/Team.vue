@@ -32,7 +32,7 @@
         <h2 class="layout__title">"{{team.team_name}}"</h2>
         <h2 class="layout__title">Команда № {{team.team_id}}</h2>
         <h3>Капитан: </h3><p>{{captain.first_name}} {{captain.last_name}}</p>
-        <h3>Участники:</h3>
+        <h3 v-if="members.length">Участники:</h3>
         <div class="team__member" v-for="(member, i) in members" :key="i">
           <p> {{i+1}}. {{member.first_name}} {{member.last_name}}
             <span v-if="member.user_id===$store.state.user.user_id">(ты)</span>
@@ -59,7 +59,7 @@
           <p class="hint">сообщи этот код членам своей команды, чтоб они могли присоединиться</p>
         </template>
         <el-button
-          v-if="!isCaptain"
+          v-if="!isCaptain || !members.length"
           type="danger"
           @click="openLeaveDialog"
         >
