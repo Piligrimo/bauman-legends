@@ -195,7 +195,7 @@ export default {
       this.errorMessage= ''
       try {
         const {data} = await getTeam()
-        this.setTeam(data)
+        await this.setTeam(data)
       } catch (e) {
         if (e.response.status === 404)
         {
@@ -269,7 +269,8 @@ export default {
     },
     async setLeader() {
       const {data} = await setLeader(this.chosenUser.user_id)
-      this.setTeam(data)
+      await this.$store.dispatch('getUser')
+      await this.setTeam(data)
       this.closeDialog()
     },
     async kickMember() {
