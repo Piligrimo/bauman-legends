@@ -17,8 +17,11 @@ export const answer = async (args) => {
     return await Axios.post(BASEURL+'/game/answer', args, {withCredentials: true})
 }
 
-export const changeStage = async (status) => {
-    return await Axios.post(BASEURL+'/manage/stage', {status, secret: 'lb2020'}, {withCredentials: true})
+
+export const getHints = async () => {
+    return await Axios.get(BASEURL+'/hint/team', {withCredentials: true})
 }
 
-
+export const buyHint = async (id) => {
+    return await Axios.get(BASEURL+'/hint/buy?hint_id='+id, {withCredentials: true})
+}
