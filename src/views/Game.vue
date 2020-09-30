@@ -2,6 +2,16 @@
   <div class="content game-bg" :class="bgClass">
     <div class="layout">
       <div v-loading="task === null">
+        <div class="refresh-button">
+          <div class="refresh-button">
+            <font-awesome-icon
+              class="icon"
+              :class="{spinning: isRefreshing}"
+              :icon="['fas', 'sync-alt']"
+              @click="refreshTask"
+            />
+          </div>
+        </div>
         <h3 class="layout__title">Игра</h3>
         <p v-if="!isPlay && task">{{task.text}}</p>
 
@@ -11,13 +21,16 @@
 
         <p v-if="isSuccess">Вы ответили верно! Скажи своим товарищам по команде обновить страницу на своих устройствах. Пусть капитан возьмет следующее задание, когда будете готовы</p>
         <p v-if="isFail">К сожалению вы не смогли ответить верно :( Пусть капитан возьмет следующее задание, когда будете готовы</p>
+        <p v-if="isPause && isMain && isSuccess">Задание решено за {{timeSpent}}</p>
+        <p v-if="isPause && isMain">Баллы команды: {{points}}</p>
         
         <el-input v-if="isPlay" class="layout__item" placeholder="Oтвет" v-model="answer"/>
-
-        <el-button v-if="isCaptain && isPause" type="primary" class="layout__item" @click="next">Взять задание</el-button>
+        <el-button v-if="isCaptain && isPause" type="primary" class="layout__item" @click="next">
+          {{task && task.task && task.task.task_id ? 'Взять следующее задание':'Взять задание'}}
+        </el-button>
         <el-button v-if="isPlay" type="primary" class="layout__item" @click="answerToTask">Ответить</el-button>
        
-        <el-button v-if="isCaptain && isPlay && !isMain" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
+        <el-button v-if="isCaptain && isPlay && isLogic" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
 
         <el-collapse v-if="isCaptain && isPlay && isMain && hints.length" class="collapse" >
           <el-collapse-item>
@@ -82,7 +95,9 @@ export default {
         cost: ''
       },
       money: 0,
-      hintDialogVisible: false
+      points: 0,
+      hintDialogVisible: false,
+      isRefreshing: false
     }
   },
   async created () {
@@ -111,6 +126,9 @@ export default {
     isMain () {
       return this.task?.task?.task_type === 'MAIN'
     },
+    isLogic () {
+      return this.task?.task?.task_type === 'LOGIC'
+    },
     html () {
       return this.task?.task?.html
     },
@@ -119,6 +137,9 @@ export default {
     },
     timeRemainedOnPageLoading () {
       return this.deadlineTime - this.timeOnPageLoad
+    },
+    timeSpent () {
+      return this.prettifyTime(this.task?.task?.finish_time - this.task?.task?.start_time)
     },
     bgClass () {
       switch (this.task?.task?.task_id % 3){
@@ -166,6 +187,7 @@ export default {
     async skip() {
       try {
         const {data} = await skipTask()
+        await this.getPoints()
         this.task = data
       } catch (e) {
         this.errorMessage = e.response.data.message
@@ -196,19 +218,28 @@ export default {
     },
 
     async refreshTask () {
+      this.isRefreshing = true
       clearInterval(this.timer)
-      const {data} = await getTask() 
-      this.task = data
-      this.timeOnPageLoad = Number(new Date()) / 1000
-      if (this.isPlay && this.isMain) {
-        if (this.isCaptain) {
-          this.getHints()
+      try {
+        const {data} = await getTask() 
+        this.task = data
+        this.timeOnPageLoad = Number(new Date()) / 1000
+        if (this.isPlay && this.isMain) {
+          if (this.isCaptain) {
+            this.getHints()
+          }
+          this.timeRemaining = this.timeRemainedOnPageLoading
+          const vue = this
+          this.timer = setInterval(() => {
+            vue.timeRemaining-- 
+          }, 1000)
         }
-        this.timeRemaining = this.timeRemainedOnPageLoading
+        await this.getPoints()
+      } catch (e) {
+        this.errorMessage = e.response.data.message
+      } finally {
         const vue = this
-        this.timer = setInterval(() => {
-          vue.timeRemaining-- 
-        }, 1000)
+        setTimeout(()=>{vue.isRefreshing = false}, 1000)
       }
     },
     openHintDialog(hint) {
@@ -235,6 +266,10 @@ export default {
         cost: ''
       }
       this.hintDialogVisible = false
+    },
+    async getPoints() {
+        const {data} = await getTeam()
+        this.points = data?.score
     }
    }
 }
@@ -274,5 +309,26 @@ export default {
   word-break: break-word;
 }
 
+.refresh-button {
+  position: relative;
+  right: 0px;
+  font-size: 30px;
+  text-align: right;
+}
+.spinning {
+  animation-name: rotation;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes rotation {
+  0% {
+      transform:rotate(0deg);
+  }
+  100% {
+      transform:rotate(360deg);
+  }
+}
 </style>
  
