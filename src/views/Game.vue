@@ -112,6 +112,7 @@ export default {
   },
   async created () {
     await this.refreshTask()
+    window.addEventListener('focus', async() => {await this.refreshTask()})
   },
   store,
   computed:{
