@@ -85,7 +85,9 @@ p.ql-align-right {
   word-break: break-word;
   padding: 1rem;
   background-color: #f8f7f5;
+  margin-bottom: 1rem;
 }
-.task-view > p > img {
+.task-view img {
   width: 100%;
+  height: auto;
 }
