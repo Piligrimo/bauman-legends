@@ -333,6 +333,7 @@ export default {
   right: 0px;
   font-size: 30px;
   text-align: right;
+  color: #080D38;
 }
 .spinning {
   animation-name: rotation;
