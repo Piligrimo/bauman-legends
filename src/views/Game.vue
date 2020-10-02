@@ -172,9 +172,12 @@ export default {
     }
   },
   watch: {
-    isAuth (val) {
-      if (!val)
-      this.$router.push('/login')
+    isAuth: { 
+      immediate: true,
+      handler(val) {
+        if (!val)
+          this.$router.push('/login')
+      }
     },
     async timeRemaining (val) {
       if (val <= -1){
@@ -217,10 +220,10 @@ export default {
         const team_id = this.$store.state.user?.team_id
         const task_id = this.task?.task?.task_id
         await answer({team_id, task_id, answer: this.answer})
-        await this.refreshTask()
       } catch (e) {
         this.errorMessage = e.response.data.message
       } finally {
+        await this.refreshTask()
         this.answer = ''
       }
     },
