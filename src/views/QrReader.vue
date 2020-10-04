@@ -1,10 +1,12 @@
 <template>
   <div class="content login-bg">
     <div class="layout">
-      <video @click="takeSnapshot" id="camera-stream"></video>
-      <canvas id="canvas"/>
-      <img id="photo">
-      <p  class="error-message" v-if="errorMessage">{{errorMessage}}</p>
+      <video @click="tick" id="camera-stream"></video>
+      <canvas id="canvas" v-show="false"></canvas>
+      <div id="output" v-show="showOutputContainer">
+        <div v-if="!isCodeFound" id="outputMessage">QR-code не найден</div>
+        <div v-show="showOutputData"><b>Код:</b> <span id="outputData">{{outputData}}</span></div>
+      </div>
     </div>
   </div>
 </template>
@@ -16,9 +18,15 @@ export default {
   data () {
     return {
       video: null,
-      hiddenCanvas: null,
+      canvas: null,
       image: null,
-      errorMessage: ''
+      errorMessage: '',
+      showCanvas: false,
+      showOutputContainer: false,
+      showOutputData: false,
+      outputData: '',
+      isCodeFound: false,
+      context: null
     }
   },
   store,
@@ -29,7 +37,8 @@ export default {
   },
   mounted () {
     this.video = document.getElementById('camera-stream')
-    this.hiddenCanvas = document.getElementById('canvas')
+    this.canvas = document.getElementById('canvas')
+    this.context = this.canvas.getContext("2d")
     this.image = document.getElementById('photo')
     const vue = this
 
@@ -57,6 +66,8 @@ export default {
       }
     }
     navigator.getUserMedia( mainCamOptions, resolveCallback, rejectCallback)
+    this.tick()
+
   },
   watch: {
     isAuth: { 
@@ -68,24 +79,33 @@ export default {
     }
   },
   methods: {
-    takeSnapshot(){
-      const width = this.video.videoWidth
-      const height = this.video.videoHeight
-      const context = this.hiddenCanvas.getContext('2d')
+    tick(){
+      console.log(this.video.readyState)
+      if (this.video.readyState === this.video.HAVE_ENOUGH_DATA) {
+      console.log(1)
 
-      this.hiddenCanvas.width = width
-      this.hiddenCanvas.height = height
-      context.drawImage(this.video, 0, 0, width, height)
-      
-      const imageData = this.hiddenCanvas.toDataURL('image/png')
-      // this.image.setAttribute('src', imageDataURL)
-      // const imageData = context.getImageData(0, 0, width, height)
-      console.log(imageData)
-      const code = jsQR(imageData, imageData.width, imageData.height)
+        this.showCanvas = true
+        this.showOutputContainer = true
+    
+        this.canvas.height = this.video.videoHeight;
+        this.canvas.width = this.video.videoWidth;
+        this.context.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+        var imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        var code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: "dontInvert",
+        });
+        this.isCodeFound = !!code
+        console.log(code)
 
-      if (code) {
-        console.log("Found QR code", code);
-        this.errorMessage = code
+        if (code) {
+          this.showOutputData = true;
+          this.outputData = code.data;
+        } else {
+          this.showOutputData = false;
+          this.tick()
+        }
+      } else {
+        this.tick()
       }
     }
   }
@@ -95,7 +115,7 @@ export default {
 <style scoped>
 
 
-  img {
+  video {
     width: 100%;
   }
 </style>
