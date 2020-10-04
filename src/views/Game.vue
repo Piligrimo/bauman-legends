@@ -40,7 +40,7 @@
           Ответить
         </el-button>
        
-        <el-button v-if="isCaptain && isPlay && isLogic" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
+        <el-button v-if="isCaptain && isPlay && isSkippable" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
 
         <el-collapse v-if="isCaptain && isPlay && isMain && hints.length" class="collapse" >
           <el-collapse-item>
@@ -112,7 +112,11 @@ export default {
   },
   async created () {
     await this.refreshTask()
-    window.addEventListener('focus', async() => {await this.refreshTask()})
+    const vue = this
+    window.addEventListener('focus', async() => {
+      if (vue.isMain)
+        await vue.refreshTask()
+    })
   },
   store,
   computed:{
@@ -137,8 +141,8 @@ export default {
     isMain () {
       return this.task?.task?.task_type === 'MAIN'
     },
-    isLogic () {
-      return this.task?.task?.task_type === 'LOGIC'
+    isSkippable () {
+      return this.task?.task?.skip
     },
     html () {
       return this.task?.task?.html
@@ -220,10 +224,11 @@ export default {
         const team_id = this.$store.state.user?.team_id
         const task_id = this.task?.task?.task_id
         await answer({team_id, task_id, answer: this.answer})
+        await this.refreshTask()
       } catch (e) {
+        await this.refreshTask()
         this.errorMessage = e.response.data.message
       } finally {
-        await this.refreshTask()
         this.answer = ''
       }
     },

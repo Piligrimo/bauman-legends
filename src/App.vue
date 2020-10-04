@@ -42,6 +42,9 @@ export default {
     }
   },
   async created () {
+    console.log('Мужество, Воля, Труд и Упорство!')
+    console.log('--------------------------------')
+    console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
     await this.$store.dispatch('getUser')
   },
   store,
