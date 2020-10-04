@@ -18,17 +18,27 @@
         <div v-if="html" v-html="html" class="task-view"/>
         
         <h3  v-if="isPlay && isMain">На решение осталось {{prettifyTime(this.timeRemaining)}}</h3>
+        <p v-if="isPlay && attemptsCaption">{{attemptsCaption}}</p>
 
-        <p v-if="isSuccess">Вы ответили верно! Скажи своим товарищам по команде обновить страницу на своих устройствах. Пусть капитан возьмет следующее задание, когда будете готовы</p>
-        <p v-if="isFail">К сожалению вы не смогли ответить верно :( Пусть капитан возьмет следующее задание, когда будете готовы</p>
+        <b v-if="isSuccess">Вы ответили верно! Скажи своим товарищам по команде обновить страницу на своих устройствах. Пусть капитан возьмет следующее задание, когда будете готовы</b>
+        <b v-if="isFail">К сожалению вы не смогли ответить верно :( Пусть капитан возьмет следующее задание, когда будете готовы</b>
+        <p v-if="isSuccess && correctAnswer">Правильный ответ: {{correctAnswer}}</p>
         <p v-if="isPause && isMain && isSuccess">Задание решено за {{timeSpent}}</p>
-        <p v-if="isPause && isMain">Баллы команды: {{points}}</p>
+        <p v-if="isPause && isMain && isSuccess">Баллы команды: {{points}}</p>
         
         <el-input v-if="isPlay" class="layout__item" placeholder="Oтвет" v-model="answer"/>
         <el-button v-if="isCaptain && isPause" type="primary" class="layout__item" @click="next">
           {{task && task.task && task.task.task_id ? 'Взять следующее задание':'Взять задание'}}
         </el-button>
-        <el-button v-if="isPlay" type="primary" class="layout__item" @click="answerToTask">Ответить</el-button>
+        <el-button
+          v-if="isPlay" 
+          type="primary" 
+          class="layout__item" 
+          :disabled="!answer"
+          @click="answerToTask"
+        >
+          Ответить
+        </el-button>
        
         <el-button v-if="isCaptain && isPlay && isLogic" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
 
@@ -102,6 +112,7 @@ export default {
   },
   async created () {
     await this.refreshTask()
+    window.addEventListener('focus', async() => {await this.refreshTask()})
   },
   store,
   computed:{
@@ -151,12 +162,22 @@ export default {
     },
     isHintAffordable () {
       return this.chosenHint?.cost < this.money
+    },
+    attemptsCaption () {
+      if (!this.task?.task?.max_attempts) return
+      return `Попытки ${this.task.attempts_count} из ${this.task.task.max_attempts}`
+    },
+    correctAnswer () {
+      return this.task?.task.answer
     }
   },
   watch: {
-    isAuth (val) {
-      if (!val)
-      this.$router.push('/login')
+    isAuth: { 
+      immediate: true,
+      handler(val) {
+        if (!val)
+          this.$router.push('/login')
+      }
     },
     async timeRemaining (val) {
       if (val <= -1){
@@ -195,14 +216,14 @@ export default {
     },
     async answerToTask() {
       try {
-        this.errorMessage = ''
+        if (!this.answer) return
         const team_id = this.$store.state.user?.team_id
         const task_id = this.task?.task?.task_id
         await answer({team_id, task_id, answer: this.answer})
-        await this.refreshTask()
       } catch (e) {
         this.errorMessage = e.response.data.message
       } finally {
+        await this.refreshTask()
         this.answer = ''
       }
     },
@@ -218,6 +239,7 @@ export default {
     },
 
     async refreshTask () {
+      this.errorMessage = ''
       this.isRefreshing = true
       clearInterval(this.timer)
       try {
@@ -314,6 +336,7 @@ export default {
   right: 0px;
   font-size: 30px;
   text-align: right;
+  color: #080D38;
 }
 .spinning {
   animation-name: rotation;
