@@ -25,7 +25,6 @@
         >
           <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
           <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
-          <el-menu-item index="/side-quest" @click="collapsed = true"> <p class="menu-item">Побочное задание</p></el-menu-item>
         </el-menu>
       </div>
     </transition>
@@ -43,6 +42,9 @@ export default {
     }
   },
   async created () {
+    console.log('Мужество, Воля, Труд и Упорство!')
+    console.log('--------------------------------')
+    console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
     await this.$store.dispatch('getUser')
   },
   store,
