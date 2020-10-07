@@ -42,7 +42,7 @@
        
         <el-button v-if="isCaptain && isPlay && isSkippable" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
 
-        <el-collapse v-if="isCaptain && isPlay && isMain && hints.length" class="collapse" >
+        <el-collapse v-if="isPlay && isMain && hints.length" class="collapse" >
           <el-collapse-item>
             <h3 class="collapse-title" slot="title">Подсказки</h3>
             <h4>Экстра-баллы: {{money}}</h4>
@@ -187,11 +187,10 @@ export default {
         const {data} = await nextTask()
         this.task = data
         this.timeOnPageLoad = Number(new Date()) / 1000
-        if (this.isCaptain) {
-          this.getHints()
-        }
+        this.getHints()
         this.timeRemaining = this.timeRemainedOnPageLoading
         const vue = this
+        clearInterval(this.timer)
         this.timer = setInterval(() => {
           vue.timeRemaining-- 
         }, 1000)
@@ -242,9 +241,7 @@ export default {
         this.task = data
         this.timeOnPageLoad = Number(new Date()) / 1000
         if (this.isPlay && this.isMain) {
-          if (this.isCaptain) {
-            this.getHints()
-          }
+          this.getHints()
           this.timeRemaining = this.timeRemainedOnPageLoading
           const vue = this
           this.timer = setInterval(() => {
