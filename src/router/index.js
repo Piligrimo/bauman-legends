@@ -37,7 +37,11 @@ const routes = [
     path: '/side-quest',
     name: 'SideQuest',
     component: SideQuest
-  }
+  },
+  {
+    path: '*',
+    redirect: '/login'
+  },
 ]
 
 const router = new VueRouter({
