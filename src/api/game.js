@@ -28,3 +28,7 @@ export const getHints = async () => {
 export const buyHint = async (id) => {
     return await Axios.get(BASEURL+'/hint/buy?hint_id='+id, {withCredentials: true})
 }
+
+export const getFact = async () => {
+    return await Axios.get(BASEURL+'/game/fact', {withCredentials: true})
+}
