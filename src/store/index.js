@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {getUser} from '@/api/user'
+import { getStage } from '@/api/game'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     isAuth: false,
-    user: null
+    user: null,
+    stage:''
   },
   mutations: {
     setAuth(state, payload) {
@@ -14,6 +16,9 @@ export default new Vuex.Store({
     },
     setUser(state, payload) {
       state.user = payload
+    },
+    setStage(state, payload) {
+      state.stage = payload
     }
   },
   actions: {
@@ -27,6 +32,15 @@ export default new Vuex.Store({
           commit('setAuth', false)
       } catch (e) {
           commit('setAuth', false)
+      }
+    },
+
+    async getStage ({commit}) {
+      try {
+        const {data} = await getStage()
+        commit('setStage', data)
+      } catch (e) {
+        console.error(e)
       }
     }
   }
