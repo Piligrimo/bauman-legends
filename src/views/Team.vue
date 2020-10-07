@@ -203,7 +203,6 @@ export default {
           const {data} = await getAllTeams()
 
           this.teamList = data.sort((a,b) => a.team_id - b.team_id)
-          console.log(this.teamList)
         }
          else{
            console.error(e)
@@ -222,7 +221,6 @@ export default {
       }
     },
     async createTeam () {
-      console.log('create invalid')
       try {
         const {data} = await createTeam({team_name: this.teamNameInput})
         this.setTeam(data)

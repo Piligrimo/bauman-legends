@@ -4,7 +4,7 @@ import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import Team from '../views/Team.vue'
 import Game from '../views/Game.vue'
-import QrReader from '../views/QrReader.vue'
+import SideQuest from '../views/SideQuest.vue'
 
 Vue.use(VueRouter)
 
@@ -35,8 +35,8 @@ const routes = [
   },
   {
     path: '/side-quest',
-    name: 'QrReader',
-    component: QrReader
+    name: 'SideQuest',
+    component: SideQuest
   }
 ]
 

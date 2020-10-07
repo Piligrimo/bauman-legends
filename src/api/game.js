@@ -4,6 +4,9 @@ import Axios from 'axios'
 export const getTask = async () => {
     return await Axios.get(BASEURL+'/game/info', {withCredentials: true})
 }
+export const getStage = async () => {
+    return await Axios.get(BASEURL+'/game/status', {withCredentials: true})
+}
 
 export const nextTask = async () => {
     return await Axios.get(BASEURL+'/game/next', {withCredentials: true})
