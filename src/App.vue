@@ -83,7 +83,10 @@ export default {
         this.$router.push('/login')
       if (this.isAuth && !this.requiresAuth)
         this.$router.push('/team')
-      if (this.$store?.state?.stage !== 'FINAL' && this.$route.path === '/side-quest')
+      if (this.$store?.state?.stage !== 'FINAL' && 
+        this.$store?.state?.stage !== '' && 
+        this.$route.path === '/side-quest'
+      )
         this.$router.push('/team')
     }
   }

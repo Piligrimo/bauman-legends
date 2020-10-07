@@ -17,33 +17,35 @@
           </div>
         </div>
         <div v-else-if="!isReaderOpened" key="list">
-          <h3>Свидетели</h3>
-          <p>Для вашего удобства предоставлен список людей, имеющих отношение к ученому. Здесь будут появляться отметки после общения с каждым из них</p>
-          <div class="witness-list">
-            <div v-for="item in witnesses" :key="item.witness_id" class="witness-item">
-              <p class="witness-item__title">
-                {{item.witness_id === 7 ? 'Ученый' : `Свидетель №${item.witness_id}`}}
-              </p>
-              <font-awesome-icon
-                  v-if="item.open"
-                  class="icon"
-                  :icon="['fas', 'check']"
-                />
-            </div>  
-          </div>
-          <el-alert
-            v-if="codeCheckingResult !== results.NONE"
-            :style="{'margin-top': '1rem'}"
-            :title="codeCheckingResult === results.SUCCESS ? 'Допрос прошел успешно!': failText"
-            :type="codeCheckingResult === results.SUCCESS ? 'success': 'error'"
-            show-icon>
-          </el-alert>
-          <div class="action">
-            <el-button type="primary" class="button"  @click="isReaderOpened=true">
-              <font-awesome-icon class="icon" :icon="['fas', 'search']"/>
-              Допросить
-            </el-button>
-          </div>
+          <h3>Побочное задание</h3>
+          <template v-if="witnesses.length">
+            <p>Для вашего удобства предоставлен список людей, имеющих отношение к ученому. Здесь будут появляться отметки после общения с каждым из них</p>
+            <div class="witness-list">
+              <div v-for="item in witnesses" :key="item.witness_id" class="witness-item">
+                <p class="witness-item__title">
+                  {{item.witness_id === 7 ? 'Ученый' : `Свидетель №${item.witness_id}`}}
+                </p>
+                <font-awesome-icon
+                    v-if="item.open"
+                    class="icon"
+                    :icon="['fas', 'check']"
+                  />
+              </div>  
+            </div>
+            <el-alert
+              v-if="codeCheckingResult !== results.NONE"
+              :style="{'margin-top': '1rem'}"
+              :title="codeCheckingResult === results.SUCCESS ? 'Допрос прошел успешно!': failText"
+              :type="codeCheckingResult === results.SUCCESS ? 'success': 'error'"
+              show-icon>
+            </el-alert>
+            <div class="action">
+              <el-button type="primary" class="button"  @click="isReaderOpened=true">
+                <font-awesome-icon class="icon" :icon="['fas', 'search']"/>
+                Допросить
+              </el-button>
+            </div>
+          </template>
         </div>
         <div v-else key="reader">
           <p @click="isReaderOpened=false">Назад</p>
@@ -100,6 +102,8 @@ export default {
           this.decision =''
           const {data} = await getWitnesses()
           this.witnesses = data
+        } else {
+          this.errorMessage = e.response.data.message
         }
       }
     },
