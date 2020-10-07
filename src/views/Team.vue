@@ -162,15 +162,10 @@ export default {
     }
   },
   async created () {
-    if (!this.$store.state.isAuth)
-      this.$router.push('/login')
     await this.getTeam()
   },
   store,
   computed:{
-    isAuth () {
-      return this.$store.state.isAuth
-    },
     isCaptain () {
       return this.$store.state.user?.user_id === this.team?.leader_id
     },
@@ -183,12 +178,6 @@ export default {
         return name.indexOf(search) >=0 || id.indexOf(search) >=0
       })
     }
-  },
-  watch: {
-    isAuth (val) {
-      if (!val)
-      this.$router.push('/login')
-    } 
   },
   methods: {
     async getTeam () {

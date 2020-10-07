@@ -54,12 +54,37 @@ export default {
     console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
     await this.$store.dispatch('getUser')
     await this.$store.dispatch('getStage')
+    this.handleRouting()
   },
   store,
+  watch: {
+    isAuth: { 
+      handler() {
+        this.handleRouting()
+      }
+    }
+  },
+  computed: {
+    requiresAuth () {
+      const nonAuthRoutes = ['/login', '/sign-up']
+      return !nonAuthRoutes.includes(this.$route.path)
+    },
+    isAuth () {
+      return this.$store.state.isAuth
+    }
+  },
   methods: {
     async logOut () {
       await logOut()
       this.$store.commit('setAuth', false)
+    },
+    handleRouting () {
+      if (!this.isAuth && this.requiresAuth)
+        this.$router.push('/login')
+      if (this.isAuth && !this.requiresAuth)
+        this.$router.push('/team')
+      if (this.$store?.state?.stage !== 'FINAL' && this.$route.path === '/side-quest')
+        this.$router.push('/team')
     }
   }
 }

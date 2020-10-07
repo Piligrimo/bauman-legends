@@ -33,16 +33,7 @@ export default {
     isDisabled () {
       const fields = [this.login, this.password, this.firstName, this.lastName, this.group, this.vkRef]
       return !fields.every(Boolean)
-    },
-    isAuth () {
-      return this.$store.state.isAuth
     }
-  },
-  watch: {
-    isAuth (val) {
-      if (val)
-      this.$router.push('/team')
-    } 
   },
   methods: {
     async submitForm() {
