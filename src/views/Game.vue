@@ -120,9 +120,6 @@ export default {
   },
   store,
   computed:{
-    isAuth () {
-      return this.$store.state.isAuth
-    },
     isCaptain () {
       return this.$store.state.user?.role === 'CAPTAIN'
     },
@@ -176,13 +173,6 @@ export default {
     }
   },
   watch: {
-    isAuth: { 
-      immediate: true,
-      handler(val) {
-        if (!val)
-          this.$router.push('/login')
-      }
-    },
     async timeRemaining (val) {
       if (val <= -1){
         clearInterval(this.timer)

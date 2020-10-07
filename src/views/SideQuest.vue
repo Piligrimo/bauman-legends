@@ -86,20 +86,8 @@ export default {
     await this.init()
   },
   computed: {
-    isAuth () {
-      return this.$store.state.isAuth
-    },
     allWitnessesOpened () {
       return this.witnesses.length && this.witnesses.every(item => item.open)
-    }
-  },
-  watch: {
-    isAuth: { 
-      immediate: true,
-      handler(val) {
-        if (!val)
-          this.$router.push('/login')
-      }
     }
   },
   methods: {
