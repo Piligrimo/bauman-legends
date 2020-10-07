@@ -6,7 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Vuex from 'vuex';
 import './assets/main.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCrown, faUserMinus, faSignOutAlt, faBars, faSyncAlt, faSearch, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faCrown, faUserMinus, faSignOutAlt, faBars, faSyncAlt, faSearch, faCheck, faReply } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 
@@ -17,6 +17,7 @@ library.add(faBars)
 library.add(faSyncAlt)
 library.add(faSearch)
 library.add(faCheck)
+library.add(faReply)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(Vuex);

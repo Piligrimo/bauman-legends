@@ -48,7 +48,10 @@
           </template>
         </div>
         <div v-else key="reader">
-          <p @click="isReaderOpened=false">Назад</p>
+          <div class="reader-header">
+            <h3>Допрос</h3>
+            <font-awesome-icon class="icon" :icon="['fas', 'reply']" @click="isReaderOpened=false"/>
+          </div>
           <qr-reader @read="checkCode"/>
         </div>
       </transition>
@@ -164,5 +167,14 @@ export default {
 .action {
   text-align: center;
   margin-top: 1rem;
+}
+.reader-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.reader-header .icon {
+  font-size: 30px;
+  color: #080D38;
 }
 </style>

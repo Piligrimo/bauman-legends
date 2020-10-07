@@ -92,8 +92,8 @@ export default {
       } else {
          this.dotCount = (this.dotCount + 1) % 3
          switch (this.dotCount) {
-             case 0: this.loadingMessage='Загрузка.'; break
-             case 1: this.loadingMessage='Загрузка..'; break
+             case 0: this.loadingMessage='  Загрузка.'; break
+             case 1: this.loadingMessage=' Загрузка..'; break
              case 2: this.loadingMessage='Загрузка...'; break
          }
       }
@@ -149,7 +149,9 @@ export default {
   #loading {
     position: absolute;
     top: 40%;
-    left: 20%;
+    /* left: 20%; */
+    width: 100%;
+    text-align: center;
     color: white;
   }
   #outputMessage {
