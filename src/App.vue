@@ -54,13 +54,13 @@ export default {
     console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
     await this.$store.dispatch('getUser')
     await this.$store.dispatch('getStage')
-    this.handleRouting()
+   // this.handleRouting()
   },
   store,
   watch: {
     isAuth: { 
       handler() {
-        this.handleRouting()
+       // this.handleRouting()
       }
     }
   },
