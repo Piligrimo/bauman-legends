@@ -50,7 +50,7 @@ export default {
   },
   async created () {
     this.$message({
-          message: `${navigator.userAgent} ----   ${navigator.platform} `,
+          message: this.browser,
           type: 'warning',
           duration: 0,
           showClose: true
@@ -78,6 +78,10 @@ export default {
     },
     isAuth () {
       return this.$store.state.isAuth
+    },
+    browser () {
+      const isSafari = window.safari !== undefined;
+      return isSafari?'Сафари':'Не сафари'
     }
   },
   methods: {
