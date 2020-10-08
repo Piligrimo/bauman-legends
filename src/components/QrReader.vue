@@ -36,7 +36,11 @@ export default {
     }
   },
   mounted () {
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
     this.video = document.getElementById('camera-stream')
+    this.video.setAttribute('playsinline', '')
+    this.video.setAttribute('autoplay', '')
+    this.video.setAttribute('muted', '')
     this.canvas = document.getElementById('canvas')
     this.context = this.canvas.getContext("2d")
     this.image = document.getElementById('photo')
@@ -58,13 +62,13 @@ export default {
           vue.errorMessage = 'Камера не обнаружена'
           break;
         case 'OverconstrainedError':
-          navigator.getUserMedia( otherCamOptions, resolveCallback, () => {console.log(err)})
+          navigator.mediaDevices.getUserMedia( otherCamOptions).then(resolveCallback).catch(rejectCallback)
           break;
         default:
           vue.errorMessage = 'Произошла проблема с подключением к камере'
       }
     }
-    navigator.getUserMedia( mainCamOptions, resolveCallback, rejectCallback)
+    navigator.mediaDevices.getUserMedia( mainCamOptions).then(resolveCallback).catch(rejectCallback)
     this.timer = setInterval(()=> {vue.tick()},100)
   },
   methods: {

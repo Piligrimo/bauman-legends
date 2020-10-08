@@ -49,6 +49,16 @@ export default {
     }
   },
   async created () {
+    if (this.message && !localStorage.messageShown) {
+      this.$message({
+        message: this.message,
+        type: 'warning',
+        duration: 0,
+        showClose: true
+      })
+      localStorage.messageShown = true
+    }
+
     console.log('Мужество, Воля, Труд и Упорство!')
     console.log('--------------------------------')
     console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
@@ -71,6 +81,14 @@ export default {
     },
     isAuth () {
       return this.$store.state.isAuth
+    },
+    message () {
+      const uAgent = navigator.userAgent || ''
+      const ios = /ipad|ipod|iphone/i.test(uAgent)
+      const android = /android/i.test(uAgent)
+      if (ios) return 'Ради бога, пользуйся Safari, если ты используешь IOS'
+      if (android) return 'Ради бога, пользуйся Google Chrome, если ты используешь Android'
+      return ''
     }
   },
   methods: {
