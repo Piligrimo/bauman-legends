@@ -21,7 +21,7 @@
         <p v-if="isPlay && attemptsCaption">{{attemptsCaption}}</p>
 
         <b v-if="isSuccess">Вы ответили верно! Скажи своим товарищам по команде обновить страницу на своих устройствах. Пусть капитан возьмет следующее задание, когда будете готовы</b>
-        <b v-if="isFail">К сожалению вы не смогли ответить верно :( Пусть капитан возьмет следующее задание, когда будете готовы</b>
+        <b v-if="isFail">К сожалению, вы не смогли ответить верно :( Пусть капитан возьмет следующее задание, когда будете готовы</b>
         <p v-if="isSuccess && correctAnswer">Правильный ответ: {{correctAnswer}}</p>
         <p v-if="isPause && isMain && isSuccess">Задание решено за {{timeSpent}}</p>
         <p v-if="isPause && isMain && isSuccess">Баллы команды: {{points}}</p>
@@ -70,7 +70,7 @@
       >
         <div class="dialog-body">
           <p v-if="isHintAffordable">Баланс вашей команды - {{money}}.<br> Вы уверены, что хотите взять подсказку?</p>
-          <p v-else>К сожалению у команды недостаточно экстра-баллов, чтоб взять эту подсказку</p>
+          <p v-else>К сожалению, у команды недостаточно экстра-баллов, чтоб взять эту подсказку</p>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button class="button" type="primary" @click="buyHint" :disabled="!isHintAffordable">Купить</el-button>
