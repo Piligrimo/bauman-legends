@@ -49,6 +49,13 @@ export default {
     }
   },
   async created () {
+    this.$message({
+          message: `${navigator.appCodeName} ----   ${navigator.platform} `,
+          type: 'warning',
+          duration: 0,
+          showClose: true
+        });
+
     console.log('Мужество, Воля, Труд и Упорство!')
     console.log('--------------------------------')
     console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
