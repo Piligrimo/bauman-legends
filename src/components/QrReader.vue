@@ -39,6 +39,8 @@ export default {
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
     this.video = document.getElementById('camera-stream')
     this.video.setAttribute('playsinline', '')
+    this.video.setAttribute('autoplay', '')
+    this.video.setAttribute('muted', '')
     this.canvas = document.getElementById('canvas')
     this.context = this.canvas.getContext("2d")
     this.image = document.getElementById('photo')
