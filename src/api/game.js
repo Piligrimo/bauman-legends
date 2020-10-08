@@ -32,3 +32,7 @@ export const buyHint = async (id) => {
 export const getFact = async () => {
     return await Axios.get(BASEURL+'/game/fact', {withCredentials: true})
 }
+
+export const getDocs = async () => {
+    return await Axios.get(BASEURL+'/bauman/fragments', {withCredentials: true})
+}

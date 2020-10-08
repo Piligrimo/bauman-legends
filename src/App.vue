@@ -27,6 +27,13 @@
           <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
           <el-menu-item 
             v-if="$store.state.stage === 'FINAL'"
+            index="/docs" 
+            @click="collapsed = true"
+          > 
+            <p class="menu-item">Документы</p>
+          </el-menu-item>
+          <el-menu-item 
+            v-if="$store.state.stage === 'FINAL'"
             index="/side-quest" 
             @click="collapsed = true"
           > 
@@ -103,7 +110,7 @@ export default {
         this.$router.push('/team')
       if (this.$store?.state?.stage !== 'FINAL' && 
         this.$store?.state?.stage !== '' && 
-        this.$route.path === '/side-quest'
+        (this.$route.path === '/side-quest' || this.$route.path === '/docs')
       )
         this.$router.push('/team')
     }

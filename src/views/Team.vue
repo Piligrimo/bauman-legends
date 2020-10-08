@@ -308,12 +308,7 @@ export default {
     color: #5f5f5f;
     font-weight: bold;
   }
-  .hint {
-    margin-top: -1rem;
-    font-size: 0.8rem;
-    line-height: 0.9rem;
-    color: #5f5f5f
-  }
+
   .button {
     width: 110px;
     margin-top: 0.5rem;
