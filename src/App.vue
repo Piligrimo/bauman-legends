@@ -49,12 +49,15 @@ export default {
     }
   },
   async created () {
-    this.$message({
-          message: this.browser,
-          type: 'warning',
-          duration: 0,
-          showClose: true
-        });
+    if (this.message && !localStorage.messageShown) {
+      this.$message({
+        message: this.message,
+        type: 'warning',
+        duration: 0,
+        showClose: true
+      })
+      localStorage.messageShown = true
+    }
 
     console.log('Мужество, Воля, Труд и Упорство!')
     console.log('--------------------------------')
@@ -79,32 +82,13 @@ export default {
     isAuth () {
       return this.$store.state.isAuth
     },
-    browser () {
+    message () {
       const uAgent = navigator.userAgent || ''
-      return {
-       
-	version : (uAgent.match( /.+(?:me|ox|on|rv|it|era|ie)[/: ]([\d.]+)/ ) || [0,'0'])[1],
-	opera : /opera/i.test(uAgent),
-	mozilla : /firefox/i.test(uAgent),
-	chrome : /chrome/i.test(uAgent),
-	safari : (!(/chrome/i.test(uAgent)) && /webkit|safari|khtml/i.test(uAgent)),
-	iphone : /iphone/i.test(uAgent),
-	ipod : /ipod/i.test(uAgent),
-	iphone4 : /iphone.*OS 4/i.test(uAgent),
-	ipod4 : /ipod.*OS 4/i.test(uAgent),
-	ipad : /ipad/i.test(uAgent),
-	ios : /ipad|ipod|iphone/i.test(uAgent),
-	android : /android/i.test(uAgent),
-	bada : /bada/i.test(uAgent),
-	mobile : /iphone|ipod|ipad|opera mini|opera mobi|iemobile/i.test(uAgent),
-	msie_mobile : /iemobile/i.test(uAgent),
-	safari_mobile : /iphone|ipod|ipad/i.test(uAgent),
-	opera_mobile : /opera mini|opera mobi/i.test(uAgent),
-	opera_mini : /opera mini/i.test(uAgent),
-	mac : /mac/i.test(uAgent),
-	android_version: parseFloat(uAgent.slice(uAgent.indexOf("Android")+8)) || 0
-};
-
+      const ios = /ipad|ipod|iphone/i.test(uAgent)
+      const android = /android/i.test(uAgent)
+      if (ios) return 'Ради бога, пользуйся Safari, если ты используешь IOS'
+      if (android) return 'Ради бога, пользуйся Google Chrome, если ты используешь Android'
+      return ''
     }
   },
   methods: {
