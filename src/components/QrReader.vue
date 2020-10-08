@@ -60,13 +60,13 @@ export default {
           vue.errorMessage = 'Камера не обнаружена'
           break;
         case 'OverconstrainedError':
-          navigator.getUserMedia( otherCamOptions, resolveCallback, () => {console.log(err)})
+          navigator.mediaDevices.getUserMedia( otherCamOptions).then(resolveCallback).catch(rejectCallback)
           break;
         default:
           vue.errorMessage = 'Произошла проблема с подключением к камере'
       }
     }
-    navigator.getUserMedia( mainCamOptions, resolveCallback, rejectCallback)
+    navigator.mediaDevices.getUserMedia( mainCamOptions).then(resolveCallback).catch(rejectCallback)
     this.timer = setInterval(()=> {vue.tick()},100)
   },
   methods: {
