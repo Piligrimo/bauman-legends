@@ -36,7 +36,9 @@ export default {
     }
   },
   mounted () {
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
     this.video = document.getElementById('camera-stream')
+    this.video.setAttribute('playsinline', '')
     this.canvas = document.getElementById('canvas')
     this.context = this.canvas.getContext("2d")
     this.image = document.getElementById('photo')
