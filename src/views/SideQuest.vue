@@ -42,6 +42,7 @@
             <div class="action">
               <el-button type="primary" class="button"  @click="isReaderOpened=true">
                 <font-awesome-icon class="icon" :icon="['fas', 'search']"/>
+                
                 Допросить
               </el-button>
             </div>
