@@ -181,7 +181,7 @@ export default {
       }
     },
     isHintAffordable () {
-      return this.chosenHint?.cost < this.money
+      return this.chosenHint?.cost <= this.money
     },
     attemptsCaption () {
       if (!this.task?.task?.max_attempts) return
