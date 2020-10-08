@@ -50,7 +50,7 @@ export default {
   },
   async created () {
     this.$message({
-          message: `${navigator.appCodeName} ----   ${navigator.platform} `,
+          message: `${navigator.userAgent} ----   ${navigator.platform} `,
           type: 'warning',
           duration: 0,
           showClose: true
