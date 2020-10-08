@@ -30,6 +30,11 @@
         <el-button v-if="isCaptain && isPause" type="primary" class="layout__item" @click="next">
           {{task && task.task && task.task.task_id ? 'Взять следующее задание':'Взять задание'}}
         </el-button>
+        <div>
+          <el-button v-if="isPause && isMain && isSuccess" type="primary" class="layout__item" @click="getFact">
+            Интересный факт
+          </el-button>
+        </div>
         <el-button
           v-if="isPlay" 
           type="primary" 
@@ -72,13 +77,25 @@
           <el-button class="button" @click="closeDialog">Отменить</el-button>
         </span>
       </el-dialog>
+      <el-dialog
+        title="Интересный факт"
+        :visible.sync="factDialogVisible"
+        width="300px"
+      >
+        <div class="dialog-body">
+          <p>{{factText}}</p>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button class="button" type="primary" @click="factDialogVisible = false">Понятно!</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import store from '@/store'
-import {getTask, nextTask, skipTask, answer, getHints, buyHint} from '@/api/game'
+import {getTask, nextTask, skipTask, answer, getHints, buyHint, getFact} from '@/api/game'
 import {getTeam} from '@/api/team'
 const getMinutes = (time) => {
   const minutes = Math.floor(time / 60)
@@ -107,7 +124,9 @@ export default {
       money: 0,
       points: 0,
       hintDialogVisible: false,
-      isRefreshing: false
+      isRefreshing: false,
+      factText:'',
+      factDialogVisible: false
     }
   },
   async created () {
@@ -284,6 +303,15 @@ export default {
     async getPoints() {
         const {data} = await getTeam()
         this.points = data?.score
+    },
+    async getFact () {
+      try {
+        const {data} = await getFact()
+        this.factText = data.fact
+        this.factDialogVisible = true
+      } catch (e) {
+        this.errorMessage = e.response.data.message
+      }
     }
    }
 }
