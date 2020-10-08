@@ -80,8 +80,31 @@ export default {
       return this.$store.state.isAuth
     },
     browser () {
-      const isSafari = window.safari !== undefined;
-      return isSafari?'Сафари':'Не сафари'
+      const uAgent = navigator.userAgent || ''
+      return {
+       
+	version : (uAgent.match( /.+(?:me|ox|on|rv|it|era|ie)[/: ]([\d.]+)/ ) || [0,'0'])[1],
+	opera : /opera/i.test(uAgent),
+	mozilla : /firefox/i.test(uAgent),
+	chrome : /chrome/i.test(uAgent),
+	safari : (!(/chrome/i.test(uAgent)) && /webkit|safari|khtml/i.test(uAgent)),
+	iphone : /iphone/i.test(uAgent),
+	ipod : /ipod/i.test(uAgent),
+	iphone4 : /iphone.*OS 4/i.test(uAgent),
+	ipod4 : /ipod.*OS 4/i.test(uAgent),
+	ipad : /ipad/i.test(uAgent),
+	ios : /ipad|ipod|iphone/i.test(uAgent),
+	android : /android/i.test(uAgent),
+	bada : /bada/i.test(uAgent),
+	mobile : /iphone|ipod|ipad|opera mini|opera mobi|iemobile/i.test(uAgent),
+	msie_mobile : /iemobile/i.test(uAgent),
+	safari_mobile : /iphone|ipod|ipad/i.test(uAgent),
+	opera_mobile : /opera mini|opera mobi/i.test(uAgent),
+	opera_mini : /opera mini/i.test(uAgent),
+	mac : /mac/i.test(uAgent),
+	android_version: parseFloat(uAgent.slice(uAgent.indexOf("Android")+8)) || 0
+};
+
     }
   },
   methods: {
