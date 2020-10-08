@@ -16,7 +16,7 @@
             </div>
           </div>
         </div>
-        <div v-else-if="!isReaderOpened && false" key="list">
+        <div v-else-if="!isReaderOpened" key="list">
           <h3>Побочное задание</h3>
           <template v-if="witnesses.length">
             <p>Для вашего удобства предоставлен список людей, имеющих отношение к ученому. Здесь будут появляться отметки после общения с каждым из них</p>
