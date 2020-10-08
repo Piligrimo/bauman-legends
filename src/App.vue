@@ -93,8 +93,8 @@ export default {
       const uAgent = navigator.userAgent || ''
       const ios = /ipad|ipod|iphone/i.test(uAgent)
       const android = /android/i.test(uAgent)
-      if (ios) return 'Ради бога, пользуйся Safari, если ты используешь IOS'
-      if (android) return 'Ради бога, пользуйся Google Chrome, если ты используешь Android'
+      if (ios) return 'Для нормальной работоспособности сайта используйте Safari'
+      if (android) return 'Для нормальной работоспособности сайта используйте Google Chrome'
       return ''
     }
   },
