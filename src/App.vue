@@ -25,20 +25,8 @@
         >
           <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
           <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
-          <el-menu-item 
-            v-if="$store.state.stage === 'FINAL'"
-            index="/docs" 
-            @click="collapsed = true"
-          > 
-            <p class="menu-item">Документы</p>
-          </el-menu-item>
-          <el-menu-item 
-            v-if="$store.state.stage === 'FINAL'"
-            index="/side-quest" 
-            @click="collapsed = true"
-          > 
-            <p class="menu-item">Побочное задание</p>
-          </el-menu-item>
+          <el-menu-item index="/docs" @click="collapsed = true"> <p class="menu-item">Документы</p></el-menu-item>
+          <el-menu-item index="/side-quest"  @click="collapsed = true"> <p class="menu-item">Побочное задание</p></el-menu-item>
         </el-menu>
       </div>
     </transition>
@@ -107,11 +95,6 @@ export default {
       if (!this.isAuth && this.requiresAuth)
         this.$router.push('/login')
       if (this.isAuth && !this.requiresAuth)
-        this.$router.push('/team')
-      if (this.$store?.state?.stage !== 'FINAL' && 
-        this.$store?.state?.stage !== '' && 
-        (this.$route.path === '/side-quest' || this.$route.path === '/docs')
-      )
         this.$router.push('/team')
     }
   }
