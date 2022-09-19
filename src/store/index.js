@@ -26,7 +26,7 @@ export default new Vuex.Store({
       try {
         const {data} = await getUser()
         commit('setUser', data)
-        if (data?.user_id) 
+        if (data?.id) 
           commit('setAuth', true) 
         else
           commit('setAuth', false)

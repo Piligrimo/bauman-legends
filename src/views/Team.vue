@@ -6,22 +6,8 @@
         <el-radio v-model="toJoinTeam" size="medium" :label="true">Присоединиться к команде</el-radio>
         <el-radio v-model="toJoinTeam" size="medium" :label="false">Создать команду</el-radio>
         <div v-if="toJoinTeam">
-          <el-input class="layout__item" placeholder="Поиск по названию или номеру" v-model="search"/>
-          <div class="team__list">
-            <table v-if="filteredTeams.length">
-              <tr v-for="item in filteredTeams" :key="item.team_id">
-                <td>{{item.team_id}}.</td>
-                <td> 
-                  <p class="team__list-title">{{item.team_name}}</p>
-                  <p class="hint">{{pluralize(item.size)}}</p>
-                </td>
-                <td> 
-                  <el-button type="primary" size="mini" @click="openJoinDialog(item)">Вступить</el-button>
-                </td>
-              </tr>
-            </table>       
-            <p v-else>Команды не найдены :(</p> 
-          </div>
+          <el-input class="layout__item" placeholder="Пригласительный код" v-model="search"/>
+          <el-button class="layout__item" type="primary" @click="joinTeam" :disabled="!inviteCode">Вступить</el-button>
         </div>
         <div v-else>
           <el-input class="layout__item" placeholder="Название команды" v-model="teamNameInput"/>
@@ -109,27 +95,12 @@
           <el-button class="button" @click="closeDialog">Отменить</el-button>
         </span>
       </el-dialog>
-      <el-dialog
-        :title="`Вступить в команду «${chosenTeam.team_name}»`"
-        :visible.sync="joinDialogVisible"
-        :before-close="closeDialog"
-        width="300px"
-      >
-        <div class="dialog-body">
-          <p>Чтоб присоединиться к команде, введи пригласительный код</p>
-          <el-input class="layout__item" placeholder="Пригласительный код" v-model="inviteCode"/>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button class="button" type="primary" @click="joinTeam" :disabled="!inviteCode">Вступить</el-button>
-          <el-button class="button" @click="closeDialog">Отменить</el-button>
-        </span>
-      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import {getTeam, getAllTeams, getTeamMembers, joinTeam, createTeam, setLeader, kickMember, leave} from '@/api/team'
+import {getTeam, getTeamMembers, joinTeam, createTeam, setLeader, kickMember, leave} from '@/api/team'
 import store from '@/store'
 
 export default {
@@ -167,7 +138,7 @@ export default {
   store,
   computed:{
     isCaptain () {
-      return this.$store.state.user?.user_id === this.team?.leader_id
+      return this.$store.state.user.captain
     },
     filteredTeams () {
       if (!this.search) return this.teamList
@@ -186,42 +157,38 @@ export default {
         const {data} = await getTeam()
         await this.setTeam(data)
       } catch (e) {
-        if (e.response.status === 404)
+        if (e.response.status === 400)
         {
           this.team = null
-          const {data} = await getAllTeams()
-
-          this.teamList = data.sort((a,b) => a.team_id - b.team_id)
         }
          else{
            console.error(e)
-           this.errorMessage=e.response.data.message
+           this.errorMessage=e.response.data.detail
          }
       }
     },
     async joinTeam () {
       try {
-       const {data} = await joinTeam({team_id: this.chosenTeam.team_id, invite_code: this.inviteCode})
+       const {data} = await joinTeam({code: this.inviteCode})
         this.setTeam(data)
       } catch (e) {
-        this.errorMessage=e.response.data.message
-      } finally {
-        this.closeDialog()
+        this.errorMessage=e.response?.data?.detail || "Произошла ошибка!"
       }
     },
     async createTeam () {
       try {
-        const {data} = await createTeam({team_name: this.teamNameInput})
-        this.setTeam(data)
+        await createTeam({name: this.teamNameInput})
+        await this.getTeam()
       } catch (e) {
-        this.errorMessage=e.response.data.message
+        console.log(e.response)
+        this.errorMessage=e.response?.data?.detail || "Произошла ошибка!"
       }
     },
     async setTeam (team) {
       const {data} = await getTeamMembers()
       this.team = team
-      this.captain = data.find(member => member?.user_id === team?.leader_id)
-      this.members = data.filter(member => member?.user_id !== team?.leader_id)
+      this.captain = data.find(member => member.captain)
+      this.members = data.filter(member => !member.captain)
     },
     openLeaderDialog(member) {
       this.chosenUser = member
