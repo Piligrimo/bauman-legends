@@ -19,9 +19,9 @@
           router
           :default-active="$route.path"
           class="menu"
-          background-color="#20245c"
+          background-color="#10141d"
           active-text-color="#ffffff"
-          text-color="#ffca85"
+          text-color="#fbf5c3"
         >
           <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
           <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->
@@ -120,7 +120,7 @@ export default {
  .header {
    min-height: 60px;
    padding: 0 1rem;
-   background-color: #141744;
+   background-color: #080b11;
    display: flex;
    justify-content: space-between;
    align-items: center;
