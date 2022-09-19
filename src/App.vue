@@ -24,9 +24,10 @@
           text-color="#ffca85"
         >
           <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
-          <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
+          <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->
+          <!-- <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
           <el-menu-item index="/docs" @click="collapsed = true"> <p class="menu-item">Документы</p></el-menu-item>
-          <el-menu-item index="/side-quest"  @click="collapsed = true"> <p class="menu-item">Побочное задание</p></el-menu-item>
+          <el-menu-item index="/side-quest"  @click="collapsed = true"> <p class="menu-item">Побочное задание</p></el-menu-item> -->
         </el-menu>
       </div>
     </transition>
@@ -58,7 +59,7 @@ export default {
     console.log('--------------------------------')
     console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
     await this.$store.dispatch('getUser')
-    await this.$store.dispatch('getStage')
+    //  await this.$store.dispatch('getStage') на время регистрации закоментил
     this.handleRouting()
   },
   store,

@@ -43,7 +43,7 @@ export default {
         password: this.password,
         first_name: this.firstName,
         last_name: this.lastName,
-        group: this.group,
+        group_number: this.group,
         vk_ref: this.vkRef,
       }
       try {

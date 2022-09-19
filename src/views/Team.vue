@@ -12,7 +12,7 @@
               <tr v-for="item in filteredTeams" :key="item.team_id">
                 <td>{{item.team_id}}.</td>
                 <td> 
-                  <p class="team__list-title">{{item.team_name}}
+                  <p class="team__list-title">{{item.team_name}}</p>
                   <p class="hint">{{pluralize(item.size)}}</p>
                 </td>
                 <td> 
