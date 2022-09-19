@@ -18,6 +18,7 @@
 <script>
 import {signIn} from '@/api/user'
 import store from '@/store'
+import axios from 'axios';
 
 export default {
   data () {
@@ -42,7 +43,10 @@ export default {
         password: this.password
       }
       try {
-        await signIn(args)
+        const {data: {access_token} } =  await signIn(args)
+
+        localStorage.setItem('access_token', access_token)
+        axios.defaults.headers.common.Authorization = 'Bearer ' + access_token
         await this.$store.dispatch('getUser')
 
         this.$router.push('/team')

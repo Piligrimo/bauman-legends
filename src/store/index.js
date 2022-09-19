@@ -26,8 +26,7 @@ export default new Vuex.Store({
       try {
         const {data} = await getUser()
         commit('setUser', data)
-        // eslint-disable-next-line no-constant-condition
-        if (data?.user_id || true) 
+        if (data?.user_id) 
           commit('setAuth', true) 
         else
           commit('setAuth', false)

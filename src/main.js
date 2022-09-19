@@ -8,7 +8,11 @@ import './assets/main.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCrown, faUserMinus, faSignOutAlt, faBars, faSyncAlt, faSearch, faCheck, faReply, faFileAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Axios from 'axios'
 
+Vue.prototype.$http = Axios;
+
+Vue.prototype.$http.defaults.headers.common.Authorization = 'Bearer ' +  localStorage.getItem('access_token');
 
 library.add(faCrown)
 library.add(faUserMinus)

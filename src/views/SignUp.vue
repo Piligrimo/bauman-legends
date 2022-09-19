@@ -16,6 +16,7 @@
 
 <script>
 import {signUp} from '@/api/user'
+import axios from 'axios';
 
 export default {
   data () {
@@ -47,7 +48,9 @@ export default {
         vk_ref: this.vkRef,
       }
       try {
-        await signUp(args)
+        const {data: {access_token} } = await signUp(args)
+        localStorage.setItem('access_token', access_token)
+        axios.defaults.headers.common.Authorization = 'Bearer ' + access_token
         await this.$store.dispatch('getUser')
 
         this.$router.push('/team')
