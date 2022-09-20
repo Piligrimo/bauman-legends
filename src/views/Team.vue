@@ -174,6 +174,7 @@ export default {
       try {
         await createTeam({name: this.teamNameInput})
         await this.getTeam()
+        await this.$store.dispatch('getUser')
       } catch (e) {
         console.log(e.response)
         this.errorMessage=e.response?.data?.detail || "Произошла ошибка!"
