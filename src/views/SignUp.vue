@@ -2,22 +2,30 @@
   <div class="content login-bg">
     <div class="layout">
       <h3 class="layout__title">Регистрация</h3>
-      <el-input class="layout__item" placeholder="Логин" v-model="login" />
+      <p class="label">Логин</p>
+      <el-input class="layout__item" placeholder="Login" v-model="login" />
+      <p class="label">Пароль</p>
       <el-input
         class="layout__item"
-        placeholder="Пароль"
+        placeholder="******"
         v-model="password"
         show-password
       />
-      <el-input class="layout__item" placeholder="Имя" v-model="firstName" />
-      <el-input class="layout__item" placeholder="Фамилия" v-model="lastName" />
+      <p class="label">Имя</p>
+      <el-input class="layout__item" placeholder="Иван" v-model="firstName" />
+      <p class="label">Фамилия</p>
+      <el-input class="layout__item" placeholder="Иванов" v-model="lastName" />
+      <p class="label">Учебная группа</p>
       <el-input
         class="layout__item"
-        placeholder="Учебная группа"
+        placeholder="ИУ5-14"
         v-model="group"
       />
-      <el-input class="layout__item" placeholder="Ссылка ВК" v-model="vkRef" />
-      <el-button class="layout__item" :disabled="isDisabled" @click="submitForm"
+      <p class="label">Ссылка ВК</p>
+      <el-input class="layout__item" placeholder="id0123456" v-model="vkRef" />
+      <br/>
+      <br/>
+      <el-button class="layout__item"  type="primary"  :disabled="isDisabled" @click="submitForm"
         >Зарегистрироваться</el-button
       >
       <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
@@ -101,4 +109,9 @@ export default {
 </script>
 
 <style scoped>
+  .label {
+    color: rgb(46, 49, 51);
+    font-size: 12px;
+    margin: 8px 4px -6px 6px;
+  }
 </style>
