@@ -3,13 +3,14 @@
     <div class="layout">
       <h3 class="layout__title">Регистрация</h3>
       <p class="label">Логин</p>
-      <el-input class="layout__item" placeholder="Login" v-model="login" :minlength="5" :maxlength="21" />
+      <el-input class="layout__item" placeholder="Login" v-model="login" :maxlength="21" />
       <p class="label">Пароль</p>
       <el-input
         class="layout__item"
         placeholder="******"
         v-model="password"
         show-password
+        :maxlength="21"
       />
       <p class="label">Имя</p>
       <el-input class="layout__item" placeholder="Иван" v-model="firstName" :maxlength="30" />
