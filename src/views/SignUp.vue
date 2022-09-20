@@ -84,7 +84,7 @@ export default {
       } catch (e) {
         console.error(e);
         const detail = e.response?.data?.detail;
-        if (detail.length) {
+        if (detail?.length) {
           const messages = detail.map(({ loc }) => {
             const field = loc?.[1];
             return errorDict[field];

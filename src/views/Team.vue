@@ -162,6 +162,11 @@ export default {
         await joinTeam({code: this.inviteCode})
         this.getTeam()
       } catch (e) {
+        const detail = e.response?.data?.detail;
+        if (detail?.length) {
+          this.errorMessage = "Неправильно введен код!"
+          return
+        }
         this.errorMessage=e.response?.data?.detail || "Произошла ошибка!"
       }
     },
