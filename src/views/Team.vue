@@ -163,7 +163,7 @@ export default {
         this.getTeam()
       } catch (e) {
         const detail = e.response?.data?.detail;
-        if (detail?.length) {
+        if (detail?.length && typeof detail !==  'string') {
           this.errorMessage = "Неправильно введен код!"
           return
         }
