@@ -1,7 +1,7 @@
 <template>
   <div class="content login-bg">
     <div class="layout">
-      <h3 class="layout__title">Логин</h3>
+      <armed-title text="Логин" />
       <el-input class="layout__item" placeholder="Логин" v-model="login"/>
       <el-input class="layout__item" placeholder="Пароль" v-model="password" show-password/>
       <div  class="layout__actions">
@@ -19,13 +19,15 @@
 import {signIn} from '@/api/user'
 import store from '@/store'
 import axios from 'axios';
+import ArmedTitle from '../components/ArmedTitle.vue';
 
 export default {
+  components: { ArmedTitle },
   data () {
     return {
         login: '',
         password: '',
-        errorMessage: []
+        errorMessages: []
     }
   },
   store,
@@ -37,7 +39,7 @@ export default {
   },
   methods: {
     async submitForm() {
-      this.errorMessage = ''
+      this.errorMessages = ''
       const args = {
         login: this.login,
         password: this.password
@@ -56,12 +58,10 @@ export default {
         const detail = e.response?.data?.detail;
         if (detail?.length && typeof detail !== 'string') {
           this.errorMessages =  detail.map(({ msg }) => msg)
-          this.$forceUpdate() // это кринж, не делайте так
           return
         }
 
         this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
-        this.$forceUpdate() // это кринж, не делайте так
       }
     } 
   }
