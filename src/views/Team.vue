@@ -6,7 +6,7 @@
         <el-radio v-model="toJoinTeam" size="medium" :label="true">Присоединиться к команде</el-radio>
         <el-radio v-model="toJoinTeam" size="medium" :label="false">Создать команду</el-radio>
         <div v-if="toJoinTeam">
-          <el-input class="layout__item" placeholder="Пригласительный код" v-model="search"/>
+          <el-input class="layout__item" placeholder="Пригласительный код" v-model="inviteCode"/>
           <el-button class="layout__item" type="primary" @click="joinTeam" :disabled="!inviteCode">Вступить</el-button>
         </div>
         <div v-else>
