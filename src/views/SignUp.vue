@@ -30,6 +30,9 @@
       <el-button class="layout__item"  type="primary"  :disabled="isDisabled" @click="submitForm"
         >Зарегистрироваться</el-button
       >
+      <router-link to="/login">
+          <el-button class="layout__action" type="primary">Назад</el-button>
+        </router-link>
       <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
     </div>
   </div>
