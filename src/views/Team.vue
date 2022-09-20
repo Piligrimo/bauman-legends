@@ -36,7 +36,7 @@
             />
           </div> 
         </div>
-        <p><span class="team__stat">Баллы: </span>{{team.points}}</p>
+        <!-- <p><span class="team__stat">Баллы: </span>{{team.points}}</p> -->
         <template v-if="isCaptain">
           <p>
             <span class="team__stat">Пригласительный код: </span>
@@ -139,15 +139,6 @@ export default {
     isCaptain () {
       return this.$store.state.user.captain
     },
-    filteredTeams () {
-      if (!this.search) return this.teamList
-      return this.teamList.filter(team => {
-        const name = team?.team_name.toUpperCase()
-        const search = this.search.toUpperCase()
-        const id = String(team?.team_id)
-        return name.indexOf(search) >=0 || id.indexOf(search) >=0
-      })
-    }
   },
   methods: {
     async getTeam () {
@@ -200,10 +191,6 @@ export default {
     openLeaveDialog() {
       this.leaveDialogVisible = true
     },
-    openJoinDialog(team) {
-      this.chosenTeam = team
-      this.joinDialogVisible = true
-    },
     closeDialog() {
       this.chosenUser = {
         first_name: '',
@@ -218,7 +205,6 @@ export default {
       this.kickDialogVisible = false
       this.leaderDialogVisible = false
       this.leaveDialogVisible = false
-      this.joinDialogVisible = false
     },
     async setLeader() {
       const {data} = await setLeader(this.chosenUser.id)
@@ -236,15 +222,6 @@ export default {
       await this.getTeam()
       this.closeDialog()
     },
-    pluralize(num) {
-      switch (num % 10) {
-        case 1: return num + ' участник'
-        case 2: return num + ' участника'
-        case 3: return num + ' участника'
-        case 4: return num + ' участника'
-        default: return num + ' участников'
-      }
-    }
   }
 }
 </script>

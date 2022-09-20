@@ -52,7 +52,7 @@ export default {
         this.$router.push('/team')
     
       } catch (e) {
-        this.errorMessage = e.response.data.message
+        this.errorMessage = e.response?.data?.detail || "Произошла ошибка"
       }
     } 
   }
