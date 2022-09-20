@@ -254,6 +254,7 @@ export default {
   }
   .team__code {
     font-family: monospace;
+    font-size: 16px;
     color: #5f5f5f;
     font-weight: bold;
   }
