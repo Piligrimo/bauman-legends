@@ -11,7 +11,7 @@
         </div>
         <div v-else>
           <el-input class="layout__item" placeholder="Название команды" v-model="teamNameInput"/>
-          <el-button class="layout__item"  @click="createTeam">Создать</el-button>
+          <el-button class="layout__item" type="primary" @click="createTeam"  :disabled="!teamNameInput">Создать</el-button>
         </div>
       </div>
       <div v-else-if="team">
@@ -153,7 +153,7 @@ export default {
         }
          else{
            console.error(e)
-           this.errorMessage=e.response.data.detail
+           this.errorMessage=e.response?.data?.detail
          }
       }
     },
