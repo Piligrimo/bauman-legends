@@ -3,7 +3,7 @@
     <div class="layout">
       <h3 class="layout__title">Регистрация</h3>
       <p class="label">Логин</p>
-      <el-input class="layout__item" placeholder="Login" v-model="login" />
+      <el-input class="layout__item" placeholder="Login" v-model="login" :minlength="5" :maxlength="21" />
       <p class="label">Пароль</p>
       <el-input
         class="layout__item"
@@ -12,23 +12,24 @@
         show-password
       />
       <p class="label">Имя</p>
-      <el-input class="layout__item" placeholder="Иван" v-model="firstName" />
+      <el-input class="layout__item" placeholder="Иван" v-model="firstName" :maxlength="30" />
       <p class="label">Фамилия</p>
-      <el-input class="layout__item" placeholder="Иванов" v-model="lastName" />
+      <el-input class="layout__item" placeholder="Иванов" v-model="lastName" :maxlength="30" />
       <p class="label">Учебная группа</p>
       <el-input
         class="layout__item"
         placeholder="ИУ5-14"
         v-model="group"
+        :maxlength="10"
       />
-      <p class="label">Ссылка ВК</p>
-      <el-input class="layout__item" placeholder="id0123456" v-model="vkRef" />
+      <p class="label">Ник или cсылка ВК</p>
+      <el-input class="layout__item" placeholder="id0123456" v-model="vkRef" :maxlength="40" />
       <br/>
       <br/>
       <el-button class="layout__item"  type="primary"  :disabled="isDisabled" @click="submitForm"
         >Зарегистрироваться</el-button
       >
-      <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
+      <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
     </div>
   </div>
 </template>
@@ -40,7 +41,7 @@ import axios from "axios";
 const errorDict = {
   first_name: "Имя введено в неправильном формате!",
   last_name: "Фамилия введена в неправильном формате!",
-  vk_ref: "Ссылка на вк введена в неправильном формате!",
+  vk_ref: "Ссылка на ВК введена в неправильном формате!",
   group_number: "Учебная группа введена в неправильном формате!",
 };
 
@@ -53,7 +54,7 @@ export default {
       lastName: "",
       group: "",
       vkRef: "",
-      errorMessage: "",
+      errorMessages: [],
     };
   },
   computed: {
@@ -97,11 +98,11 @@ export default {
             const field = loc?.[1];
             return errorDict[field];
           });
-          this.errorMessage = messages.join('\n')
+          this.errorMessages = messages
           return
         }
 
-        this.errorMessage = e.response.data.detail || "Произошла ошибка";
+        this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
       }
     },
   },

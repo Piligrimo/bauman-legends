@@ -10,7 +10,7 @@
           <el-button class="layout__item" type="primary" @click="joinTeam" :disabled="!inviteCode">Вступить</el-button>
         </div>
         <div v-else>
-          <el-input class="layout__item" placeholder="Название команды" v-model="teamNameInput"/>
+          <el-input class="layout__item" placeholder="Название команды" v-model="teamNameInput" :maxlength="21"/>
           <el-button class="layout__item" type="primary" @click="createTeam"  :disabled="!teamNameInput">Создать</el-button>
         </div>
       </div>
