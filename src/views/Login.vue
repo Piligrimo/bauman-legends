@@ -10,7 +10,7 @@
           <el-button class="layout__action" type="primary">Зарегистрироваться</el-button>
         </router-link>
       </div>
-      <p  class="error-message" v-if="errorMessage">{{errorMessage}}</p>
+      <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
     return {
         login: '',
         password: '',
-        errorMessage: ''
+        errorMessage: []
     }
   },
   store,
@@ -52,7 +52,14 @@ export default {
         this.$router.push('/team')
     
       } catch (e) {
-        this.errorMessage = e.response?.data?.detail || "Произошла ошибка"
+        console.error(e);
+        const detail = e.response?.data?.detail;
+        if (detail?.length && typeof detail !== 'string') {
+          this.errorMessages =  detail.map(({ msg }) => msg);
+          return
+        }
+
+        this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
       }
     } 
   }

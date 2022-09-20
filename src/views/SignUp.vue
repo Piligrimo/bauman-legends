@@ -38,13 +38,6 @@
 import { signUp } from "@/api/user";
 import axios from "axios";
 
-const errorDict = {
-  first_name: "Имя введено в неправильном формате!",
-  last_name: "Фамилия введена в неправильном формате!",
-  vk_ref: "Ссылка на ВК введена в неправильном формате!",
-  group_number: "Учебная группа введена в неправильном формате!",
-};
-
 export default {
   data() {
     return {
@@ -93,12 +86,8 @@ export default {
       } catch (e) {
         console.error(e);
         const detail = e.response?.data?.detail;
-        if (detail?.length) {
-          const messages = detail.map(({ loc }) => {
-            const field = loc?.[1];
-            return errorDict[field];
-          });
-          this.errorMessages = messages
+        if (detail?.length && typeof detail !== 'string') {
+          this.errorMessages =  detail.map(({ msg }) => msg);
           return
         }
 
