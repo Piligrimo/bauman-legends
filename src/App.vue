@@ -37,7 +37,6 @@
 
 <script>
 import store from '@/store'
-import {logOut} from '@/api/user'
 export default {
   data () {
     return {
@@ -89,7 +88,7 @@ export default {
   },
   methods: {
     async logOut () {
-      await logOut()
+      localStorage.removeItem('access_token')
       this.$store.commit('setAuth', false)
     },
     handleRouting () {

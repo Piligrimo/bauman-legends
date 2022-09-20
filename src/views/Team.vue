@@ -15,8 +15,8 @@
         </div>
       </div>
       <div v-else-if="team">
-        <h2 class="layout__title">"{{team.team_name}}"</h2>
-        <h2 class="layout__title">Команда № {{team.team_id}}</h2>
+        <h2 class="layout__title">"{{team.name}}"</h2>
+        <h2 class="layout__title">Команда № {{team.id}}</h2>
         <h3>Капитан: </h3><p>{{captain.first_name}} {{captain.last_name}}</p>
         <h3 v-if="members.length">Участники:</h3>
         <div class="team__member" v-for="(member, i) in members" :key="i">
@@ -36,12 +36,11 @@
             />
           </div> 
         </div>
-        <p><span class="team__stat">Баллы: </span>{{team.score}}</p>
-        <p><span class="team__stat">Эсктра-баллы: </span>{{team.money}}</p>
+        <p><span class="team__stat">Баллы: </span>{{team.points}}</p>
         <template v-if="isCaptain">
           <p>
             <span class="team__stat">Пригласительный код: </span>
-            <span class="team__code">{{team.invite_code}}</span></p>
+            <span class="team__code">{{team.invitation_code}}</span></p>
           <p class="hint">сообщи этот код членам своей команды, чтоб они могли присоединиться</p>
         </template>
         <el-button
