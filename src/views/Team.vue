@@ -173,8 +173,8 @@ export default {
     async createTeam () {
       try {
         await createTeam({name: this.teamNameInput})
-        await this.getTeam()
         await this.$store.dispatch('getUser')
+        await this.getTeam()
       } catch (e) {
         console.log(e.response)
         this.errorMessage=e.response?.data?.detail || "Произошла ошибка!"
@@ -226,6 +226,7 @@ export default {
     async leave() {
       await leave()
       await this.getTeam()
+      await this.$store.dispatch('getUser')
       this.closeDialog()
     },
   }
