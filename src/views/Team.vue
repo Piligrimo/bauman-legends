@@ -159,8 +159,8 @@ export default {
     },
     async joinTeam () {
       try {
-       const {data} = await joinTeam({code: this.inviteCode})
-        this.setTeam(data)
+        await joinTeam({code: this.inviteCode})
+        this.getTeam()
       } catch (e) {
         this.errorMessage=e.response?.data?.detail || "Произошла ошибка!"
       }
