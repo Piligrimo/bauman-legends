@@ -21,7 +21,7 @@
         <h3 v-if="members.length">Участники:</h3>
         <div class="team__member" v-for="(member, i) in members" :key="i">
           <p> {{i+1}}. {{member.first_name}} {{member.last_name}}
-            <span v-if="member.user_id===$store.state.user.user_id">(ты)</span>
+            <span v-if="member.id===$store.state.user.id">(ты)</span>
           </p>
           <div v-if="isCaptain">
             <font-awesome-icon
@@ -118,11 +118,11 @@ export default {
       chosenUser: {
         first_name: '',
         last_name: '',
-        user_id: ''
+        id: ''
       },
       chosenTeam: {
-        team_name: '',
-        team_id: ''
+        name: '',
+        id: ''
       },
       leaderDialogVisible: false,
       kickDialogVisible: false,
@@ -208,7 +208,7 @@ export default {
       this.chosenUser = {
         first_name: '',
         last_name: '',
-        user_id: ''
+        id: ''
       }
       this.chosenTeam = {
         team_name: '',
@@ -221,13 +221,13 @@ export default {
       this.joinDialogVisible = false
     },
     async setLeader() {
-      const {data} = await setLeader(this.chosenUser.user_id)
+      const {data} = await setLeader(this.chosenUser.id)
       await this.$store.dispatch('getUser')
       await this.setTeam(data)
       this.closeDialog()
     },
     async kickMember() {
-      await kickMember(this.chosenUser.user_id)
+      await kickMember(this.chosenUser.id)
       await this.getTeam()
       this.closeDialog()
     },

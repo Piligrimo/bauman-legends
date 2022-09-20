@@ -37,6 +37,8 @@
 
 <script>
 import store from '@/store'
+import axios from 'axios';
+
 export default {
   data () {
     return {
@@ -89,6 +91,8 @@ export default {
   methods: {
     async logOut () {
       localStorage.removeItem('access_token')
+      delete axios.defaults.headers.common.Authorization
+      
       this.$store.commit('setAuth', false)
     },
     handleRouting () {
