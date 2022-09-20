@@ -38,9 +38,10 @@
 .layout__actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
-.layout__action {
+
+.layout__action_wide {
   margin-top: 0.5rem;
   width: 100%;
 }
@@ -49,7 +50,10 @@
   .layout__actions {
     flex-direction: column;
   }
-  
+  .layout__action {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
 }
 
 .content{

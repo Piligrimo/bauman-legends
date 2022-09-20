@@ -5,9 +5,9 @@
       <el-input class="layout__item" placeholder="Логин" v-model="login"/>
       <el-input class="layout__item" placeholder="Пароль" v-model="password" show-password/>
       <div  class="layout__actions">
-        <el-button  type="primary" :disabled="isDisabled" @click="submitForm">Войти</el-button>
+        <el-button class="layout__action"  type="primary" :disabled="isDisabled" @click="submitForm">Войти</el-button>
         <router-link to="/sign-up">
-          <el-button  type="primary">Зарегистрироваться</el-button>
+          <el-button  class="layout__action" type="primary">Зарегистрироваться</el-button>
         </router-link>
       </div>
       <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
