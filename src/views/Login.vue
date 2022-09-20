@@ -55,7 +55,8 @@ export default {
         console.error(e);
         const detail = e.response?.data?.detail;
         if (detail?.length && typeof detail !== 'string') {
-          this.errorMessages =  detail.map(({ msg }) => msg);
+          this.errorMessages =  detail.map(({ msg }) => msg)
+          this.$forceUpdate() // это кринж, не делайте так
           return
         }
 
