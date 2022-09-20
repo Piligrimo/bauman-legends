@@ -1,7 +1,11 @@
 <template>
   <div class="content login-bg">
     <div class="layout">
-      <h3 class="layout__title">Регистрация</h3>
+      <div class="sign-in-header">
+        <div class="arms ss"/>
+          <h3 class="layout__title">Регистрация</h3>        
+        <div class="arms bmstu"/>
+      </div>
       <p class="label">Логин</p>
       <el-input class="layout__item" placeholder="Login" v-model="login" :maxlength="21" />
       <p class="label">Пароль</p>
@@ -103,6 +107,26 @@ export default {
 </script>
 
 <style scoped>
+  .sign-in-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .arms {
+    height: 60px;
+    width: 60px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .ss {
+    background-image: url('../assets//ss.png');
+  }
+
+  .bmstu {
+    background-image: url('../assets//bmstu.png');
+  }
   .label {
     color: rgb(46, 49, 51);
     font-size: 12px;

@@ -61,6 +61,7 @@ export default {
         }
 
         this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
+        this.$forceUpdate() // это кринж, не делайте так
       }
     } 
   }
