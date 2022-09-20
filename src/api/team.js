@@ -30,5 +30,5 @@ export const kickMember = async (args) => {
 }
 
 export const leave =  async () => {
-    return await Axios.delete(BASEURL+'/team/leave', {withCredentials: true})
+    return await Axios.post(BASEURL+'/team/leave',{}, {withCredentials: true})
 }

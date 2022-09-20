@@ -212,9 +212,9 @@ export default {
       this.leaveDialogVisible = false
     },
     async setLeader() {
-      const {data} = await setLeader(this.chosenUser.id)
+      await setLeader(this.chosenUser.id)
       await this.$store.dispatch('getUser')
-      await this.setTeam(data)
+      await this.getTeam()
       this.closeDialog()
     },
     async kickMember() {
