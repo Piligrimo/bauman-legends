@@ -31,12 +31,11 @@
       <el-input class="layout__item" placeholder="id0123456" v-model="vkRef" :maxlength="40" />
       <br/>
       <br/>
-      <el-button class="layout__item"  type="primary"  :disabled="isDisabled" @click="submitForm"
-        >Зарегистрироваться</el-button
-      >
-      <router-link to="/login">
-          <el-button class="layout__action" type="primary">Назад</el-button>
-        </router-link>
+      <el-button class="layout__item"  type="primary"  :disabled="isDisabled" @click="submitForm">
+        Зарегистрироваться</el-button>
+      <router-link  class="layout__action"  to="/login">
+        <el-button  class="layout__action" type="primary">Назад</el-button>
+      </router-link>
       <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
     </div>
   </div>

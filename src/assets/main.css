@@ -38,17 +38,18 @@
 .layout__actions {
   display: flex;
   justify-content: space-between;
+  margin-top: 1rem;
+}
+.layout__action {
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 @media screen and (max-width: 480px) { 
   .layout__actions {
     flex-direction: column;
   }
-  .layout__action {
-    margin-top: 0.5rem;
-    width: 100%;
-  }
+  
 }
 
 .content{
