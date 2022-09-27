@@ -1,1 +1,1 @@
-export const BASEURL = 'https://legends.batalichev.pro/api'
+export const BASEURL = 'https://testing.legends.bmstu.ru/api'

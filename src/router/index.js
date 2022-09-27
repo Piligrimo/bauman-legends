@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import Team from '../views/Team.vue'
+import Help from '../views/Help.vue'
 
 
 Vue.use(VueRouter)
@@ -26,6 +27,11 @@ const routes = [
     path: '/team',
     name: 'Team',
     component: Team
+  },
+  {
+    path: '/help',
+    name: 'Help',
+    component: Help
   },
   // !!!!!!!!!!!! на время  регистрации !!!!!!!!!!!!
   // {

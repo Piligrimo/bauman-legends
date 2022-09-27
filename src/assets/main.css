@@ -18,7 +18,7 @@
   margin: auto;
   padding: 2rem;
   max-width: 350px;
-  background-color: #ffffffde;
+  background-color: #f8efe6de;
 }
 @media screen and (max-width: 480px) { 
     .layout {

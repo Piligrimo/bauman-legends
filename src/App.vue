@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="$store.state.isAuth" class="header">
+    <div v-if="isAuth" class="header">
       <font-awesome-icon
         class="icon"
         :icon="['fas', 'bars']"
@@ -24,6 +24,7 @@
           text-color="#fbf5c3"
         >
           <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
+          <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item>
           <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->
           <!-- <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
           <el-menu-item index="/docs" @click="collapsed = true"> <p class="menu-item">Документы</p></el-menu-item>
