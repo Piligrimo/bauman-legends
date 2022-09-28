@@ -3116,6 +3116,11 @@
   "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-1.30.1.tgz"
   "version" "1.30.1"
 
+"dayjs@^1.11.5":
+  "integrity" "sha512-CAdX5Q3YW3Gclyo5Vpqkgpj8fSdLQcRuzfX6mC6Phy0nfJ0eGYOeS7m4mt2plDWLAtA4TqTakvbboHvUxfe4iA=="
+  "resolved" "https://registry.npmjs.org/dayjs/-/dayjs-1.11.5.tgz"
+  "version" "1.11.5"
+
 "de-indent@^1.0.2":
   "integrity" "sha1-sgOOhG3DO6pXlhKNCAS0VbjB4h0= sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg=="
   "resolved" "https://registry.npmjs.org/de-indent/-/de-indent-1.0.2.tgz"
@@ -3394,11 +3399,6 @@
   dependencies:
     "domelementtype" "1"
 
-"dommatrix@^1.0.1":
-  "integrity" "sha512-l32Xp/TLgWb8ReqbVJAFIvXmY7go4nTxxlWiAFyhoQw9RKEOHBZNnyGvJWqDVSPmq3Y9HlM4npqF/T6VMOXhww=="
-  "resolved" "https://registry.npmjs.org/dommatrix/-/dommatrix-1.0.3.tgz"
-  "version" "1.0.3"
-
 "domutils@^1.5.1", "domutils@1.5.1":
   "integrity" "sha1-3NhIiib1Y9YQeeSMn3t+Mjc2gs8= sha512-gSu5Oi/I+3wDENBsOWBiRK1eoGxcywYSqg3rR960/+EfY0CF4EX1VPkgHOZ3WiS/Jg2DtliF6BhWcHlfpYUcGw=="
   "resolved" "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz"
@@ -3577,7 +3577,7 @@
   dependencies:
     "stackframe" "^1.1.1"
 
-"es-abstract@^1.17.0-next.1", "es-abstract@^1.17.5", "es-abstract@^1.18.0", "es-abstract@^1.19.0", "es-abstract@^1.19.5":
+"es-abstract@^1.17.0-next.1", "es-abstract@^1.17.5", "es-abstract@^1.19.0", "es-abstract@^1.19.5":
   "integrity" "sha512-AyrnaKVpMzljIdwjzrj+LxGmj8ik2LckwXacHqrJJ/jxz6dDDBcZ7I7nlHM0FvEW8MfbWJwOd+yT2XzYW49Frw=="
   "resolved" "https://registry.npmjs.org/es-abstract/-/es-abstract-1.20.3.tgz"
   "version" "1.20.3"
@@ -6664,24 +6664,6 @@
     "safe-buffer" "^5.0.1"
     "sha.js" "^2.4.8"
 
-"pdfjs-dist@2.14.305":
-  "integrity" "sha512-5f7i25J1dKIBczhgfxEgNxfYNIxXEdxqo6Qb4ehY7Ja+p6AI4uUmk/OcVGXfRGm2ys5iaJJhJUwBFwv6Jl/Qww=="
-  "resolved" "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-2.14.305.tgz"
-  "version" "2.14.305"
-  dependencies:
-    "dommatrix" "^1.0.1"
-    "web-streams-polyfill" "^3.2.1"
-
-"pdfvuer@^1.10.0":
-  "integrity" "sha512-sPeyBeLE12nkOzhiOh97LwSQ72NkGo8WwLC5vpHsFRgeDmquW40PJAxPqrHW12Ua8bpi6RXNm7BjGxvz8jjZ9g=="
-  "resolved" "https://registry.npmjs.org/pdfvuer/-/pdfvuer-1.10.0.tgz"
-  "version" "1.10.0"
-  dependencies:
-    "es-abstract" "^1.18.0"
-    "pdfjs-dist" "2.14.305"
-    "raw-loader" "^0.5.1"
-    "vue-resize-sensor" "^2.0.0"
-
 "performance-now@^2.1.0":
   "integrity" "sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns= sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow=="
   "resolved" "https://registry.npmjs.org/performance-now/-/performance-now-2.1.0.tgz"
@@ -7288,11 +7270,6 @@
     "http-errors" "1.7.2"
     "iconv-lite" "0.4.24"
     "unpipe" "1.0.0"
-
-"raw-loader@^0.5.1":
-  "integrity" "sha512-sf7oGoLuaYAScB4VGr0tzetsYlS8EJH6qnTCfQ/WVEa89hALQ4RQfCKt5xCyPQKPDUbVUAIP1QsxAwfAjlDp7Q=="
-  "resolved" "https://registry.npmjs.org/raw-loader/-/raw-loader-0.5.1.tgz"
-  "version" "0.5.1"
 
 "read-pkg@^5.1.1":
   "integrity" "sha512-Ug69mNOpfvKDAc2Q8DRpMjjzdtrnv9HcSMX+4VsZxD1aZ6ZzrIE7rlzXBtWTyhULSMKg076AW6WR5iZpD0JiOg=="
@@ -8918,11 +8895,6 @@
   "resolved" "https://registry.npmjs.org/vue-pdf-embed/-/vue-pdf-embed-1.1.4.tgz"
   "version" "1.1.4"
 
-"vue-resize-sensor@^2.0.0":
-  "integrity" "sha512-W+y2EAI/BxS4Vlcca9scQv8ifeBFck56DRtSwWJ2H4Cw1GLNUYxiZxUHHkuzuI5JPW/cYtL1bPO5xPyEXx4LmQ=="
-  "resolved" "https://registry.npmjs.org/vue-resize-sensor/-/vue-resize-sensor-2.0.0.tgz"
-  "version" "2.0.0"
-
 "vue-router@^3.2.0":
   "integrity" "sha512-BADg1mjGWX18Dpmy6bOGzGNnk7B/ZA0RxuA6qedY/YJwirMfKXIDzcccmHbQI0A6k5PzMdMloc0ElHfyOoX35A=="
   "resolved" "https://registry.npmjs.org/vue-router/-/vue-router-3.4.3.tgz"
@@ -8983,11 +8955,6 @@
   "version" "1.0.1"
   dependencies:
     "defaults" "^1.0.3"
-
-"web-streams-polyfill@^3.2.1":
-  "integrity" "sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q=="
-  "resolved" "https://registry.npmjs.org/web-streams-polyfill/-/web-streams-polyfill-3.2.1.tgz"
-  "version" "3.2.1"
 
 "webpack-bundle-analyzer@^3.8.0":
   "integrity" "sha512-PODQhAYVEourCcOuU+NiYI7WdR8QyELZGgPvB1y2tjbUpbmcQOt5Q7jEK+ttd5se0KSBKD9SXHCEozS++Wllmw=="

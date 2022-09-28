@@ -5,6 +5,7 @@ import SignUp from '../views/SignUp.vue'
 import Team from '../views/Team.vue'
 import Help from '../views/Help.vue'
 import Consult from '../views/Consult.vue'
+import Feed from '../views/Feed.vue'
 
 
 Vue.use(VueRouter)
@@ -38,6 +39,11 @@ const routes = [
     path: '/consult',
     name: 'Consult',
     component: Consult
+  },
+  {
+    path: '/feed',
+    name: 'Feed',
+    component: Feed
   },
   // !!!!!!!!!!!! на время  регистрации !!!!!!!!!!!!
   // {

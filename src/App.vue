@@ -26,6 +26,8 @@
           <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
           <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item>
           <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Консультация</p> </el-menu-item>
+          <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Обновления</p> </el-menu-item>
+          <el-menu-item  @click="warn"> <p class="menu-item">Битая ссылка</p> </el-menu-item>
           <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->
           <!-- <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
           <el-menu-item index="/docs" @click="collapsed = true"> <p class="menu-item">Документы</p></el-menu-item>
@@ -34,6 +36,17 @@
       </div>
     </transition>
     <router-view/>
+    <el-dialog
+        class="shakin"
+        title="Warning!!!"
+        :visible.sync="warningVisible"
+        width="300px"
+      >
+        <div style="color: red" class="dialog-body">
+          <i class="el-icon-warning"></i> 
+          <span>  Нет доступа!!!</span>
+        </div>
+      </el-dialog>
     <div id="vk_community_messages" :class="{hide: hideVkWidget}"></div>
   </div>
 </template>
@@ -45,7 +58,8 @@ import axios from 'axios';
 export default {
   data () {
     return {
-      collapsed: true
+      collapsed: true,
+      warningVisible: false,
     }
   },
   async created () {
@@ -81,6 +95,9 @@ export default {
     },
     isAuth () {
       return this.$store.state.isAuth
+    }, 
+    user () {
+      return this.$store.user
     },
     hideVkWidget () {
       return this.$route.name !== 'Consult'
@@ -106,6 +123,11 @@ export default {
         this.$router.push('/login')
       if (this.isAuth && !this.requiresAuth)
         this.$router.push('/team')
+    },
+    warn()  {
+      this.warningVisible = true
+      const vue = this
+        setTimeout(()=>{vue.warningVisible = false}, 1500)
     }
   }
 }
@@ -114,6 +136,8 @@ export default {
 <style>
   #app {
     height: 100%; 
+   font-family: 'Cool jazz';
+
   }
 
   #vk_community_messages {
@@ -177,6 +201,34 @@ export default {
 .slide-enter, .slide-leave-to {
   transform: translateX(-200px);
   opacity: 0;
+}
+
+.shakin {
+  animation-name: shake;
+  animation-duration: .2s;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+}
+
+@keyframes shake {
+  0% {
+      transform: translate(15px,10px);
+  }
+  20% {
+      transform: translate(-30px,0);
+  }
+  40% {
+      transform: translate(10px,-15px);
+  }
+  60% {
+      transform: translate(-14px,-1px);
+  }
+  80% {
+      transform: translate(16px,-8px);
+  }
+  100% {
+    transform: translate(0,0); 
+  }
 }
  
 </style>

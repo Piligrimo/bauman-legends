@@ -27,12 +27,16 @@ export default new Vuex.Store({
         const {data} = await getUser()
         commit('setUser', data)
         if (data?.id) 
+        {
           commit('setAuth', true) 
+        }
         else
+        {
           commit('setAuth', false)
+        }
       } catch (e) {
           commit('setAuth', false)
-      }
+        }
     },
 
     async getStage ({commit}) {

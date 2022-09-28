@@ -11,10 +11,11 @@
 }
 
 .dialog-body {
-  word-break: normal;
+  word-break: break-word;
+  max-height: 400px;
+  overflow-y: auto;
 }
 .layout {
-  font-family: 'Cool jazz';
   margin: auto;
   padding: 2rem;
   max-width: 350px;
