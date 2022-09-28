@@ -60,7 +60,6 @@ export default {
           this.errorMessages =  detail.map(({ msg }) => msg)
           return
         }
-
         this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
       }
     } 

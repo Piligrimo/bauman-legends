@@ -2,30 +2,21 @@
   <div class="content info-bg">
     <div class="layout">
       <h3 class="layout__title">Консультация</h3>
-
-      <div id="vk_community_messages"></div>
+      <p>Воспользуйся  виждетм внизу экрана,  чтоб  связаться с модераторами</p>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Help',
-	components: {
-  },
-	data() {
-    return {
-      source1: 'help.pdf',
-    }
-  }
+  name: 'Consult',
+
 }
 </script>
 
 <style scoped>
 
-#vk_community_messages{
-  position: relative !important;
-}
+
 
 
 </style>

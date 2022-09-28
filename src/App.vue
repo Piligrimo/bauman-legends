@@ -33,7 +33,8 @@
         </el-menu>
       </div>
     </transition>
-    <router-view/>  
+    <router-view/>
+    <div id="vk_community_messages" :class="{hide: hideVkWidget}"></div>
   </div>
 </template>
 
@@ -81,6 +82,9 @@ export default {
     isAuth () {
       return this.$store.state.isAuth
     },
+    hideVkWidget () {
+      return this.$route.name !== 'Consult'
+    },
     message () {
       const uAgent = navigator.userAgent || ''
       const ios = /ipad|ipod|iphone/i.test(uAgent)
@@ -113,6 +117,10 @@ export default {
   }
   .default-bg {
     background-image: url('./assets/bg.jpg');
+  }
+
+  .hide {
+    display: none;
   }
 
   .logo {
