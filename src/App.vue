@@ -115,6 +115,11 @@ export default {
   #app {
     height: 100%; 
   }
+
+  #vk_community_messages {
+    z-index: 3 !important;
+  }
+
   .default-bg {
     background-image: url('./assets/bg.jpg');
   }
