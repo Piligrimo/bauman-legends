@@ -79,7 +79,7 @@ export default {
       return !nonAuthRoutes.includes(this.$route.path)
     },
     isAuth () {
-      return true
+      return this.$store.state.isAuth
     },
     message () {
       const uAgent = navigator.userAgent || ''
