@@ -25,6 +25,7 @@
         >
           <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
           <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item>
+          <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Консультация</p> </el-menu-item>
           <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->
           <!-- <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
           <el-menu-item index="/docs" @click="collapsed = true"> <p class="menu-item">Документы</p></el-menu-item>
@@ -78,7 +79,7 @@ export default {
       return !nonAuthRoutes.includes(this.$route.path)
     },
     isAuth () {
-      return this.$store.state.isAuth
+      return true
     },
     message () {
       const uAgent = navigator.userAgent || ''

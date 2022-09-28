@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import Team from '../views/Team.vue'
 import Help from '../views/Help.vue'
+import Consult from '../views/Consult.vue'
 
 
 Vue.use(VueRouter)
@@ -32,6 +33,11 @@ const routes = [
     path: '/help',
     name: 'Help',
     component: Help
+  },
+  {
+    path: '/consult',
+    name: 'Consult',
+    component: Consult
   },
   // !!!!!!!!!!!! на время  регистрации !!!!!!!!!!!!
   // {
