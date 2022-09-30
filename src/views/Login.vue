@@ -35,7 +35,10 @@ export default {
     isDisabled () {
       const fields = [this.login, this.password]
       return !fields.every(Boolean)
-    }
+    },
+    isAdmin ()  {
+      return this.$store.state.user.admin
+    },
   },
   methods: {
     async submitForm() {
@@ -51,7 +54,10 @@ export default {
         axios.defaults.headers.common.Authorization = 'Bearer ' + access_token
         await this.$store.dispatch('getUser')
 
-        this.$router.push('/team')
+        if(this.isAdmin)
+          this.$router.push('/teams')
+        else
+          this.$router.push('/team')
     
       } catch (e) {
         console.error(e);

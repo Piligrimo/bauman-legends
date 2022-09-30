@@ -23,13 +23,20 @@
           active-text-color="#ffffff"
           text-color="#fbf5c3"
         >
-          <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
-          <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item>
-          <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Консультация</p> </el-menu-item>
-          <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Обновления</p> </el-menu-item>
-          <el-menu-item  @click="warn"> <p class="menu-item">Битая ссылка</p> </el-menu-item>
+          <template v-if="!isAdmin">
+            <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
+            <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Испытание</p></el-menu-item>
+            <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item>
+            <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Консультация</p> </el-menu-item>
+            <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Обновления</p> </el-menu-item>
+            <el-menu-item  @click="warn"> <p class="menu-item">Битая ссылка</p> </el-menu-item>
+          </template>
+          <template v-else>
+            <el-menu-item index="/teams" @click="collapsed = true"> <p class="menu-item">Команды</p> </el-menu-item>
+          </template>
+          
           <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->
-          <!-- <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Задание</p></el-menu-item>
+          <!-- 
           <el-menu-item index="/docs" @click="collapsed = true"> <p class="menu-item">Документы</p></el-menu-item>
           <el-menu-item index="/side-quest"  @click="collapsed = true"> <p class="menu-item">Побочное задание</p></el-menu-item> -->
         </el-menu>
@@ -96,8 +103,8 @@ export default {
     isAuth () {
       return this.$store.state.isAuth
     }, 
-    user () {
-      return this.$store.user
+    isAdmin ()  {
+      return this.$store.state.user.admin
     },
     hideVkWidget () {
       return this.$route.name !== 'Consult'
@@ -119,10 +126,17 @@ export default {
       this.$store.commit('setAuth', false)
     },
     handleRouting () {
-      if (!this.isAuth && this.requiresAuth)
+      if (!this.isAuth && this.requiresAuth){
+        this.logOut()
         this.$router.push('/login')
+      }
       if (this.isAuth && !this.requiresAuth)
-        this.$router.push('/team')
+      {
+        if(this.isAdmin)
+          this.$router.push('/teams')
+        else
+          this.$router.push('/team')
+      }
     },
     warn()  {
       this.warningVisible = true

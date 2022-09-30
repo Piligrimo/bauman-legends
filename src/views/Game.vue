@@ -1,7 +1,7 @@
 <template>
   <div class="content game-bg" :class="bgClass">
     <div class="layout">
-      <div v-loading="task === null">
+      <div >
         <div class="refresh-button">
           <div class="refresh-button">
             <font-awesome-icon
@@ -27,14 +27,9 @@
         <p v-if="isPause && isMain && isSuccess">Баллы команды: {{points}}</p>
         
         <el-input v-if="isPlay" class="layout__item" placeholder="Oтвет" v-model="answer"/>
-        <el-button v-if="isCaptain && isPause" type="primary" class="layout__item" @click="next">
+        <el-button v-if="isCaptain && task===null" type="primary" class="layout__item" @click="next">
           {{task && task.task && task.task.task_id ? 'Взять следующее задание':'Взять задание'}}
         </el-button>
-        <div>
-          <el-button v-if="isPause && isMain && isSuccess" type="primary" class="layout__item" @click="getFact">
-            Интересный факт
-          </el-button>
-        </div>
         <el-button
           v-if="isPlay" 
           type="primary" 
@@ -140,7 +135,7 @@ export default {
   store,
   computed:{
     isCaptain () {
-      return this.$store.state.user?.role === 'CAPTAIN'
+      return this.$store.state.user.captain
     },
     isPlay () {
       return this.task?.status === 'PLAY'

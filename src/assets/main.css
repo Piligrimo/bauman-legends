@@ -20,6 +20,11 @@
   padding: 2rem;
   max-width: 350px;
   background-color: #f8efe6de;
+  
+}
+
+.layout.admin {
+  max-width: 850px;
 }
 @media screen and (max-width: 480px) { 
     .layout {

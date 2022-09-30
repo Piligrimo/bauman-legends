@@ -3,9 +3,11 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import Team from '../views/Team.vue'
+import Teams from '../views/admin/Teams.vue'
 import Help from '../views/Help.vue'
 import Consult from '../views/Consult.vue'
 import Feed from '../views/Feed.vue'
+import Game from '../views/Game.vue'
 
 
 Vue.use(VueRouter)
@@ -31,6 +33,11 @@ const routes = [
     component: Team
   },
   {
+    path: '/teams',
+    name: 'Teams',
+    component: Teams
+  },
+  {
     path: '/help',
     name: 'Help',
     component: Help
@@ -45,12 +52,11 @@ const routes = [
     name: 'Feed',
     component: Feed
   },
-  // !!!!!!!!!!!! на время  регистрации !!!!!!!!!!!!
-  // {
-  //   path: '/game',
-  //   name: 'Game',
-  //   component: Game
-  // },
+  {
+    path: '/game',
+    name: 'Game',
+    component: Game
+  },
   // {
   //   path: '/side-quest',
   //   name: 'SideQuest',
