@@ -18,8 +18,8 @@ export default {
   components: { PuzzleForm },
   async mounted() {
     const id = this.$route.params.id
-   const {data} = await getPuzzleById(id)
-   this.puzzle = data[0]
+    const {data} = await getPuzzleById(id)
+    this.puzzle = data[0]
   }
 }
 </script>

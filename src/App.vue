@@ -34,6 +34,7 @@
           <template v-else>
             <el-menu-item index="/teams" @click="collapsed = true"> <p class="menu-item">Команды</p> </el-menu-item>
             <el-menu-item index="/puzzle" @click="collapsed = true"> <p class="menu-item">Загадки</p> </el-menu-item>
+            <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Опубликовать новость</p> </el-menu-item>
           </template>
           
           <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->

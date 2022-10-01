@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import Team from '../views/Team.vue'
 import Teams from '../views/admin/Teams.vue'
+import Moderators from '../views/admin/Moderators.vue'
 import Help from '../views/Help.vue'
 import Consult from '../views/Consult.vue'
 import Feed from '../views/Feed.vue'
@@ -74,6 +75,11 @@ const routes = [
     path: '/puzzle/edit/:id',
     name: 'PuzzleEdit',
     component: PuzzleEdit,
+  },
+  {
+    path: '/moders',
+    name: 'Moderators',
+    component: Moderators,
   },
   // {
   //   path: '/side-quest',

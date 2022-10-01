@@ -13,6 +13,10 @@ export const getUser = async () => {
   return await Axios.get(BASEURL+'/user/info', {withCredentials: true})
 }
 
+export const getUsers = async () => {
+  return await Axios.get(BASEURL+'/user/all', {withCredentials: true})
+}
+
 export const logOut = async () => {
   return await Axios.get(BASEURL+'/user/logout', {withCredentials: true})
 }
