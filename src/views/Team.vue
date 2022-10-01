@@ -176,7 +176,7 @@ export default {
         await this.$store.dispatch('getUser')
         await this.getTeam()
       } catch (e) {
-        console.log(e.response)
+        console.error(e.response)
         this.errorMessage=e.response?.data?.detail || "Произошла ошибка!"
       }
     },

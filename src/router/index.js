@@ -8,6 +8,9 @@ import Help from '../views/Help.vue'
 import Consult from '../views/Consult.vue'
 import Feed from '../views/Feed.vue'
 import Game from '../views/Game.vue'
+import List from '../views/admin/puzzles/List.vue'
+import PuzzleCreate from '../views/admin/puzzles/Create.vue'
+import PuzzleEdit from '../views/admin/puzzles/Edit.vue'
 
 
 Vue.use(VueRouter)
@@ -56,6 +59,21 @@ const routes = [
     path: '/game',
     name: 'Game',
     component: Game
+  },
+  {
+    path: '/puzzle',
+    name: 'Puzzles',
+    component: List,
+  },
+  {
+    path: '/puzzle/create',
+    name: 'PuzzleCreate',
+    component: PuzzleCreate,
+  },
+  {
+    path: '/puzzle/edit/:id',
+    name: 'PuzzleEdit',
+    component: PuzzleEdit,
   },
   // {
   //   path: '/side-quest',

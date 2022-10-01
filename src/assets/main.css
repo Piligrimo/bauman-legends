@@ -15,6 +15,14 @@
   max-height: 400px;
   overflow-y: auto;
 }
+
+
+.label {
+  color: rgb(46, 49, 51);
+  font-size: 12px;
+  margin: 8px 4px -6px 6px;
+}
+
 .layout {
   margin: auto;
   padding: 2rem;
@@ -25,10 +33,14 @@
 
 .layout.admin {
   max-width: 850px;
+  padding: 2rem 100px;
 }
 @media screen and (max-width: 480px) { 
     .layout {
       margin: 0 auto;
+    }
+    .layout.admin {
+      padding: 2rem;
     }
 }
 .layout__item {

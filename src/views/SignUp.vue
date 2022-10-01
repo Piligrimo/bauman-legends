@@ -106,9 +106,4 @@ export default {
 </script>
 
 <style scoped>
-  .label {
-    color: rgb(46, 49, 51);
-    font-size: 12px;
-    margin: 8px 4px -6px 6px;
-  }
 </style>
