@@ -13,11 +13,11 @@ export const nextTask = async () => {
 }
 
 export const skipTask = async () => {
-    return await Axios.get(BASEURL+'/game/skip', {withCredentials: true})
+    return await Axios.get(BASEURL+'/puzzle/skip', {withCredentials: true})
 }
 
 export const answer = async (args) => {
-    return await Axios.post(BASEURL+'/game/answer', args, {withCredentials: true})
+    return await Axios.post(BASEURL+'/puzzle/finish', args, {withCredentials: true})
 }
 
 

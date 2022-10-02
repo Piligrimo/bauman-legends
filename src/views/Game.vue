@@ -13,10 +13,34 @@
           </div>
         </div>
         <h3 class="layout__title">Игра</h3>
-        <p v-if="!isPlay && task">{{task.text}}</p>
 
-        <div v-if="html" v-html="html" class="task-view"/>
-        
+
+        <div v-if="task === null">
+          <el-button v-if="isCaptain" type="primary" class="layout__item" @click="next">
+            Взять следующее задание
+          </el-button>
+          <p v-else>Попроси капитана, чтоб он взял задание</p>
+        </div>
+        <div v-else>
+          <h4>{{task.title}}</h4>
+          <img v-if="task.photo" :src="task.photo"/>
+          <p>{{task.text}}</p>
+
+          <el-input v-if="isCaptain" class="layout__item" placeholder="Oтвет" v-model="answer"/>
+          <div  class="layout__actions">
+            <el-button
+              v-if="isCaptain"
+              type="primary" 
+              class="layout__item" 
+              @click="answerToTask"
+            >
+              Ответить
+            </el-button>
+            <el-button v-if="isCaptain" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
+          </div>
+        </div>
+
+<!--     !!! легаси или типа того    
         <h3  v-if="isPlay && isMain">На решение осталось {{prettifyTime(this.timeRemaining)}}</h3>
         <p v-if="isPlay && attemptsCaption">{{attemptsCaption}}</p>
 
@@ -54,8 +78,8 @@
               </template>
             </div>
           </el-collapse-item>
-        </el-collapse>
-        <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
+        </el-collapse> -->
+        <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
       </div>
       <el-dialog
         :title="`Купить подсказку за ${chosenHint.cost} экстра-баллов?`"
@@ -70,18 +94,6 @@
         <span slot="footer" class="dialog-footer">
           <el-button class="button" type="primary" @click="buyHint" :disabled="!isHintAffordable">Купить</el-button>
           <el-button class="button" @click="closeDialog">Отменить</el-button>
-        </span>
-      </el-dialog>
-      <el-dialog
-        title="Интересный факт"
-        :visible.sync="factDialogVisible"
-        width="300px"
-      >
-        <div class="dialog-body">
-          <p>{{factText}}</p>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button class="button" type="primary" @click="factDialogVisible = false">Понятно!</el-button>
         </span>
       </el-dialog>
     </div>
@@ -107,7 +119,7 @@ export default {
     return {
       task: null,
       hints: [],
-      errorMessage: '',
+      errorMessages: [],
       answer: '',
       timeOnPageLoad: 0,
       timeRemaining: 0,
@@ -196,6 +208,14 @@ export default {
     }
   },
   methods: {
+    handleError(e) {
+      const detail = e.response?.data?.detail;
+      if (detail?.length && typeof detail !== 'string') {
+        this.errorMessages =  detail.map(({ msg }) => msg)
+        return
+      }
+      this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
+    },
     async next() {
       try {
         const {data} = await nextTask()
@@ -209,7 +229,13 @@ export default {
           vue.timeRemaining-- 
         }, 1000)
       } catch (e) {
-        this.errorMessage = e.response.data.message
+        console.error(e);
+        const detail = e.response?.data?.detail;
+        if (detail?.length && typeof detail !== 'string') {
+          this.errorMessages =  detail.map(({ msg }) => msg)
+          return
+        }
+        this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
       }
     },
     async skip() {
@@ -218,19 +244,16 @@ export default {
         await this.getPoints()
         this.task = data
       } catch (e) {
-        this.errorMessage = e.response.data.message
+        this.handleError(e)
       }
     },
     async answerToTask() {
       try {
-        if (!this.answer) return
-        const team_id = this.$store.state.user?.team_id
-        const task_id = this.task?.task?.task_id
-        await answer({team_id, task_id, answer: this.answer})
+        await answer({answer: this.answer})
         await this.refreshTask()
       } catch (e) {
         await this.refreshTask()
-        this.errorMessage = e.response.data.message
+        this.handleError(e)
       } finally {
         this.answer = ''
       }
@@ -242,12 +265,12 @@ export default {
         const team = await getTeam()
         this.money = team?.data?.money
       } catch (e) {
-        this.errorMessage = e.response.data.message
+        this.handleError(e)
       }
     },
 
     async refreshTask () {
-      this.errorMessage = ''
+      this.errorMessages = []
       this.isRefreshing = true
       clearInterval(this.timer)
       try {
@@ -264,7 +287,7 @@ export default {
         }
         await this.getPoints()
       } catch (e) {
-        this.errorMessage = e.response.data.message
+        this.handleError(e)
       } finally {
         const vue = this
         setTimeout(()=>{vue.isRefreshing = false}, 1000)
@@ -283,7 +306,7 @@ export default {
         await buyHint(this.chosenHint.hint_id)
         await this.getHints()
       } catch (e) {
-        this.errorMessage = e.response.data.message
+        this.handleError(e)
       } finally {
         this.closeDialog()
       }
@@ -305,7 +328,7 @@ export default {
         this.factText = data.fact
         this.factDialogVisible = true
       } catch (e) {
-        this.errorMessage = e.response.data.message
+        this.handleError(e)
       }
     }
    }
