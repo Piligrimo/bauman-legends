@@ -57,7 +57,7 @@ export default {
         if(this.isAdmin)
           this.$router.push('/teams')
         else
-          this.$router.push('/team')
+          this.$router.push('/banner')
     
       } catch (e) {
         console.error(e);

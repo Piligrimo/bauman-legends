@@ -5,10 +5,11 @@ import SignUp from '../views/SignUp.vue'
 import Team from '../views/Team.vue'
 import Teams from '../views/admin/Teams.vue'
 import Moderators from '../views/admin/Moderators.vue'
-import Help from '../views/Help.vue'
+//import Help from '../views/Help.vue'
 import Consult from '../views/Consult.vue'
 import Feed from '../views/Feed.vue'
-import Game from '../views/Game.vue'
+import Banner from '../views/Banner.vue'
+//import Game from '../views/Game.vue'
 import List from '../views/admin/puzzles/List.vue'
 import PuzzleCreate from '../views/admin/puzzles/Create.vue'
 import PuzzleEdit from '../views/admin/puzzles/Edit.vue'
@@ -41,11 +42,11 @@ const routes = [
     name: 'Teams',
     component: Teams
   },
-  {
-    path: '/help',
-    name: 'Help',
-    component: Help
-  },
+  // {
+  //   path: '/help',
+  //   name: 'Help',
+  //   component: Help
+  // },
   {
     path: '/consult',
     name: 'Consult',
@@ -56,11 +57,11 @@ const routes = [
     name: 'Feed',
     component: Feed
   },
-  {
-    path: '/game',
-    name: 'Game',
-    component: Game
-  },
+  // {
+  //   path: '/game',
+  //   name: 'Game',
+  //   component: Game
+  // },
   {
     path: '/puzzle',
     name: 'Puzzles',
@@ -80,6 +81,11 @@ const routes = [
     path: '/moders',
     name: 'Moderators',
     component: Moderators,
+  },
+  {
+    path: '/banner',
+    name: 'Banner',
+    component: Banner,
   },
   // {
   //   path: '/side-quest',

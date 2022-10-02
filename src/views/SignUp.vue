@@ -89,7 +89,7 @@ export default {
         axios.defaults.headers.common.Authorization = "Bearer " + access_token;
         await this.$store.dispatch("getUser");
 
-        this.$router.push("/team");
+        this.$router.push("/banner");
       } catch (e) {
         console.error(e);
         const detail = e.response?.data?.detail;
