@@ -14,9 +14,21 @@ export const getPuzzleById = async (id) => {
 }
 
 export const createPuzzle = async (args) => {
-    return await Axios.post(BASEURL+'/puzzle/create', args, {withCredentials: true})
+    return await Axios.post(BASEURL+'/puzzle/create', args, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true
+        }
+    )
 }
 
 export const editPuzzle = async (args) => {
-    return await Axios.post(BASEURL+'/puzzle/edit', args, {withCredentials: true})
+    return await Axios.post(BASEURL+'/puzzle/edit', args, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true
+        }
+    )
 }

@@ -15,14 +15,16 @@
         <el-radio label="final">Для Финала</el-radio>
       </el-radio-group>
       <p class="label">Картинка</p>
-      <el-upload
-        class="layout__item" 
-        action="https://jsonplaceholder.typicode.com/posts/"
-        list-type="picture-card"
-        :limit="1"
-      >
-        <i class="el-icon-plus"></i>
-      </el-upload>
+      <img v-if="photo" class="picture layout__item" :src="photo"/>
+      <div class="upload-control">
+        <input v-if="!photo" class="layout__item" ref="upload" @change="onFileChange" type="file" />
+        <i 
+          v-if="photo"
+          class="el-icon-delete-solid" 
+          style="color:red; font-size: 40px; cursor: pointer;"
+          @click="deletePhoto"
+        />
+      </div>
       <p class="label">Текст загадки</p>
       <el-input
         class="layout__item" 
@@ -49,6 +51,7 @@
 
 <script>
 import { createPuzzle, editPuzzle } from '../api/admin';
+import { BASEURL } from '../api/config';
 
 
 export default {
@@ -60,13 +63,13 @@ export default {
   watch: {
     initialValues (val) {
       if (!val) return
-      const { title,text,puzzle_type,regex_answer, points, photo} = this.initialValues
-      this.title = title
-      this.text = text
-      this.puzzle_type = puzzle_type
-      this.regex_answer = regex_answer
-      this.points = points
-      this.photo = photo
+      const { title,text,puzzle_type,regex_answer, file,filename} = this.initialValues
+      this.title = title || ''
+      this.text = text || ''
+      this.puzzle_type = puzzle_type || ''
+      this.regex_answer = regex_answer || ''
+      this.file = file
+      this.filename = filename
     }
   },
   data() {
@@ -75,19 +78,46 @@ export default {
       text: '',
       puzzle_type: 'logic',
       regex_answer: '',
-      photo: '',
+      filename: '',
       errorMessages: [],
+      file: null,
     }
   }, 
+  computed: {
+    photo() {
+      if (this.filename) return BASEURL + '/file/' + this.filename
+      if (!this.file) return
+      return URL.createObjectURL(this.file)
+    }
+  },
   methods: {
+    onFileChange(e) {
+      console.log(e)
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+        return;
+      this.file = files[0]
+
+    },
+    deletePhoto() {
+      this.file= null
+      if (this.$refs.upload)
+        this.$refs.upload.value = null;
+      this.filename = ''
+    },
     async submit () {
-      const { title,text,puzzle_type,regex_answer, photo} = this
+      const { title,text,puzzle_type,regex_answer} = this
+      const id = Number(this.$route.params.id)
+      const puzzle = {title,text,puzzle_type,regex_answer,points:100}
+      const formData = new FormData()
+      formData.append('file', this.file)
       try {
-        if (this.isEdit) {
-          const id = Number(this.$route.params.id)
-          await editPuzzle({title,text,puzzle_type,regex_answer,points:100, photo, id})
+        if (this.isEdit) {     
+          formData.append('puzzle', JSON.stringify({...puzzle, id}))
+          await editPuzzle(formData)
         } else {
-          await createPuzzle({title,text,puzzle_type,regex_answer,points:100, photo})
+          formData.append('puzzle', JSON.stringify(puzzle))
+          await createPuzzle(formData)
         }
         this.$router.push('/puzzle')
       } catch(e) {
@@ -110,6 +140,13 @@ export default {
   .container { 
     max-width: 500px;
     margin: auto;
+  }
+
+  .upload-control {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 1rem;
   }
 </style>
  

@@ -277,17 +277,18 @@ export default {
         const {data} = await getTask() 
         this.task = data
         this.timeOnPageLoad = Number(new Date()) / 1000
-        if (this.isPlay && this.isMain) {
-          this.getHints()
-          this.timeRemaining = this.timeRemainedOnPageLoading
-          const vue = this
-          this.timer = setInterval(() => {
-            vue.timeRemaining-- 
-          }, 1000)
-        }
+        
+        // this.getHints()
+        // this.timeRemaining = this.timeRemainedOnPageLoading
+        // const vue = this
+        // this.timer = setInterval(() => {
+        //   vue.timeRemaining-- 
+        // }, 1000)
+        
         await this.getPoints()
       } catch (e) {
-        this.handleError(e)
+        console.error(e)
+        this.task = null
       } finally {
         const vue = this
         setTimeout(()=>{vue.isRefreshing = false}, 1000)
@@ -320,7 +321,7 @@ export default {
     },
     async getPoints() {
         const {data} = await getTeam()
-        this.points = data?.score
+        this.points = data?.main_points
     },
     async getFact () {
       try {
