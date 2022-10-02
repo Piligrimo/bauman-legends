@@ -36,7 +36,7 @@
             >
               Ответить
             </el-button>
-            <el-button v-if="isCaptain" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
+            <el-button v-if="isCaptain && !isPhotoQuest" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
           </div>
         </div>
 
@@ -148,7 +148,7 @@ export default {
   store,
   computed:{
     isCaptain () {
-      return this.$store.state.user.captain
+      return this.$store.state.user?.captain
     },
     isPlay () {
       return this.task?.status === 'PLAY'
@@ -200,6 +200,9 @@ export default {
     },
     photo() {
       return BASEURL + '/file/' + this.task.filename
+    },
+    isPhotoQuest () {
+      return this.task?.puzzle_type === 'photo'
     }
   },
   watch: {
@@ -222,24 +225,18 @@ export default {
     },
     async next() {
       try {
-        const {data} = await nextTask()
-        this.task = data
-        this.timeOnPageLoad = Number(new Date()) / 1000
-        this.getHints()
-        this.timeRemaining = this.timeRemainedOnPageLoading
-        const vue = this
-        clearInterval(this.timer)
-        this.timer = setInterval(() => {
-          vue.timeRemaining-- 
-        }, 1000)
+        await nextTask()
+        await this.refreshTask()
+        //this.timeOnPageLoad = Number(new Date()) / 1000
+        // this.getHints()
+       //  this.timeRemaining = this.timeRemainedOnPageLoading
+        // const vue = this
+        // clearInterval(this.timer)
+        // this.timer = setInterval(() => {
+        //   vue.timeRemaining-- 
+        // }, 1000)
       } catch (e) {
-        console.error(e);
-        const detail = e.response?.data?.detail;
-        if (detail?.length && typeof detail !== 'string') {
-          this.errorMessages =  detail.map(({ msg }) => msg)
-          return
-        }
-        this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
+        this.handleError()
       }
     },
     async skip() {
