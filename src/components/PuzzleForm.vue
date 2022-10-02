@@ -31,10 +31,9 @@
         placeholder="Было два деда..."
         v-model="text">
       </el-input>
-      <template>
-        <p class="label">Ответ</p>
+      <template  v-if="puzzle_type!=='photo'">
+        <p class="label" >Ответ</p>
         <el-input
-          v-if="puzzle_type!=='photo'"
           class="layout__item" 
           placeholder="Ответ"
           v-model="regex_answer">
@@ -67,7 +66,7 @@ export default {
       this.puzzle_type = puzzle_type
       this.regex_answer = regex_answer
       this.points = points
-      this.points = photo
+      this.photo = photo
     }
   },
   data() {
@@ -109,7 +108,7 @@ export default {
 
 <style scoped>
   .container { 
-    width: 500px;
+    max-width: 500px;
     margin: auto;
   }
 </style>
