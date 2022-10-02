@@ -23,7 +23,7 @@
         </div>
         <div v-else>
           <h4>{{task.title}}</h4>
-          <img v-if="task.photo" :src="task.photo"/>
+          <img class="layout__item" v-if="task.filename" :src="photo"/>
           <p>{{task.text}}</p>
 
           <el-input v-if="isCaptain" class="layout__item" placeholder="Oтвет" v-model="answer"/>
@@ -81,7 +81,7 @@
         </el-collapse> -->
         <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
       </div>
-      <el-dialog
+      <!-- <el-dialog
         :title="`Купить подсказку за ${chosenHint.cost} экстра-баллов?`"
         :visible.sync="hintDialogVisible"
         :before-close="closeDialog"
@@ -95,7 +95,7 @@
           <el-button class="button" type="primary" @click="buyHint" :disabled="!isHintAffordable">Купить</el-button>
           <el-button class="button" @click="closeDialog">Отменить</el-button>
         </span>
-      </el-dialog>
+      </el-dialog> -->
     </div>
   </div>
 </template>
@@ -104,6 +104,7 @@
 import store from '@/store'
 import {getTask, nextTask, skipTask, answer, getHints, buyHint, getFact} from '@/api/game'
 import {getTeam} from '@/api/team'
+import { BASEURL } from '../api/config'
 const getMinutes = (time) => {
   const minutes = Math.floor(time / 60)
   return minutes >= 10 ? minutes : '0' + minutes
@@ -196,6 +197,9 @@ export default {
     },
     correctAnswer () {
       return this.task?.task.answer
+    },
+    photo() {
+      return BASEURL + '/file/' + this.task.filename
     }
   },
   watch: {
