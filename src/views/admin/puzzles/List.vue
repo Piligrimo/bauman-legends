@@ -5,9 +5,13 @@
       <router-link to="/puzzle/create">
         <el-button  class="layout__action" type="primary">Создать новую</el-button>
       </router-link>
-      <router-link  v-for="puzzle in puzzles" :key="puzzle.id" :to="{name: 'PuzzleEdit', params: {id: puzzle.id}}">
+      <router-link 
+        v-for="{id, puzzle_type,title} in puzzles" 
+        :key="id+puzzle_type" 
+        :to="{name: 'PuzzleEdit', params: {id, type:puzzle_type}}"
+      >
         <h2 class="item">
-          {{puzzle.title }}
+          {{title}}
         </h2>
       </router-link>
     </div>

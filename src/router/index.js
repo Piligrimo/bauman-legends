@@ -73,7 +73,7 @@ const routes = [
     component: PuzzleCreate,
   },
   {
-    path: '/puzzle/edit/:id',
+    path: '/puzzle/edit/:id/:type',
     name: 'PuzzleEdit',
     component: PuzzleEdit,
   },

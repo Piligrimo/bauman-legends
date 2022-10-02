@@ -8,12 +8,15 @@
         placeholder="Заголовок"
         v-model="title">
       </el-input>
-      <p class="label">Тип загадки</p>
-      <el-radio-group class="layout__item"  v-model="puzzle_type">
-        <el-radio label="logic">Логическая</el-radio>
-        <el-radio label="photo">Фотоквест</el-radio>
-        <el-radio label="final">Для Финала</el-radio>
-      </el-radio-group>
+      <template v-if="!isEdit" >
+        <p class="label">Тип загадки</p>
+        <el-radio-group class="layout__item"  v-model="puzzle_type">
+          <el-radio label="logic">Логическая</el-radio>
+          <el-radio label="photo">Фотоквест</el-radio>
+          <el-radio label="final">Для Финала</el-radio>
+        </el-radio-group>
+      </template>
+      
       <p class="label">Картинка</p>
       <img v-if="photo" class="picture layout__item" :src="photo"/>
       <div class="upload-control">
@@ -111,6 +114,7 @@ export default {
       const puzzle = {title,text,puzzle_type,regex_answer,points:100}
       const formData = new FormData()
       formData.append('file', this.file)
+      console.log(this.file)
       try {
         if (this.isEdit) {     
           formData.append('puzzle', JSON.stringify({...puzzle, id}))
