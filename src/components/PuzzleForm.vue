@@ -66,12 +66,11 @@ export default {
   watch: {
     initialValues (val) {
       if (!val) return
-      const { title,text,puzzle_type,regex_answer, file,filename} = this.initialValues
+      const { title,text,puzzle_type,regex_answer,filename} = this.initialValues
       this.title = title || ''
       this.text = text || ''
       this.puzzle_type = puzzle_type || ''
       this.regex_answer = regex_answer || ''
-      this.file = file
       this.filename = filename
     }
   },
@@ -89,7 +88,7 @@ export default {
   computed: {
     photo() {
       if (this.filename) return BASEURL + '/file/' + this.filename
-      if (!this.file) return
+      if (!this.file || this.file === '"delete"') return
       return URL.createObjectURL(this.file)
     }
   },
@@ -103,7 +102,7 @@ export default {
 
     },
     deletePhoto() {
-      this.file= null
+      this.file= '"delete"'
       if (this.$refs.upload)
         this.$refs.upload.value = null;
       this.filename = ''
@@ -114,7 +113,6 @@ export default {
       const puzzle = {title,text,puzzle_type,regex_answer,points:100}
       const formData = new FormData()
       formData.append('file', this.file)
-      console.log(this.file)
       try {
         if (this.isEdit) {     
           formData.append('puzzle', JSON.stringify({...puzzle, id}))
