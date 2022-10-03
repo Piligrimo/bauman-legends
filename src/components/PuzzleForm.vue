@@ -94,7 +94,6 @@ export default {
   },
   methods: {
     onFileChange(e) {
-      console.log(e)
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length)
         return;
