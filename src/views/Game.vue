@@ -241,9 +241,8 @@ export default {
     },
     async skip() {
       try {
-        const {data} = await skipTask()
-        await this.getPoints()
-        this.task = data
+        await skipTask()
+        this.refreshTask()
       } catch (e) {
         this.handleError(e)
       }
