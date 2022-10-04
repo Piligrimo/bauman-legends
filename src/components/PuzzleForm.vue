@@ -121,6 +121,7 @@ export default {
           await createPuzzle(formData)
         }
         this.$router.push('/puzzle')
+        window.location.reload()
       } catch(e) {
         console.error(e);
         const detail = e.response?.data?.detail;
