@@ -99,7 +99,6 @@ dayjs.extend(duration)
     }
 
     .puzzle-name {
-      width: 130px;
       text-overflow: ellipsis;
       margin: 0 5px;
     }
