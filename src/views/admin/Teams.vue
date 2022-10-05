@@ -10,16 +10,20 @@
               :key="puzzle.id"
               class="puzzle-container" 
             >
-              <div 
-                class="puzzle" 
-                :class="{skip: puzzle.skip}"
-              >
-                {{time(puzzle)}}
+              <div>
+                <p class="puzzle-name hint">{{puzzle.title}}</p>
+                <p class="puzzle-name hint">{{typeHumanize(puzzle.puzzle_type)}}</p>
+                <div 
+                  class="puzzle" 
+                  :class="{skip: puzzle.skip}"
+                >
+                  {{time(puzzle)}}
+                </div>
               </div>
               <i v-if="i !== team.history.length - 1" class="el-icon-arrow-right" style="font-size: 30px"> </i> 
             </div>
           </div>
-          <p v-else> Команда не решила ни одной загадки. Лохи))00 </p>
+          <p v-else> Команда не решила ни одной загадки.</p>
         </div>
       </div>
     </div>
@@ -54,6 +58,11 @@ dayjs.extend(duration)
         const start = dayjs(puzzle.start_date)
         const dur = dayjs.duration(end.diff(start))
         return this.format(dur)
+      },
+      typeHumanize(type) {
+        if (type === 'photo') return '(фотоквест)' 
+        if (type === 'logic') return '(логика)'
+        return '' 
       }
     }
   }
@@ -70,6 +79,8 @@ dayjs.extend(duration)
       align-items: center;
       text-align: center;
       padding: 10px;
+      margin-top: 10px;
+
     }
     .skip {
       background-color: cornflowerblue;
@@ -77,11 +88,20 @@ dayjs.extend(duration)
 
     .puzzle-container {
       display: inline-flex; 
-      align-items: center;
+      align-items: flex-end;
       margin-bottom: 1rem;
+      width: 130px;
     }
   
-    .puzzles {
+
+    .el-icon-arrow-right {
+      margin-bottom: 36px;
+    }
+
+    .puzzle-name {
+      width: 130px;
+      text-overflow: ellipsis;
+      margin: 0 5px;
     }
   </style>
    
