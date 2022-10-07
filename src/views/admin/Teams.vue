@@ -4,6 +4,16 @@
         <h3 class="layout__title">Команды</h3>
         <div v-for="team in teams" :key="team.id">
           <h4> Команда № {{team.id}} "{{team.name}}" </h4>
+          <template v-if="code(team)">
+            <span class="hint">Посмотреть код:</span>
+            <span 
+              class="hint spoiler" 
+              :class="{spoiler_shown: shownCodeTeam === team.id}" 
+              @click="handleSpoilerClick(team.id)">{{code(team)}}
+            </span>
+            <i class="el-icon-copy-document" @click="copyCode(team)"> </i> 
+          </template>
+         
           <div v-if="team.history.length" class="puzzles">
             <div
               v-for="(puzzle, i) in team.history" 
@@ -39,17 +49,40 @@ dayjs.extend(duration)
     name: 'Teams',
     data() {
       return {
-        teams: []
+        teams: [],
+        shownCodeTeam: ''
       }
     },
     async mounted() {
       const {data} = await getTeams()
       this.teams = data
     },
+    computed: {
+      
+    },
     methods: {
+      handleSpoilerClick(id) {
+        if (id === this.shownCodeTeam) {
+          this.shownCodeTeam = ''
+          return
+        }
+        this.shownCodeTeam = id
+      },
+      code(team) {
+        const last = team.history[team.history.length - 1]
+
+        if (!last) return null
+        const isPhoto = last.puzzle_type === 'photo'
+        const isInProgress = !last.end_date
+        if (isPhoto && isInProgress) return last.photo_code
+        return null
+      },
+      copyCode(team) {
+        navigator.clipboard.writeText(this.code(team));
+      },
       format (dur) {
         if (dur.days())
-          return '> 24 часов'
+          return dur.format('DD:HH:mm:ss')
         return dur.format('HH:mm:ss')
       },
       time(puzzle) {
@@ -97,10 +130,28 @@ dayjs.extend(duration)
     .el-icon-arrow-right {
       margin-bottom: 36px;
     }
+    .el-icon-copy-document {
+      cursor: pointer;
+    }
 
     .puzzle-name {
       text-overflow: ellipsis;
       margin: 0 5px;
+    }
+
+    .spoiler {
+      background-color: #5f5f5f;
+      border-radius: 3px;
+      margin: 0 10px;
+      line-height: 1.2;
+      cursor: pointer;
+    }
+    .spoiler_shown {
+      background: none;
+    }
+
+    .puzzles {
+      margin-top: 1rem;
     }
   </style>
    
