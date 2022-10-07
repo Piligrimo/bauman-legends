@@ -79,6 +79,10 @@ dayjs.extend(duration)
       },
       copyCode(team) {
         navigator.clipboard.writeText(this.code(team));
+        this.$message({
+          message: 'Код скопирован.',
+          type: 'success'
+        });
       },
       format (dur) {
         if (dur.days())

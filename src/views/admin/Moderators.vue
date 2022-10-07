@@ -2,39 +2,176 @@
 <template>
   <div class="content info-bg">
     <div class="layout admin">  
-      <h3 class="layout__title">Модеры</h3>
-      <h4 class="item">
-        {{user.first_name }} {{user.last_name }}
-      </h4>
+      <h3 class="layout__title">Управление пользователями</h3>
+      <p class="label">Поиск</p>
+      <el-input
+        class="layout__item" 
+        placeholder="Введи имя, фамилию или логин"
+        v-model="search">
+      </el-input>
+      <br><br>
+      <table v-if="filteredUsers.length">
+        <thead>
+          <td>ФИО</td>
+          <td>Логин</td>
+          <td>Роль</td>
+          <td v-if="isMainAdmin" width="90px">Действия</td>
+        </thead>
+        <tbody>
+          <tr v-for="user in filteredUsers" :key="user.id">
+            <td>{{user.first_name}} {{user.last_name}}</td>
+            <td>{{user.login}}</td>
+            <td>{{getRole(user)}}</td>
+            <td width="90px" v-if="isMainAdmin">
+              <el-button
+                style="width: 100%" 
+                v-if="!user.admin && !user.main_admin" 
+                type="primary" 
+                size="mini"
+                @click="promote(user.login)"
+              >
+                Повысить
+              </el-button>
+              <el-button 
+                style="width: 100%" 
+                v-else-if="!user.main_admin" 
+                type="primary" 
+                size="mini"
+                @click="demote(user.login)"
+              >
+                Кикнуть
+              </el-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p v-else-if="search">По твоему запросу нет пользователей</p>
+      <p v-else>Пользователей нет</p>
     </div>
   </div>
 </template>
 
 <script>
 import { getUsers } from '../../api/user';
+import { promote, demote } from '../../api/admin';
+import store from '@/store'
+
+const searchBy = (prop, text) => {
+  return (prop || '').toUpperCase().includes(text.toUpperCase())
+}
 
 export default {
   name: 'Moderators',
   data () {
     return {
-      users: []
+      users: [],
+      search: ''
     }
   }, 
   async mounted () {
-    const {data} = await getUsers()
-    this.users = data
+    this.fetchUsers()
+  },
+  store,
+  computed: {
+    mainAdmins() {
+      return this.users.filter(({main_admin}) => main_admin)
+    },
+    admins() {
+      return this.users.filter(({admin, main_admin}) => admin && !main_admin)
+    },
+    players() {
+      return this.users.filter(({admin, main_admin}) => !admin && !main_admin)
+    }, 
+    filteredUsers () {
+      const {mainAdmins, admins,players} = this
+      const joined = [...mainAdmins, ...admins,...players]
+      return joined.filter(({first_name, last_name, login}) => {
+        return searchBy(`${first_name} ${last_name} ${login}`, this.search) 
+      })
+    },
+    isMainAdmin () {
+      return this.$store.state.user?.main_admin
+    }
+  },
+  methods: {
+    async fetchUsers() {
+      const {data} = await getUsers()
+      this.users = data
+    },
+    getRole(user) {
+      if (user.main_admin) return 'гл. админ'
+      if (user.admin) return 'админ'
+      return 'игрок'
+    },
+    async promote(login) {
+      try {
+        await promote(login)
+        this.$message({
+          message: 'Пользователь повышен до админа',
+          type: 'success'
+        });
+        this.fetchUsers()
+      } catch (e) {
+        console.error(e);
+        this.$message({
+          message: 'Ошибка!',
+          type: 'error'
+        });
+      }
+    },
+    async demote(login) {
+      try {
+        await demote(login)
+        this.$message({
+          message: 'Пользователь понижен до игрока',
+          type: 'success'
+        });
+        this.fetchUsers()
+      } catch (e) {
+        console.error(e);
+        this.$message({
+          message: 'Ошибка!',
+          type: 'error'
+        });
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-  .item {
-    cursor: pointer;
-    color: #375eb3;
+  thead {
+    width: calc( 100% - 22px );/* scrollbar is average 1em/16px width, remove it from thead width */
+    font-weight: bolder;
+    background-color: #ffd0a1de;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #fffdfbde;
+  }
+  td {
+    border: 1px solid;
+    padding: 5px 15px;
+  }
+  tbody {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
   }
 
-  .item:hover {
-    color: #4572d4;
+  thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;/* even columns width , fix width of table too*/
   }
+  tr {
+    display: table;
+  }
+
+  
 </style>
  

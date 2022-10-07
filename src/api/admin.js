@@ -13,22 +13,30 @@ export const getPuzzleById = async (id,type) => {
     return await Axios.get(`${BASEURL}/puzzle/${id}/${type}`, {withCredentials: true})
 }
 
+export const promote = async (login) => {
+  return await Axios.post(`${BASEURL}/admin/make/${login}`, {}, {withCredentials: true})
+}
+
+export const demote = async (login) => {
+  return await Axios.post(`${BASEURL}/admin/demote/${login}`, {}, {withCredentials: true})
+}
+
 export const createPuzzle = async (args) => {
-    return await Axios.post(BASEURL+'/puzzle/create', args, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true
-        }
-    )
+  return await Axios.post(BASEURL+'/puzzle/create', args, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true
+    }
+  )
 }
 
 export const editPuzzle = async (args) => {
-    return await Axios.post(BASEURL+'/puzzle/edit', args, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true
-        }
-    )
+  return await Axios.post(BASEURL+'/puzzle/edit', args, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true
+    }
+  )
 }
