@@ -25,7 +25,7 @@
                 <p class="puzzle-name hint">{{typeHumanize(puzzle.puzzle_type)}}</p>
                 <div 
                   class="puzzle" 
-                  :class="{skip: puzzle.skip}"
+                  :class="{skip: puzzle.skip, 'in-progress': !puzzle.end_date}"
                 >
                   {{time(puzzle)}}
                 </div>
@@ -117,10 +117,15 @@ dayjs.extend(duration)
       text-align: center;
       padding: 10px;
       margin-top: 10px;
-
+      -webkit-box-shadow: 0px 14px 10px -7px rgba(0,0,0,0.1); 
+      box-shadow: 0px 14px 10px -7px rgba(0,0,0,0.1);
     }
     .skip {
       background-color: cornflowerblue;
+    }
+
+    .in-progress {
+      background-color: aliceblue;
     }
 
     .puzzle-container {
