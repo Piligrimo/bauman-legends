@@ -19,9 +19,9 @@
         </thead>
         <tbody>
           <tr v-for="user in filteredUsers" :key="user.id">
-            <td>{{user.first_name}} {{user.last_name}}</td>
-            <td>{{user.login}}</td>
-            <td>{{getRole(user)}}</td>
+            <td class="name-cell">{{user.first_name}} {{user.last_name}}</td>
+            <td><span class="mobile hint">Логин</span> {{user.login}}</td>
+            <td><span class="mobile hint">Роль</span> {{getRole(user)}}</td>
             <td width="90px" v-if="isMainAdmin">
               <el-button
                 style="width: 100%" 
@@ -140,6 +140,9 @@ export default {
 </script>
 
 <style scoped>
+  .mobile {
+    display: none;
+  }
   thead {
     width: calc( 100% - 22px );/* scrollbar is average 1em/16px width, remove it from thead width */
     font-weight: bolder;
@@ -168,9 +171,40 @@ export default {
     width: 100%;
     table-layout: fixed;/* even columns width , fix width of table too*/
   }
-  tr {
-    display: table;
-  }
+
+  @media screen and (max-width: 800px) { 
+    .name-cell {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    thead {
+      display: none;
+    }
+    tr {
+      display: flex !important;
+      flex-direction: column;
+      background-color: #fffdfbde;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      padding: 10px;
+      width: 90% !important;
+      -webkit-box-shadow: 0px 14px 10px -7px rgba(0,0,0,0.1); 
+      box-shadow: 0px 14px 10px -7px rgba(0,0,0,0.1);
+    }
+    td {
+      border: none;
+    }
+    table {
+      background: none;
+    }
+    tbody {
+      border: none;
+     
+    }
+    .mobile {
+      display: inline;
+    }
+}
 
   
 </style>
