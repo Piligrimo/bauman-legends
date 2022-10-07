@@ -20,8 +20,8 @@
         <tbody>
           <tr v-for="user in filteredUsers" :key="user.id">
             <td class="name-cell">{{user.first_name}} {{user.last_name}}</td>
-            <td><span class="mobile hint">Логин</span> {{user.login}}</td>
-            <td><span class="mobile hint">Роль</span> {{getRole(user)}}</td>
+            <td><span class="mobile hint">Логин:</span> {{user.login}}</td>
+            <td><span class="mobile hint">Роль:</span> {{getRole(user)}}</td>
             <td width="90px" v-if="isMainAdmin">
               <el-button
                 style="width: 100%" 
