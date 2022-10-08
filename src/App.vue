@@ -27,6 +27,7 @@
             <el-menu-item index="/banner" @click="collapsed = true"> <p class="menu-item">Главная</p> </el-menu-item>
             <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
             <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Испытание</p></el-menu-item>
+            <el-menu-item index="/results" @click="collapsed = true"> <p class="menu-item">Результаты</p> </el-menu-item>
             <!-- <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item> -->
             <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Консультация</p> </el-menu-item>
             <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Обновления</p> </el-menu-item>

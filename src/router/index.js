@@ -10,6 +10,7 @@ import Consult from '../views/Consult.vue'
 import Feed from '../views/Feed.vue'
 import Banner from '../views/Banner.vue'
 import Game from '../views/Game.vue'
+import Results from '../views/Results.vue'
 import List from '../views/admin/puzzles/List.vue'
 import PuzzleCreate from '../views/admin/puzzles/Create.vue'
 import PuzzleEdit from '../views/admin/puzzles/Edit.vue'
@@ -86,6 +87,11 @@ const routes = [
     path: '/banner',
     name: 'Banner',
     component: Banner,
+  },
+  {
+    path: '/results',
+    name: 'Results',
+    component: Results,
   },
   // {
   //   path: '/side-quest',

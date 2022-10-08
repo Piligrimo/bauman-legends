@@ -2,39 +2,42 @@
     <div class="content info-bg">
       <div class="layout admin">
         <h3 class="layout__title">Команды</h3>
-        <div v-for="team in teams" :key="team.id">
-          <h4> Команда № {{team.id}} "{{team.name}}" </h4>
-          <template v-if="code(team)">
-            <span class="hint">Посмотреть код:</span>
-            <span 
-              class="hint spoiler" 
-              :class="{spoiler_shown: shownCodeTeam === team.id}" 
-              @click="handleSpoilerClick(team.id)">{{code(team)}}
-            </span>
-            <i class="el-icon-copy-document" @click="copyCode(team)"> </i> 
-          </template>
-         
-          <div v-if="team.history.length" class="puzzles">
-            <div
-              v-for="(puzzle, i) in team.history" 
-              :key="puzzle.id"
-              class="puzzle-container" 
-            >
-              <div>
-                <p class="puzzle-name hint">{{puzzle.title}}</p>
-                <p class="puzzle-name hint">{{typeHumanize(puzzle.puzzle_type)}}</p>
-                <div 
-                  class="puzzle" 
-                  :class="{skip: puzzle.skip, 'in-progress': !puzzle.end_date}"
-                >
-                  {{time(puzzle)}}
+        <div class="teams">
+          <div  v-for="team in teams" :key="team.id">
+            <h4> Команда № {{team.id}} "{{team.name}}" </h4>
+            <template v-if="code(team)">
+              <span class="hint">Посмотреть код:</span>
+              <span 
+                class="hint spoiler" 
+                :class="{spoiler_shown: shownCodeTeam === team.id}" 
+                @click="handleSpoilerClick(team.id)">{{code(team)}}
+              </span>
+              <i class="el-icon-copy-document" @click="copyCode(team)"> </i> 
+            </template>
+          
+            <div v-if="team.history.length" class="puzzles">
+              <div
+                v-for="(puzzle, i) in team.history" 
+                :key="puzzle.id"
+                class="puzzle-container" 
+              >
+                <div>
+                  <p class="puzzle-name hint">{{puzzle.title}}</p>
+                  <p class="puzzle-name hint">{{typeHumanize(puzzle.puzzle_type)}}</p>
+                  <div 
+                    class="puzzle" 
+                    :class="{skip: puzzle.skip, 'in-progress': !puzzle.end_date}"
+                  >
+                    {{time(puzzle)}}
+                  </div>
                 </div>
+                <i v-if="i !== team.history.length - 1" class="el-icon-arrow-right" style="font-size: 30px"> </i> 
               </div>
-              <i v-if="i !== team.history.length - 1" class="el-icon-arrow-right" style="font-size: 30px"> </i> 
             </div>
+            <p v-else> Команда не решила ни одной загадки.</p>
           </div>
-          <p v-else> Команда не решила ни одной загадки.</p>
         </div>
+        
       </div>
     </div>
   </template>
@@ -107,6 +110,10 @@ dayjs.extend(duration)
   </script>
   
   <style scoped>
+    .teams {
+      max-height: 400px;
+      overflow-y: auto;
+    }
     .puzzle {
       width: 80px;
       height: 80px;

@@ -5,6 +5,10 @@ export const getTeam = async () => {
     return await Axios.get(BASEURL+'/team/info', {withCredentials: true})
 }
 
+export const getResults = async () => {
+    return await Axios.get(BASEURL+'/team/history', {withCredentials: true})
+}
+
 export const getAllTeams = async () => {
     return await Axios.get(BASEURL+'/team/all', {withCredentials: true})
 }
