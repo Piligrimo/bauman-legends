@@ -21,6 +21,10 @@ export const demote = async (login) => {
   return await Axios.post(`${BASEURL}/admin/demote/${login}`, {}, {withCredentials: true})
 }
 
+export const setStage = async (num) => {
+  return await Axios.post(`${BASEURL}/stage/set/${num}`, {}, {withCredentials: true})
+}
+
 export const createPuzzle = async (args) => {
   return await Axios.post(BASEURL+'/puzzle/create', args, {
     headers: {

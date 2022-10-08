@@ -23,7 +23,14 @@
           active-text-color="#ffffff"
           text-color="#fbf5c3"
         >
-          <template v-if="!isAdmin">
+          <template v-if="isAdmin">
+            <el-menu-item index="/teams" @click="collapsed = true"> <p class="menu-item">Команды</p> </el-menu-item>
+            <el-menu-item index="/moders" @click="collapsed = true"> <p class="menu-item">Модераторы</p> </el-menu-item>
+            <el-menu-item index="/puzzle" @click="collapsed = true"> <p class="menu-item">Загадки</p> </el-menu-item>
+            <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Опубликовать новость</p> </el-menu-item>
+            <el-menu-item v-if="isMainAdmin" index="/stage-control" @click="collapsed = true"> <p class="menu-item">Переключение этапа</p> </el-menu-item>
+          </template>
+          <template v-else>
             <el-menu-item index="/banner" @click="collapsed = true"> <p class="menu-item">Главная</p> </el-menu-item>
             <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
             <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Испытание</p></el-menu-item>
@@ -31,12 +38,6 @@
             <!-- <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item> -->
             <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Консультация</p> </el-menu-item>
             <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Обновления</p> </el-menu-item>
-          </template>
-          <template v-else>
-            <el-menu-item index="/teams" @click="collapsed = true"> <p class="menu-item">Команды</p> </el-menu-item>
-            <el-menu-item index="/moders" @click="collapsed = true"> <p class="menu-item">Модераторы</p> </el-menu-item>
-            <el-menu-item index="/puzzle" @click="collapsed = true"> <p class="menu-item">Загадки</p> </el-menu-item>
-            <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Опубликовать новость</p> </el-menu-item>
           </template>
           
           <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->
@@ -110,6 +111,9 @@ export default {
     }, 
     isAdmin ()  {
       return this.$store.state.user.admin
+    },
+    isMainAdmin ()  {
+      return this.$store.state.user.main_admin
     },
     hideVkWidget () {
       return this.$route.name !== 'Consult'

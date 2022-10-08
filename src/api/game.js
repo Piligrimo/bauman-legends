@@ -5,7 +5,7 @@ export const getTask = async () => {
     return await Axios.get(BASEURL+'/puzzle/current', {withCredentials: true})
 }
 export const getStage = async () => {
-    return await Axios.get(BASEURL+'/game/status', {withCredentials: true})
+    return await Axios.get(BASEURL+'/stage/current', {withCredentials: true})
 }
 
 export const nextTask = async () => {
