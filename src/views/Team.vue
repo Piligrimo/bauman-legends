@@ -36,7 +36,7 @@
             />
           </div> 
         </div>
-        <!-- <p><span class="team__stat">Баллы: </span>{{team.points}}</p> -->
+        <p><span class="team__stat">Экстра-баллы: </span>{{team.extra_points}}</p>
         <template v-if="isCaptain">
           <p>
             <span class="team__stat">Пригласительный код: </span>

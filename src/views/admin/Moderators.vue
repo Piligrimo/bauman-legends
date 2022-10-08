@@ -108,14 +108,16 @@ export default {
         await promote(login)
         this.$message({
           message: 'Пользователь повышен до админа',
-          type: 'success'
+          type: 'success',
+          offset: 65
         });
         this.fetchUsers()
       } catch (e) {
         console.error(e);
         this.$message({
           message: 'Ошибка!',
-          type: 'error'
+          type: 'error',
+          offset: 65
         });
       }
     },
@@ -124,14 +126,16 @@ export default {
         await demote(login)
         this.$message({
           message: 'Пользователь понижен до игрока',
-          type: 'success'
+          type: 'success',
+          offset: 65
         });
         this.fetchUsers()
       } catch (e) {
         console.error(e);
         this.$message({
           message: 'Ошибка!',
-          type: 'error'
+          type: 'error',
+          offset: 65
         });
       }
     }

@@ -14,8 +14,8 @@
         </div>
         <h3 class="layout__title">Игра</h3>
 
-
-        <div v-if="task === null">
+        <p v-if="isComplete">Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе</p>
+        <div v-else-if="task === null">
           <el-button v-if="isCaptain" type="primary" class="layout__item" @click="next">
             Взять следующее задание
           </el-button>
@@ -134,7 +134,8 @@ export default {
       hintDialogVisible: false,
       isRefreshing: false,
       factText:'',
-      factDialogVisible: false
+      factDialogVisible: false,
+      isComplete: false
     }
   },
   async created () {
@@ -241,7 +242,11 @@ export default {
     },
     async skip() {
       try {
-        await skipTask()
+        const {data} = await skipTask()
+        this.$message({
+          message: data,
+          offset: 65
+        });
         this.refreshTask()
       } catch (e) {
         this.handleError(e)
@@ -249,8 +254,13 @@ export default {
     },
     async answerToTask() {
       try {
-        await answer({answer: this.answer})
+        const {data} = await answer({answer: this.answer})
         await this.refreshTask()
+        this.$message({
+          message: data,
+          type: 'success',
+          offset: 65
+        });
       } catch (e) {
         await this.refreshTask()
         this.handleError(e)
@@ -274,7 +284,10 @@ export default {
       this.isRefreshing = true
       clearInterval(this.timer)
       try {
-        const {data} = await getTask() 
+        const {data, status} = await getTask() 
+        
+        this.isComplete = status === 202
+
         this.task = data
         this.timeOnPageLoad = Number(new Date()) / 1000
         

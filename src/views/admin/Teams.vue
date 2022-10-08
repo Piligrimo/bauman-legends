@@ -81,7 +81,8 @@ dayjs.extend(duration)
         navigator.clipboard.writeText(this.code(team));
         this.$message({
           message: 'Код скопирован.',
-          type: 'success'
+          type: 'success',
+          offset: 65
         });
       },
       format (dur) {

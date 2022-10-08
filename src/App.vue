@@ -78,7 +78,8 @@ export default {
         message: this.message,
         type: 'warning',
         duration: 0,
-        showClose: true
+        showClose: true,
+        offset: 65
       })
       localStorage.messageShown = true
     }
