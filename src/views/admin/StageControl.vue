@@ -71,7 +71,6 @@ export default {
   },
   async mounted() {
     const {data: stage} = await getStage()
-    console.log(stage)
     this.stage = Object.keys(stage)[0]
     this.initialStage  = this.stage
   },

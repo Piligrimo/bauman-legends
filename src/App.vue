@@ -30,7 +30,12 @@
             <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Опубликовать новость</p> </el-menu-item>
             <el-menu-item v-if="isMainAdmin" index="/stage-control" @click="collapsed = true"> <p class="menu-item">Переключение этапа</p> </el-menu-item>
           </template>
-          <template v-else>
+          <template v-else-if="stage==='register'">
+            <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
+            <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Консультация</p> </el-menu-item>
+            <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Обновления</p> </el-menu-item>
+          </template>
+          <template v-else-if="stage==='main'">
             <el-menu-item index="/banner" @click="collapsed = true"> <p class="menu-item">Главная</p> </el-menu-item>
             <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
             <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Испытание</p></el-menu-item>
@@ -38,6 +43,12 @@
             <!-- <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item> -->
             <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Консультация</p> </el-menu-item>
             <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Обновления</p> </el-menu-item>
+          </template>
+          <template v-else-if="stage==='final'">
+            <el-menu-item index="/banner" @click="collapsed = true"> <p class="menu-item">Главная</p> </el-menu-item>
+          </template>
+          <template v-else-if="stage==='end'">
+            <el-menu-item index="/banner" @click="collapsed = true"> <p class="menu-item">Главная</p> </el-menu-item>
           </template>
           
           <!-- !!!!!!!!!!! На время регистрации !!!!!!!!!!! -->
@@ -90,7 +101,7 @@ export default {
     console.log('--------------------------------')
     console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
     await this.$store.dispatch('getUser')
-    //  await this.$store.dispatch('getStage') на время регистрации закоментил
+    await this.$store.dispatch('getStage')
     this.handleRouting()
   },
   store,
@@ -114,6 +125,9 @@ export default {
     },
     isMainAdmin ()  {
       return this.$store.state.user.main_admin
+    },
+    stage ()  {
+      return this.$store.state.stage
     },
     hideVkWidget () {
       return this.$route.name !== 'Consult'

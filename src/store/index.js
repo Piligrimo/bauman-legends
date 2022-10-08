@@ -4,6 +4,13 @@ import {getUser} from '@/api/user'
 import { getStage } from '@/api/game'
 Vue.use(Vuex)
 
+const stages = [
+  'register',
+  'main',
+  'final',
+  'end'
+]
+
 export default new Vuex.Store({
   state: {
     isAuth: false,
@@ -42,7 +49,9 @@ export default new Vuex.Store({
     async getStage ({commit}) {
       try {
         const {data} = await getStage()
-        commit('setStage', data)
+        const i = Object.keys(data)[0]
+
+        commit('setStage', stages[i])
       } catch (e) {
         console.error(e)
       }
