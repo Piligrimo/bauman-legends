@@ -101,7 +101,6 @@ export default {
     console.log('--------------------------------')
     console.log('Здорова, хакер. Все ответы тут https://clck.ru/9TFat')
     await this.$store.dispatch('getUser')
-    await this.$store.dispatch('getStage')
     this.handleRouting()
   },
   store,

@@ -15,6 +15,7 @@ import Results from '../views/Results.vue'
 import List from '../views/admin/puzzles/List.vue'
 import PuzzleCreate from '../views/admin/puzzles/Create.vue'
 import PuzzleEdit from '../views/admin/puzzles/Edit.vue'
+import { stageGuard } from './guards'
 
 
 Vue.use(VueRouter)
@@ -37,12 +38,13 @@ const routes = [
   {
     path: '/team',
     name: 'Team',
-    component: Team
+    component: Team,
+    beforeEnter: stageGuard(['main','register'])
   },
   {
     path: '/teams',
     name: 'Teams',
-    component: Teams
+    component: Teams,
   },
   // {
   //   path: '/help',
@@ -52,17 +54,20 @@ const routes = [
   {
     path: '/consult',
     name: 'Consult',
-    component: Consult
+    component: Consult,
+    beforeEnter: stageGuard(['main','register'])
   },
   {
     path: '/feed',
     name: 'Feed',
-    component: Feed
+    component: Feed,
+    beforeEnter: stageGuard(['main','register'])
   },
   {
     path: '/game',
     name: 'Game',
-    component: Game
+    component: Game,
+    beforeEnter: stageGuard(['main'])
   },
   {
     path: '/puzzle',
@@ -88,11 +93,13 @@ const routes = [
     path: '/banner',
     name: 'Banner',
     component: Banner,
+    beforeEnter: stageGuard()
   },
   {
     path: '/results',
     name: 'Results',
     component: Results,
+    beforeEnter: stageGuard(['main'])
   },
   {
     path: '/stage-control',

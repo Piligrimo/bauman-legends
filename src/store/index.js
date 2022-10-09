@@ -4,7 +4,7 @@ import {getUser} from '@/api/user'
 import { getStage } from '@/api/game'
 Vue.use(Vuex)
 
-const stages = [
+export const stages = [
   'register',
   'main',
   'final',
