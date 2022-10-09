@@ -9,6 +9,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCrown, faUserMinus, faSignOutAlt, faBars, faSyncAlt, faSearch, faCheck, faReply, faFileAlt, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Axios from 'axios'
+import VueVideoPlayer from 'vue-video-player'
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
 
 Vue.prototype.$http = Axios;
 
@@ -28,7 +31,7 @@ library.add(faDownload)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(Vuex);
 Vue.use(ElementUI);
-
+Vue.use(VueVideoPlayer)
 Vue.config.productionTip = false
 
 new Vue({

@@ -8,16 +8,24 @@
           <td :class="state(history[i])">{{stateCaption(history[i])}}</td>
         </tr>
       </table>
+      <!-- <video-player  
+        class="video-player-box"
+        ref="videoPlayer"
+        :options="playerOptions"
+      >
+      </video-player> -->
     </div>
   </div>
 </template>
 
 <script>
 import {getResults} from '@/api/team'
+//import { videoPlayer } from 'vue-video-player'
 
 export default {
   name: 'Results',
 	components: {
+   // videoPlayer
   },
 	data() {
     return {
@@ -29,7 +37,18 @@ export default {
         "Ловкость",
         "Здоровье",
         "Не с Энерго",
-      ]
+      ],
+      playerOptions: {
+          // videojs options
+          muted: false,
+          language: 'ru',
+          playbackRates: [0.7, 1.0, 1.5, 2.0],
+          height: 200,
+          sources: [{
+            type: "video/mp4",
+            src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
+          }],
+        }
     }
   },
   async mounted() {
@@ -85,6 +104,10 @@ export default {
     border: 1px solid rgb(175, 175, 175);
     padding: 10px 15px;
     min-width: 80px;
+  }
+
+  .video-player-box /deep/ .video-js {
+    width: 100%;
   }
 </style>
  
