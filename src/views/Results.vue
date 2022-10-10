@@ -2,72 +2,81 @@
   <div class="content info-bg">
     <div class="layout">
       <h3 class="layout__title">Результаты</h3>
-      <table>
-        <tr  v-for="(title, i) in titles" :key="i">
-          <td>{{title}}</td>
-          <td :class="state(history[i])">{{stateCaption(history[i])}}</td>
-        </tr>
-      </table>
-      <!-- <video-player  
-        class="video-player-box"
-        ref="videoPlayer"
-        :options="playerOptions"
-      >
-      </video-player> -->
+      <el-tabs v-model="tab">
+        <el-tab-pane label="Исследование тела" name="body">
+          <table>
+            <tr  v-for="item in tableResults" :key="item.title">
+              <td>{{item.title}}</td>
+              <td :class="{success: item.complete}">{{item.result}}</td>
+            </tr>
+          </table>
+        </el-tab-pane>
+        <el-tab-pane label="Исследование мозга" name="brain">
+          <div class="brain-container">
+            <img class="brain" src="brain-outline.jpg"/>
+            <img v-for="(_,i) in brainResults" :key="i" class="brain" :src="brainParts[i] || brainParts[0]"/>
+          </div>
+          <h4> Проведено {{pluralize(brainResults.length)}} из 6 </h4>
+        </el-tab-pane>
+      </el-tabs>
+      
     </div>
   </div>
 </template>
 
 <script>
 import {getResults} from '@/api/team'
-//import { videoPlayer } from 'vue-video-player'
 
 export default {
   name: 'Results',
 	components: {
-   // videoPlayer
   },
 	data() {
     return {
+      tab: 'body',
       history: [],
       titles: [
-        "Интеллект",
+        "Скорость",
         "Выносливость",
         "Сила",
         "Ловкость",
-        "Здоровье",
-        "Не с Энерго",
+        "Иммунитет",
+        "Реакция",
       ],
-      playerOptions: {
-          // videojs options
-          muted: false,
-          language: 'ru',
-          playbackRates: [0.7, 1.0, 1.5, 2.0],
-          height: 200,
-          sources: [{
-            type: "video/mp4",
-            src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
-          }],
-        }
+      brainParts: [
+        'brain1.png',
+        'brain2.png',
+        'brain3.png',
+        'brain4.png',
+        'brain5.png',
+        'brain6.png',
+      ]
     }
   },
   async mounted() {
     const {data} = await getResults()
-    this.history = data.filter(({puzzle_type})=> puzzle_type === 'logic')
+    this.history = data
+  },
+  computed: {
+    tableResults() {
+      const photoPuzzles = this.history.filter(({puzzle_type}) => puzzle_type === 'photo')
+      return this.titles.map((title, i) => {
+        return {
+          title,
+          result: photoPuzzles[i]?.end_date ? 'Годен' : 'Нет данных',
+          complete: !!photoPuzzles[i]?.end_date
+        }
+      })
+    },
+    brainResults() {
+      return this.history.filter(({puzzle_type, skip}) => puzzle_type === 'logic' && !skip)
+    }
   },
   methods: {
-    state(item) {
-      if (!item?.end_date) return 'progress'
-      if (item.skip) return 'fail'
-      return 'success'
-    },
-    stateCaption(item) {
-      const dict = {
-        progress: '',
-        success: 'годен',
-        fail: 'не годен'
-      }
-      return dict[this.state(item)]
+    pluralize (num) {
+      if (num === 1) return `${num} тест`
+      if (num >=2 && num <5) return `${num} теста`
+      return `${num} тестов` 
     }
   }
 }
@@ -108,6 +117,17 @@ export default {
 
   .video-player-box /deep/ .video-js {
     width: 100%;
+  }
+
+  .brain {
+    position: absolute;
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .brain:last-child {
+    position: relative;
+    box-shadow: 0px 14px 10px -7px rgba(0, 0, 0, 0.1);
   }
 </style>
  

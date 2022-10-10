@@ -38,63 +38,8 @@
             <el-button v-if="isCaptain && !isPhotoQuest" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
           </div>
         </div>
-
-<!--     !!! легаси или типа того    
-        <h3  v-if="isPlay && isMain">На решение осталось {{prettifyTime(this.timeRemaining)}}</h3>
-        <p v-if="isPlay && attemptsCaption">{{attemptsCaption}}</p>
-
-        <b v-if="isSuccess">Вы ответили верно! Скажи своим товарищам по команде обновить страницу на своих устройствах. Пусть капитан возьмет следующее задание, когда будете готовы</b>
-        <b v-if="isFail">К сожалению, вы не смогли ответить верно :( Пусть капитан возьмет следующее задание, когда будете готовы</b>
-        <p v-if="isSuccess && correctAnswer">Правильный ответ: {{correctAnswer}}</p>
-        <p v-if="isPause && isMain && isSuccess">Задание решено за {{timeSpent}}</p>
-        <p v-if="isPause && isMain && isSuccess">Баллы команды: {{points}}</p>
-        
-        <el-input v-if="isPlay" class="layout__item" placeholder="Oтвет" v-model="answer"/>
-        <el-button v-if="isCaptain && task===null" type="primary" class="layout__item" @click="next">
-          {{task && task.task && task.task.task_id ? 'Взять следующее задание':'Взять задание'}}
-        </el-button>
-        <el-button
-          v-if="isPlay" 
-          type="primary" 
-          class="layout__item" 
-          :disabled="!answer"
-          @click="answerToTask"
-        >
-          Ответить
-        </el-button>
-       
-        <el-button v-if="isCaptain && isPlay && isSkippable" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
-
-        <el-collapse v-if="isPlay && isMain && hints.length" class="collapse" >
-          <el-collapse-item>
-            <h3 class="collapse-title" slot="title">Подсказки</h3>
-            <h4>Экстра-баллы: {{money}}</h4>
-            <div v-for="hint in hints" :key="hint.hint_id" class="task-hint">
-              <div v-if="hint.html" v-html="hint.html"/>
-              <template v-else>
-                <p>Подсказка за {{hint.cost}}</p>
-                <el-button type="primary" size="mini" @click="openHintDialog(hint)">Купить</el-button>
-              </template>
-            </div>
-          </el-collapse-item>
-        </el-collapse> -->
         <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
       </div>
-      <!-- <el-dialog
-        :title="`Купить подсказку за ${chosenHint.cost} экстра-баллов?`"
-        :visible.sync="hintDialogVisible"
-        :before-close="closeDialog"
-        width="300px"
-      >
-        <div class="dialog-body">
-          <p v-if="isHintAffordable">Баланс вашей команды - {{money}}.<br> Вы уверены, что хотите взять подсказку?</p>
-          <p v-else>К сожалению, у команды недостаточно экстра-баллов, чтоб взять эту подсказку</p>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button class="button" type="primary" @click="buyHint" :disabled="!isHintAffordable">Купить</el-button>
-          <el-button class="button" @click="closeDialog">Отменить</el-button>
-        </span>
-      </el-dialog> -->
     </div>
   </div>
 </template>
@@ -141,35 +86,13 @@ export default {
     await this.refreshTask()
     const vue = this
     window.addEventListener('focus', async() => {
-      if (vue.isMain)
-        await vue.refreshTask()
+      await vue.refreshTask()
     })
   },
   store,
   computed:{
     isCaptain () {
       return this.$store.state.user?.captain
-    },
-    isPlay () {
-      return this.task?.status === 'PLAY'
-    },
-    isPause () {
-      return this.task?.status === 'PAUSE'
-    },
-    isSuccess () {
-      return this.task?.task?.task_status === 'SUCCESS'
-    },
-    isFail () {
-      return this.task?.task?.task_status === 'FAIL'
-    },
-    isMain () {
-      return this.task?.task?.task_type === 'MAIN'
-    },
-    isSkippable () {
-      return this.task?.task?.skip
-    },
-    html () {
-      return this.task?.task?.html
     },
     deadlineTime () {
       return this.task?.task?.start_time + this.task?.task?.duration
@@ -181,7 +104,7 @@ export default {
       return this.prettifyTime(this.task?.task?.finish_time - this.task?.task?.start_time)
     },
     bgClass () {
-      switch (this.task?.task?.task_id % 3){
+      switch (this.task?.id % 3){
         case 0 : return 'game-bg-1'
         case 1 : return 'game-bg-2'
         case 2 : return 'game-bg-3'
