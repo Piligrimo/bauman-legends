@@ -12,7 +12,7 @@
             />
           </div>
         </div>
-        <h3 class="layout__title">Игра</h3>
+        <h3 class="layout__title">{{task === null?'Испытание':'Текущее задание'}}</h3>
 
         <p v-if="isComplete">Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе</p>
         <div v-else-if="task === null">
@@ -22,7 +22,6 @@
           <p v-else>Попроси капитана, чтоб он взял задание</p>
         </div>
         <div v-else>
-          <h4>{{task.title}}</h4>
           <img class="layout__item" v-if="task.filename" :src="photo"/>
           <p>{{task.text}}</p>
 
