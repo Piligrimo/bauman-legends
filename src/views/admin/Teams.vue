@@ -2,8 +2,14 @@
     <div class="content info-bg">
       <div class="layout admin">
         <h3 class="layout__title">Команды</h3>
+        <p class="label">Поиск</p>
+        <el-input
+          class="layout__item" 
+          placeholder="Введи название или номер команды"
+          v-model="search">
+        </el-input>
         <div class="teams">
-          <div  v-for="team in teams" :key="team.id">
+          <div  v-for="team in filteredTeams" :key="team.id">
             <h4> Команда № {{team.id}} "{{team.name}}" </h4>
             <template v-if="code(team)">
               <span class="hint">Посмотреть код:</span>
@@ -48,12 +54,17 @@ import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 dayjs.extend(duration)
 
+const searchBy = (prop, text) => {
+  return (prop || '').toUpperCase().includes(text.toUpperCase())
+}
+
   export default {
     name: 'Teams',
     data() {
       return {
         teams: [],
-        shownCodeTeam: ''
+        shownCodeTeam: '',
+        search: ''
       }
     },
     async mounted() {
@@ -61,7 +72,11 @@ dayjs.extend(duration)
       this.teams = data
     },
     computed: {
-      
+      filteredTeams () {
+        return this.teams.filter(({id, name}) => {
+          return searchBy(`${name} ${id}`, this.search) 
+        })
+      },
     },
     methods: {
       handleSpoilerClick(id) {
