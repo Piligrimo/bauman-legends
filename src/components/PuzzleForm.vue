@@ -11,8 +11,8 @@
       <template v-if="!isEdit" >
         <p class="label">Тип загадки</p>
         <el-radio-group class="layout__item"  v-model="puzzle_type">
-          <el-radio label="logic">Логическая</el-radio>
-          <el-radio label="photo">Фотоквест</el-radio>
+          <el-radio label="logic" :disabled="disableLogic">Логическая</el-radio>
+          <el-radio label="photo" :disabled="disablePhoto">Фотоквест</el-radio>
           <el-radio label="final">Для Финала</el-radio>
         </el-radio-group>
       </template>
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { createPuzzle, editPuzzle } from '../api/admin';
+import { createPuzzle, editPuzzle, getPuzzles } from '../api/admin';
 import { BASEURL } from '../api/config';
 
 
@@ -66,7 +66,7 @@ export default {
   watch: {
     initialValues (val) {
       if (!val) return
-      const { title,text,puzzle_type,regex_answer,filename} = this.initialValues
+      const { title,text,puzzle_type,regex_answer,filename} = val
       this.title = title || ''
       this.text = text || ''
       this.puzzle_type = puzzle_type || ''
@@ -83,8 +83,36 @@ export default {
       filename: '',
       errorMessages: [],
       file: null,
+      disableLogic: false,
+      disablePhoto: false,
     }
-  }, 
+  },
+  async mounted() {
+    if (!this.isEdit)
+    {
+      const {data} = await getPuzzles()
+      const logicNum = data.filter(({puzzle_type}) => puzzle_type === 'logic').length
+      const photoNum = data.filter(({puzzle_type}) => puzzle_type === 'photo').length
+      this.disableLogic = logicNum >=6
+      this.disablePhoto = photoNum >=6
+
+      const warnings = []
+      if (this.disableLogic) {
+        this.puzzle_type = 'photo'
+        warnings.push('логических загадок')
+      }
+      if (this.disablePhoto) {
+        this.puzzle_type = 'final'
+        warnings.push('загадок для фотоквеста')
+      }
+      if (warnings.length)
+        this.$message({
+          message: 'Достигнуто максимальное количество ' + warnings.join(' и '),
+          type: 'warning',
+          offset: 65
+        });
+    }
+  },
   computed: {
     photo() {
       if (this.filename) return BASEURL + '/file/' + this.filename
