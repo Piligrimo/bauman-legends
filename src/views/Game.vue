@@ -23,7 +23,7 @@
         </div>
         <div v-else>
           <img class="layout__item" v-if="task.filename" :src="photo"/>
-          <p>{{task.text}}</p>
+          <p v-html="formattedText" />
 
           <el-input v-if="isCaptain" class="layout__item" placeholder="Oтвет" v-model="answer"/>
           <div  class="layout__actions">
@@ -91,6 +91,9 @@ export default {
   },
   store,
   computed:{
+    formattedText() {
+      return this.task?.text.replaceAll('\n','<br>')
+    },
     isCaptain () {
       return this.$store.state.user?.captain
     },
