@@ -92,7 +92,7 @@ export default {
   store,
   computed:{
     formattedText() {
-      return this.task?.text.replaceAll('\n','<br>')
+      return this.task?.text?.replaceAll('\n','<br>')
     },
     isCaptain () {
       return this.$store.state.user?.captain
