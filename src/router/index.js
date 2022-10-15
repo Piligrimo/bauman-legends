@@ -45,6 +45,7 @@ const routes = [
     path: '/teams',
     name: 'Teams',
     component: Teams,
+    beforeEnter: adminGuard
   },
   // {
   //   path: '/help',

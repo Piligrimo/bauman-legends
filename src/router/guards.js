@@ -16,7 +16,8 @@ export const adminGuard = async (to, from, next) => {
     await store.dispatch('getUser')
   } 
 
-  if (!store.state.user.admin) {
+  if (!store.state.user.admin) 
     next({name: 'Team'})
-  }
+  else
+    next()
 }
