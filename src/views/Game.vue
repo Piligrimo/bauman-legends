@@ -13,6 +13,14 @@
           </div>
         </div>
         <h3 class="layout__title">{{task === null?'Испытание':'Текущее задание'}}</h3>
+        <el-alert
+          v-if="task && task.puzzle_type === 'photo'"
+          type="info"
+          show-icon
+        >
+          Фото отправлять <a target="_blank" href="https://vk.com/im?sel=-198373277">в сообщения группы ВК. </a>
+          Ответом на данное задание является код, который пришлют модераторы
+        </el-alert>
 
         <p v-if="isComplete">Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе</p>
         <div v-else-if="task === null">
