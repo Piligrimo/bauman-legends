@@ -15,7 +15,7 @@ import Results from '../views/Results.vue'
 import List from '../views/admin/puzzles/List.vue'
 import PuzzleCreate from '../views/admin/puzzles/Create.vue'
 import PuzzleEdit from '../views/admin/puzzles/Edit.vue'
-import { stageGuard } from './guards'
+import { adminGuard, stageGuard } from './guards'
 
 
 Vue.use(VueRouter)
@@ -73,21 +73,25 @@ const routes = [
     path: '/puzzle',
     name: 'Puzzles',
     component: List,
+    beforeEnter: adminGuard
   },
   {
     path: '/puzzle/create',
     name: 'PuzzleCreate',
     component: PuzzleCreate,
+    beforeEnter: adminGuard
   },
   {
     path: '/puzzle/edit/:id/:type',
     name: 'PuzzleEdit',
     component: PuzzleEdit,
+    beforeEnter: adminGuard
   },
   {
     path: '/moders',
     name: 'Moderators',
     component: Moderators,
+    beforeEnter: adminGuard
   },
   {
     path: '/banner',
@@ -105,6 +109,7 @@ const routes = [
     path: '/stage-control',
     name: 'StageControl',
     component: StageControl,
+    beforeEnter: adminGuard
   },
   // {
   //   path: '/side-quest',
