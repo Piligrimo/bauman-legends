@@ -13,10 +13,10 @@
         </el-tab-pane>
         <el-tab-pane label="Исследование мозга" name="brain">
           <div class="brain-container">
-            <img class="brain" src="brain-outline.jpg"/>
+            <img class="brain" src="brain-outline.png"/>
             <img v-for="(_,i) in brainResults" :key="i" class="brain" :src="brainParts[i] || brainParts[0]"/>
           </div>
-          <h4> Проведено {{pluralize(brainResults.length)}} из 7 </h4>
+          <h4 class="subtitle"> Проведено {{pluralize(brainResults.length)}} из 7 </h4>
         </el-tab-pane>
       </el-tabs>
       
@@ -51,7 +51,8 @@ export default {
         'brain4.png',
         'brain5.png',
         'brain6.png',
-      ]
+        'brain7.png',
+      ],
     }
   },
   async mounted() {
@@ -128,7 +129,11 @@ export default {
 
   .brain:last-child {
     position: relative;
-    box-shadow: 0px 14px 10px -7px rgba(0, 0, 0, 0.1);
+  }
+
+  .subtitle {
+    text-align: center;
+    margin-top: 20px;
   }
 </style>
  

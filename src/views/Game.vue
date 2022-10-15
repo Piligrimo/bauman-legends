@@ -13,16 +13,12 @@
           </div>
         </div>
         <h3 class="layout__title">{{task === null?'Испытание':'Текущее задание'}}</h3>
-        <el-alert
-          v-if="task && task.puzzle_type === 'photo'"
-          type="info"
-          show-icon
-        >
-          Фото отправлять <a target="_blank" href="https://vk.com/im?sel=-198373277">в сообщения группы ВК. </a>
-          Ответом на данное задание является код, который пришлют модераторы
-        </el-alert>
-
+        
         <p v-if="isComplete">Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе</p>
+        <p v-else-if="!enoughPlayers">
+          Упс, чтобы взять задание, в команде должно быть 4-8 участников. 
+          Найти товарищей по команде можно в <a href="https://vk.com/topic-198373277_49117988">обсуждении в группе</a>
+        </p>
         <div v-else-if="task === null">
           <el-button v-if="isCaptain" type="primary" class="layout__item" @click="next">
             Взять следующее задание
@@ -30,6 +26,14 @@
           <p v-else>Попроси капитана, чтоб он взял задание</p>
         </div>
         <div v-else>
+          <el-alert
+            v-if="task.puzzle_type === 'photo'"
+            type="info"
+            show-icon
+          >
+            Фото отправлять <a target="_blank" href="https://vk.com/im?sel=-198373277">в сообщения группы ВК. </a>
+            Ответом на данное задание является код, который пришлет искусственный интеллект
+          </el-alert>
           <img class="layout__item" v-if="task.filename" :src="photo"/>
           <p v-html="formattedText" />
 
@@ -71,6 +75,7 @@ export default {
   data () {
     return {
       task: null,
+      team: null,
       hints: [],
       errorMessages: [],
       answer: '',
@@ -92,6 +97,8 @@ export default {
   },
   async created () {
     await this.refreshTask()
+    const {data} = await getTeam()
+    this.team = data
     const vue = this
     window.addEventListener('focus', async() => {
       await vue.refreshTask()
@@ -113,6 +120,9 @@ export default {
     },
     timeSpent () {
       return this.prettifyTime(this.task?.task?.finish_time - this.task?.task?.start_time)
+    },
+    enoughPlayers () {
+      return this.team.amount_of_members >=4
     },
     bgClass () {
       switch (this.task?.id % 3){
