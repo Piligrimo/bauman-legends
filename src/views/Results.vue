@@ -16,7 +16,7 @@
             <img class="brain" src="brain-outline.jpg"/>
             <img v-for="(_,i) in brainResults" :key="i" class="brain" :src="brainParts[i] || brainParts[0]"/>
           </div>
-          <h4> Проведено {{pluralize(brainResults.length)}} из 6 </h4>
+          <h4> Проведено {{pluralize(brainResults.length)}} из 7 </h4>
         </el-tab-pane>
       </el-tabs>
       
@@ -36,12 +36,13 @@ export default {
       tab: 'body',
       history: [],
       titles: [
-        "Скорость",
+        "Стрессоустойчивость",
         "Выносливость",
-        "Сила",
+        "Генетика",
         "Ловкость",
         "Иммунитет",
-        "Реакция",
+        "Сила",
+        "Скорость реакций",
       ],
       brainParts: [
         'brain1.png',

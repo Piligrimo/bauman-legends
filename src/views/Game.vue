@@ -43,7 +43,7 @@
             >
               Ответить
             </el-button>
-            <el-button v-if="isCaptain && !isPhotoQuest" class="layout__item" type="primary" @click="skip">Пропустить задание</el-button>
+            <el-button v-if="isCaptain && !isPhotoQuest" class="layout__item button" type="primary" @click="skip">Пропустить задание</el-button>
           </div>
         </div>
         <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>

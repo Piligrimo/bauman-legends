@@ -70,7 +70,11 @@
   }
   .layout__action {
     margin-top: 0.5rem;
+    margin-left: 0;
     width: 100%;
+  }
+  .layout__item {
+    margin-left: 0 !important;
   }
 }
 

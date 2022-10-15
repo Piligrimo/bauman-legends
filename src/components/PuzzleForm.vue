@@ -93,8 +93,8 @@ export default {
       const {data} = await getPuzzles()
       const logicNum = data.filter(({puzzle_type}) => puzzle_type === 'logic').length
       const photoNum = data.filter(({puzzle_type}) => puzzle_type === 'photo').length
-      this.disableLogic = logicNum >=6
-      this.disablePhoto = photoNum >=6
+      this.disableLogic = logicNum >=7
+      this.disablePhoto = photoNum >=7
 
       const warnings = []
       if (this.disableLogic) {
