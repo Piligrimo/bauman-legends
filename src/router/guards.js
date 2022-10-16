@@ -30,5 +30,5 @@ export const mainAdminGuard = async (to, from, next) => {
   if (store.state.user.main_admin) 
     next()
   else
-    adminGuard(to, from, next)
+    next({name: 'Teams'})
 }
