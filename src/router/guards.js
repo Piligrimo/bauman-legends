@@ -21,3 +21,14 @@ export const adminGuard = async (to, from, next) => {
   else
     next()
 }
+
+export const mainAdminGuard = async (to, from, next) => {
+  if(!store.state.user) {
+    await store.dispatch('getUser')
+  } 
+
+  if (store.state.user.main_admin) 
+    next()
+  else
+    adminGuard(to, from, next)
+}

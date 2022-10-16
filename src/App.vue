@@ -26,7 +26,7 @@
           <template v-if="isAdmin">
             <el-menu-item index="/teams" @click="collapsed = true"> <p class="menu-item">Команды</p> </el-menu-item>
             <el-menu-item index="/moders" @click="collapsed = true"> <p class="menu-item">Модераторы</p> </el-menu-item>
-            <el-menu-item index="/puzzle" @click="collapsed = true"> <p class="menu-item">Загадки</p> </el-menu-item>
+            <el-menu-item v-if="isMainAdmin" index="/puzzle" @click="collapsed = true"> <p class="menu-item">Загадки</p> </el-menu-item>
             <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Опубликовать новость</p> </el-menu-item>
             <el-menu-item v-if="isMainAdmin" index="/stage-control" @click="collapsed = true"> <p class="menu-item">Переключение этапа</p> </el-menu-item>
           </template>
@@ -178,6 +178,7 @@ export default {
 
   #vk_community_messages {
     z-index: 3 !important;
+    right: 0 !important;
   }
 
   .default-bg {

@@ -122,7 +122,7 @@ export default {
       return this.prettifyTime(this.task?.task?.finish_time - this.task?.task?.start_time)
     },
     enoughPlayers () {
-      return this.team.amount_of_members >=4
+      return this.team?.amount_of_members >=4
     },
     bgClass () {
       switch (this.task?.id % 3){

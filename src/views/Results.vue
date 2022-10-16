@@ -113,8 +113,9 @@ export default {
 
   td {
     border: 1px solid rgb(175, 175, 175);
-    padding: 10px 15px;
+    padding: 10px;
     min-width: 80px;
+    font-size: 14px;
   }
 
   .video-player-box /deep/ .video-js {

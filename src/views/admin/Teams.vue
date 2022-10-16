@@ -11,6 +11,7 @@
         <div class="teams">
           <div  v-for="team in filteredTeams" :key="team.id">
             <h4> Команда № {{team.id}} "{{team.name}}" </h4>
+            <p class="hint"> Количество участников: {{team.amount_of_members}}</p>
             <template v-if="code(team)">
               <span class="hint">Посмотреть код:</span>
               <span 
