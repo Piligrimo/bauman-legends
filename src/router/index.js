@@ -5,7 +5,7 @@ import SignUp from '../views/SignUp.vue'
 import Team from '../views/Team.vue'
 import Teams from '../views/admin/Teams.vue'
 import Moderators from '../views/admin/Moderators.vue'
-//import Help from '../views/Help.vue'
+import Help from '../views/Help.vue'
 import Consult from '../views/Consult.vue'
 import Feed from '../views/Feed.vue'
 import Banner from '../views/Banner.vue'
@@ -47,11 +47,11 @@ const routes = [
     component: Teams,
     beforeEnter: adminGuard
   },
-  // {
-  //   path: '/help',
-  //   name: 'Help',
-  //   component: Help
-  // },
+  {
+    path: '/help',
+    name: 'Help',
+    component: Help
+  },
   {
     path: '/consult',
     name: 'Consult',
@@ -98,7 +98,7 @@ const routes = [
     path: '/banner',
     name: 'Banner',
     component: Banner,
-    beforeEnter: stageGuard()
+    beforeEnter: stageGuard(['final','register','end'])
   },
   {
     path: '/results',
