@@ -60,6 +60,25 @@
     </transition>
     <router-view/>
     <el-dialog
+      title="Новое сообщение!"
+      :visible.sync="plotDialogVisible"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
+      center
+      width="300px"
+    >
+      <p v-html="plotMessage" class="dialog-body" />
+      <span slot="footer">
+        <template v-if="buttonSet === 0">
+          <el-button style="width: 100px" class="button" type="primary" @click="helpPlotStage">Да</el-button>
+          <el-button style="width: 100px" class="button" type="primary" @click="termsPlotStage">Нет</el-button>
+        </template>
+        <el-button v-else-if="buttonSet === 1" class="button" type="primary" @click="preStartPlotStage">Продолжить</el-button>
+        <el-button v-else class="button" type="primary" @click="startPlotStage">Ура!</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
         class="shakin"
         title="Warning!!!"
         :visible.sync="warningVisible"
@@ -67,7 +86,7 @@
       >
         <div style="color: red" class="dialog-body">
           <i class="el-icon-warning"></i> 
-          <span>  Нет доступа!!!</span>
+          <span> Нет доступа!!!</span>
         </div>
       </el-dialog>
     <div id="vk_community_messages" :class="{hide: hideVkWidget}"></div>
@@ -77,12 +96,16 @@
 <script>
 import store from '@/store'
 import axios from 'axios';
+import plotMessages from './assets/plotMessages';
 
 export default {
   data () {
     return {
       collapsed: true,
       warningVisible: false,
+      plotMessage: '',
+      plotDialogVisible: false,
+      buttonSet: 0,
     }
   },
   async created () {
@@ -92,10 +115,11 @@ export default {
         type: 'warning',
         duration: 0,
         showClose: true,
-        offset: 65
       })
       localStorage.messageShown = true
     }
+
+    
 
     console.log('Мужество, Воля, Труд и Упорство!')
     console.log('--------------------------------')
@@ -106,8 +130,19 @@ export default {
   store,
   watch: {
     isAuth: { 
-      handler() {
+      handler(val) {
         this.handleRouting()
+        if (val) {
+          this.handlePlot()
+        }
+      }
+    },
+    isOnHelp(val) {
+      if (val) {
+        this.plotDialogVisible = false
+      } else if (localStorage.getItem('plotStage') === 'help') {
+        localStorage.setItem('plotStage', 'terms')
+        this.handlePlot()
       }
     }
   },
@@ -115,6 +150,9 @@ export default {
     requiresAuth () {
       const nonAuthRoutes = ['/login', '/sign-up']
       return !nonAuthRoutes.includes(this.$route.path)
+    },
+    isOnHelp() {
+      return this.$route.path === '/help'
     },
     isAuth () {
       return this.$store.state.isAuth
@@ -147,6 +185,24 @@ export default {
       
       this.$store.commit('setAuth', false)
     },
+    helpPlotStage() {
+      this.$router.push('/help')
+      localStorage.setItem('plotStage', 'help')
+    },
+    termsPlotStage() {
+      this.plotMessage=plotMessages[16] 
+      localStorage.setItem('plotStage', 'terms')
+      this.buttonSet = 1
+    },
+    preStartPlotStage() {
+      this.plotMessage=plotMessages[17] 
+      localStorage.setItem('plotStage', 'preStart')
+      this.buttonSet = 2
+    },
+    startPlotStage() {
+      this.plotDialogVisible = false;
+      localStorage.setItem('plotStage', 'start')
+    },
     handleRouting () {
       if (!this.isAuth && this.requiresAuth){
         this.logOut()
@@ -158,6 +214,22 @@ export default {
           this.$router.push('/teams')
         else
           this.$router.push('/team')
+      }
+    },
+    handlePlot() {
+      const plotStage = localStorage.getItem('plotStage')
+      if (!plotStage) {
+        this.plotDialogVisible = true;
+        this.plotMessage = plotMessages[15]
+        this.buttonSet = 0
+      } else if (plotStage === 'terms') {
+        this.plotDialogVisible = true;
+        this.plotMessage = plotMessages[16]
+        this.buttonSet = 1 
+      } else if (plotStage === 'preStart') {
+        this.plotDialogVisible = true;
+        this.plotMessage = plotMessages[17]
+        this.buttonSet = 2
       }
     },
     warn()  {

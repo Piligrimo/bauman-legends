@@ -14,7 +14,17 @@
         </div>
         <h3 class="layout__title">{{task === null?'Испытание':'Текущее задание'}}</h3>
         
-        <p v-if="isComplete">Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе</p>
+        <p v-if="isComplete">
+          Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе
+          <el-button
+            v-if="plotMessage"
+            type="primary" 
+            class="layout__item" 
+            @click="plotDialogVisible = true"
+          >
+            Посмотреть новое сообщение
+          </el-button>
+        </p>
         <p v-else-if="!enoughPlayers">
           Упс, чтобы взять задание, в команде должно быть 4-8 участников. 
           Найти товарищей по команде можно в <a href="https://vk.com/topic-198373277_49117988">обсуждении в группе</a>
@@ -24,6 +34,14 @@
             Взять следующее задание
           </el-button>
           <p v-else>Попроси капитана, чтоб он взял задание</p>
+          <el-button
+            v-if="plotMessage"
+            type="primary" 
+            class="layout__item" 
+            @click="plotDialogVisible = true"
+          >
+            Посмотреть новое сообщение
+          </el-button>
         </div>
         <div v-else>
           <el-alert
@@ -52,6 +70,17 @@
         </div>
         <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
       </div>
+      <el-dialog
+        title="Новое сообщение!"
+        :visible.sync="plotDialogVisible"
+        center
+        width="300px"
+      >
+        <p v-html="plotMessage" class="dialog-body" />
+        <span slot="footer">
+          <el-button style="width: 100px" class="button" type="primary" @click="plotDialogVisible = false">ОК</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -60,7 +89,9 @@
 import store from '@/store'
 import {getTask, nextTask, skipTask, answer, getHints, buyHint, getFact} from '@/api/game'
 import {getTeam} from '@/api/team'
-import { BASEURL } from '../api/config'
+import { BASEURL } from '@/api/config'
+import plotMessages from '@/assets/plotMessages'
+
 const getMinutes = (time) => {
   const minutes = Math.floor(time / 60)
   return minutes >= 10 ? minutes : '0' + minutes
@@ -92,6 +123,8 @@ export default {
       isRefreshing: false,
       factText:'',
       factDialogVisible: false,
+      plotDialogVisible: false,
+      plotMessage: '',
       isComplete: false
     }
   },
@@ -186,10 +219,11 @@ export default {
     async skip() {
       try {
         const {data} = await skipTask()
-        this.$message({
-          message: data,
-          offset: 65
-        });
+
+
+        this.plotMessage = plotMessages[data]
+        this.plotDialogVisible = !!this.plotMessage
+
         this.refreshTask()
       } catch (e) {
         this.handleError(e)
@@ -199,11 +233,9 @@ export default {
       try {
         const {data} = await answer({answer: this.answer})
         await this.refreshTask()
-        this.$message({
-          message: data,
-          type: 'success',
-          offset: 65
-        });
+
+        this.plotMessage = plotMessages[data]
+        this.plotDialogVisible = !!this.plotMessage
       } catch (e) {
         await this.refreshTask()
         this.handleError(e)
@@ -231,7 +263,12 @@ export default {
         
         this.isComplete = status === 202
 
-        this.task = data
+        if (data.id){
+          this.task = data
+        } else {
+          this.task = null
+          this.plotMessage = this.isComplete ? plotMessages[14] : plotMessages[data?.detail]
+        }
         this.timeOnPageLoad = Number(new Date()) / 1000
         
         // this.getHints()
