@@ -3,7 +3,7 @@
     <div class="layout">
       <h3 class="layout__title">{{isAdmin ? 'Опубликовать новость' : 'Обновления'}}</h3>
       <template v-if="isAdmin">
-        <h4>Добвление новости</h4>
+        <h4>Добавление новости</h4>
         <p class="label">Заголовок</p>
         <el-input
           class="layout__item" 
@@ -41,7 +41,7 @@
       
     >
       <div class="dialog-body">
-        <span>{{chosenItem.description}}</span>
+        <span v-html="formattedText"/>
       </div>
     </el-dialog>
     <el-dialog
@@ -57,7 +57,7 @@
         </div>
         <br>
         <h4>{{chosenItem.title}}</h4>
-        <p>{{chosenItem.description}}</p>
+        <p v-html="formattedText" />
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button class="button" type="primary" @click="deleteItem" >Удалить</el-button>
@@ -95,6 +95,9 @@ export default {
   computed: {
     isAdmin ()  {
       return this.$store.state.user?.admin
+    },
+    formattedText() {
+      return this.chosenItem?.description?.replaceAll('\n','<br>')
     },
   },
   methods: {
