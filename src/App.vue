@@ -217,6 +217,7 @@ export default {
       }
     },
     handlePlot() {
+      if (this.isAdmin) return
       const plotStage = localStorage.getItem('plotStage')
       if (!plotStage) {
         this.plotDialogVisible = true;

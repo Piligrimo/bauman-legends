@@ -20,6 +20,7 @@
             v-if="plotMessage"
             type="primary" 
             class="layout__item" 
+            style="margin-left: 0;" 
             @click="plotDialogVisible = true"
           >
             Посмотреть новое сообщение
@@ -37,7 +38,8 @@
           <el-button
             v-if="plotMessage"
             type="primary" 
-            class="layout__item" 
+            class="layout__item"
+            style="margin-left: 0;" 
             @click="plotDialogVisible = true"
           >
             Посмотреть новое сообщение
