@@ -143,7 +143,7 @@ export default {
     return {
       title: '',
       text: '',
-      puzzle_type: 'final',
+      puzzle_type: 'logic',
       regex_answer: '',
       filename: '',
       file: null,
@@ -194,11 +194,13 @@ export default {
       return URL.createObjectURL(this.file)
     },
     formattedText() {
+      if (!this.chosenHint) return ''
       return this.hintTexts[this.chosenHint].replaceAll('\n','<br>')
     },
   },
   methods: {
     getHintPhoto(n) {
+      if (!this.hintFileNames || !this.hintFiles) return
       const filename = this.hintFileNames[n]
       if (filename) return BASEURL + '/file/' + filename
       const file = this.hintFiles[n]

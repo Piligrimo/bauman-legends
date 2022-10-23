@@ -7,7 +7,7 @@ export const stageGuard = (allowedStages = stages) => async (to, from, next) => 
   } 
 
   if (allowedStages.includes(store.state.stage)) next() 
-  else if (!['final', 'end'].includes(store.state.stage)) next({name: 'Team'})
+  else if (store.state.stage !== 'end') next({name: 'Team'})
   else next({name: 'Banner'})
 }
 

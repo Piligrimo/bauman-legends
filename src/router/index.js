@@ -39,7 +39,7 @@ const routes = [
     path: '/team',
     name: 'Team',
     component: Team,
-    beforeEnter: stageGuard(['main','register'])
+    beforeEnter: stageGuard(['main','register', 'final'])
   },
   {
     path: '/teams',
@@ -56,19 +56,19 @@ const routes = [
     path: '/consult',
     name: 'Consult',
     component: Consult,
-    beforeEnter: stageGuard(['main','register'])
+    beforeEnter: stageGuard(['main','register', 'final'])
   },
   {
     path: '/feed',
     name: 'Feed',
     component: Feed,
-    beforeEnter: stageGuard(['main','register'])
+    beforeEnter: stageGuard(['main','register', 'final'])
   },
   {
     path: '/game',
     name: 'Game',
     component: Game,
-    beforeEnter: stageGuard(['main'])
+    beforeEnter: stageGuard(['main', 'final'])
   },
   {
     path: '/puzzle',
@@ -98,13 +98,13 @@ const routes = [
     path: '/banner',
     name: 'Banner',
     component: Banner,
-    beforeEnter: stageGuard(['final','register','end'])
+    beforeEnter: stageGuard(['register','end'])
   },
   {
     path: '/results',
     name: 'Results',
     component: Results,
-    beforeEnter: stageGuard(['main'])
+    beforeEnter: stageGuard(['main', 'final'])
   },
   {
     path: '/stage-control',
