@@ -127,12 +127,16 @@ export default {
   watch: {
     initialValues (val) {
       if (!val) return
-      const { title,text,puzzle_type,regex_answer,filename} = val
+      const { title,text,puzzle_type,regex_answer,filename, hint_files,hint,passing,timer} = val
       this.title = title || ''
       this.text = text || ''
       this.puzzle_type = puzzle_type || ''
       this.regex_answer = regex_answer || ''
       this.filename = filename
+      this.hintFileNames=hint_files
+      this.hintTexts = hint
+      this.passing = passing
+      this.timer = timer
     }
   },
   data() {
@@ -214,7 +218,6 @@ export default {
     deletePhoto(hintIndex) {
       if (hintIndex != undefined)
       {
-        console.log(this.$refs);
         console.log(this.$refs[`upload-${hintIndex-1}`])
         this.hintFiles[hintIndex]= '"delete"'
         if (this.$refs[`upload-${hintIndex-1}`])
@@ -222,7 +225,6 @@ export default {
         this.hintFileNames[hintIndex] = ''
         this.keyHack++
       } else {
-        console.log(this.$refs);
         this.file= '"delete"'
         if (this.$refs.upload)
           this.$refs.upload.value = null;
@@ -236,10 +238,12 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
       if (puzzle_type === 'final') {
-        formData.append('hint_files', this.hintFiles)
-        formData.append('hints', this.hintTexts)
+        formData.append('hint1', this.hintFiles[0])
+        formData.append('hint2', this.hintFiles[1])
+        formData.append('hint3', this.hintFiles[2])
         puzzle.passing = this.passing
         puzzle.timer = this.timer
+        puzzle.hint = this.hintTexts 
       }
       try {
         if (this.isEdit) {     
