@@ -15,7 +15,7 @@
           class="layout__item" 
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 4}"
-          placeholder="Описание."
+          placeholder="Описание"
           v-model="description">
         </el-input>
         <br>

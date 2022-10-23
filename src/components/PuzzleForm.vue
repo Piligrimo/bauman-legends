@@ -18,14 +18,14 @@
       </template>
       
       <p class="label">Картинка</p>
-      <img v-if="photo" class="picture layout__item" :src="photo"/>
+      <img v-if="photo" class="layout__item" :src="photo"/>
       <div class="upload-control">
         <input v-if="!photo" class="layout__item" ref="upload" @change="onFileChange" type="file" />
         <i 
           v-if="photo"
           class="el-icon-delete-solid" 
           style="color:red; font-size: 40px; cursor: pointer;"
-          @click="deletePhoto"
+          @click="deletePhoto()"
         />
       </div>
       <p class="label">Текст загадки</p>
@@ -44,10 +44,71 @@
           v-model="regex_answer">
         </el-input>
       </template>
+      <template v-if="puzzle_type === 'final'">
+        <div class="number-inputs">
+          <div>
+            <p class="label">Пропускная способность</p>
+            <el-input-number
+              class="layout__item number-input" 
+              :min="2"
+              :max="8"
+              v-model="passing"
+            />
+          </div>
+          <div>
+            <p class="label">Время на выполнение (мин)</p>
+            <el-input-number
+              :min="10"
+              :max="25"
+              :step="5"
+              class="layout__item number-input" 
+              v-model="timer"
+            />
+          </div>
+        </div>
+        <h4>Подсказки</h4>
+        <div :key="keyHack" class="hints-container">
+          <div v-for="n in 3" :key="n" class="hint-subform">
+            <div>
+              <p class="label">Картинка подсказки</p>
+              <div class="upload-control">
+                <img v-if="getHintPhoto(n-1)" class="hint-image layout__item" :src="getHintPhoto(n-1)" @click="openPreview(n-1)"/>
+                <input v-if="!getHintPhoto(n-1)" class="layout__item" :ref="`upload-${n-1}`" @change="onFileChange($event, n-1)" type="file" />
+                <i 
+                  v-if="getHintPhoto(n-1)"
+                  class="el-icon-delete-solid" 
+                  style="color:red; font-size: 40px; cursor: pointer;"
+                  @click="deletePhoto(n-1)"
+                />
+              </div>
+            </div>
+            <div>
+              <p class="label">Текст подсказки</p>
+              <el-input
+                class="layout__item" 
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 4}"
+                placeholder="тому хуже у кого..."
+                v-model="hintTexts[n-1]">
+              </el-input>
+            </div>
+          </div>
+        </div>
+      </template>
       <br>
       <br>
       <el-button  class="layout__action" type="primary" @click="submit">Сохранить</el-button>
       <p v-for="(message, i) in errorMessages" :key="i" class="error-message" >{{ message }}</p>
+      <el-dialog
+        title="Так подсказка будет выглядеть у игрока"
+        :visible.sync="dialogVisible"
+        width="300px"
+      >
+        <div class="dialog-body">
+          <img class="layout__item" :src="getHintPhoto(chosenHint)"/>
+          <p v-html="formattedText"/>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -78,13 +139,22 @@ export default {
     return {
       title: '',
       text: '',
-      puzzle_type: 'logic',
+      puzzle_type: 'final',
       regex_answer: '',
       filename: '',
-      errorMessages: [],
       file: null,
+      hintFileNames: ['','',''],
+      hintTexts: ['','',''],
+      hintFiles: [null, null, null],
+      errorMessages: [],
       disableLogic: false,
       disablePhoto: false,
+      dialogVisible: false,
+      passing: 0,
+      timer: 10,
+      keyHack: 0,
+      chosenHint: 0,
+      
     }
   },
   async mounted() {
@@ -118,21 +188,46 @@ export default {
       if (this.filename) return BASEURL + '/file/' + this.filename
       if (!this.file || this.file === '"delete"') return
       return URL.createObjectURL(this.file)
-    }
+    },
+    formattedText() {
+      return this.hintTexts[this.chosenHint].replaceAll('\n','<br>')
+    },
   },
   methods: {
-    onFileChange(e) {
-      var files = e.target.files || e.dataTransfer.files;
+    getHintPhoto(n) {
+      const filename = this.hintFileNames[n]
+      if (filename) return BASEURL + '/file/' + filename
+      const file = this.hintFiles[n]
+      if (!file || file === '"delete"') return
+      return URL.createObjectURL(file)
+    },
+    onFileChange(e, hintIndex) {
+      const files = e.target.files || e.dataTransfer.files;
       if (!files.length)
         return;
-      this.file = files[0]
-
+      if (hintIndex != undefined) {
+        this.$set(this.hintFiles, hintIndex, files[0])
+      } else  {
+        this.file = files[0]
+      }
     },
-    deletePhoto() {
-      this.file= '"delete"'
-      if (this.$refs.upload)
-        this.$refs.upload.value = null;
-      this.filename = ''
+    deletePhoto(hintIndex) {
+      if (hintIndex != undefined)
+      {
+        console.log(this.$refs);
+        console.log(this.$refs[`upload-${hintIndex-1}`])
+        this.hintFiles[hintIndex]= '"delete"'
+        if (this.$refs[`upload-${hintIndex-1}`])
+          this.$refs[`upload-${hintIndex-1}`].value = null;
+        this.hintFileNames[hintIndex] = ''
+        this.keyHack++
+      } else {
+        console.log(this.$refs);
+        this.file= '"delete"'
+        if (this.$refs.upload)
+          this.$refs.upload.value = null;
+        this.filename = ''
+      }
     },
     async submit () {
       const { title,text,puzzle_type,regex_answer} = this
@@ -140,6 +235,12 @@ export default {
       const puzzle = {title,text,puzzle_type,regex_answer,points:100}
       const formData = new FormData()
       formData.append('file', this.file)
+      if (puzzle_type === 'final') {
+        formData.append('hint_files', this.hintFiles)
+        formData.append('hints', this.hintTexts)
+        puzzle.passing = this.passing
+        puzzle.timer = this.timer
+      }
       try {
         if (this.isEdit) {     
           formData.append('puzzle', JSON.stringify({...puzzle, id}))
@@ -161,6 +262,10 @@ export default {
         this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
       }
       
+    },
+    openPreview(n) {
+      this.dialogVisible = true
+      this.chosenHint = n
     }
   }
 }
@@ -172,11 +277,38 @@ export default {
     margin: auto;
   }
 
+  .number-input {
+    max-width: 200px;
+    margin-top: 10px;
+  }
+
+  .number-inputs {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+
   .upload-control {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     margin-bottom: 1rem;
+  }
+
+  .hints-container {
+    margin-left: 20px;
+  }
+
+  .hint-subform {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .hint-image {
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
   }
 </style>
  
