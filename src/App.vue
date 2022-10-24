@@ -317,33 +317,5 @@ export default {
   transform: translateX(-200px);
   opacity: 0;
 }
-
-.shakin {
-  animation-name: shake;
-  animation-duration: .2s;
-  animation-iteration-count: 1;
-  animation-timing-function: linear;
-}
-
-@keyframes shake {
-  0% {
-      transform: translate(15px,10px);
-  }
-  20% {
-      transform: translate(-30px,0);
-  }
-  40% {
-      transform: translate(10px,-15px);
-  }
-  60% {
-      transform: translate(-14px,-1px);
-  }
-  80% {
-      transform: translate(16px,-8px);
-  }
-  100% {
-    transform: translate(0,0); 
-  }
-}
  
 </style>
