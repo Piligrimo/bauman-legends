@@ -83,17 +83,6 @@
         <el-button v-else class="button" type="primary" @click="startPlotStage">Ура!</el-button>
       </span>
     </el-dialog>
-    <el-dialog
-        class="shakin"
-        title="Warning!!!"
-        :visible.sync="warningVisible"
-        width="300px"
-      >
-        <div style="color: red" class="dialog-body">
-          <i class="el-icon-warning"></i> 
-          <span> Нет доступа!!!</span>
-        </div>
-      </el-dialog>
     <div id="vk_community_messages" :class="{hide: hideVkWidget}"></div>
   </div>
 </template>
@@ -238,11 +227,6 @@ export default {
         this.buttonSet = 2
       }
     },
-    warn()  {
-      this.warningVisible = true
-      const vue = this
-        setTimeout(()=>{vue.warningVisible = false}, 1500)
-    }
   }
 }
 </script>

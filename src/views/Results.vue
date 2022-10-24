@@ -1,8 +1,8 @@
 <template>
   <div class="content info-bg">
     <div class="layout">
-      <h3 class="layout__title">Результаты</h3>
-      <el-tabs v-model="tab">
+      <h3 class="layout__title">{{isFinal ? 'Архив' : 'Результаты'}}</h3>
+      <el-tabs v-if="!isFinal" v-model="tab">
         <el-tab-pane label="Исследование тела" name="body">
           <table>
             <tr  v-for="item in tableResults" :key="item.title">
@@ -19,13 +19,53 @@
           <h4 class="subtitle"> Проведено {{pluralize(brainResults.length)}} из 7 </h4>
         </el-tab-pane>
       </el-tabs>
-      
+      <table v-else>
+        <tr class="archive" v-for="(item, i) in finalArchive" :key="i" @click="handleAccess({...item, id: i+1})">
+          <td>Архивная запись №{{i+1}}</td>
+          <td  class="icon"> <img :src="item.type+'.png'"/></td>
+        </tr>
+      </table>
+      <el-dialog
+        class="shakin"
+        title="Warning!!!"
+        :visible.sync="warningVisible"
+        width="300px"
+      >
+        <div style="color: red" class="dialog-body">
+          <i class="el-icon-warning"></i> 
+          <span> Нет доступа!!!</span>
+        </div>
+      </el-dialog>
+      <el-dialog
+        v-if="chosenFile"
+        :title="'Архивная запись №' + chosenFile.id"
+        :visible.sync="showFile"
+        width="350px"
+      >
+        <div class="dialog-body">
+          <component
+            :is="fileComponents[chosenFile.type]" 
+            :src="chosenFile.src"
+            @next="showFile=false"
+          />
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import {getResults} from '@/api/team'
+import store from '@/store'
+import Video from '@/components/FinalPlot/Video.vue'
+import Picture from '@/components/FinalPlot/Picture.vue'
+import Audio from '@/components/FinalPlot/Audio.vue'
+
+const fileComponents = {
+  video: Video,
+  sound: Audio,
+  doc: Picture,
+}
 
 export default {
   name: 'Results',
@@ -53,13 +93,68 @@ export default {
         'brain6.png',
         'brain7.png',
       ],
+      finalArchive: [
+        {
+          type: 'video',
+          src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
+          condition: 1
+        },
+        {
+          type: 'doc',
+          src: "report.png",
+          condition: 2
+        },
+        {
+          type: 'video',
+          src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
+          condition: 3
+        },
+        {
+          type: 'doc',
+          src: "34.png",
+          condition: 4
+        },
+        {
+          type: 'sound',
+          src: "experiment.wav",
+          condition: 5
+        },
+        {
+          type: 'doc',
+          src: "favicon.png",
+          condition: 6
+        },
+        {
+          type: 'sound',
+          src: "diary.mp3",
+          condition: 7
+        },
+        {
+          type: 'doc',
+          src: "rpeort.png",
+          condition: 7
+        },
+        {
+          type: 'sound',
+          src: "firstflight.mp3",
+          condition: 8
+        },
+      ],
+      fileComponents,
+      chosenFile: null,
+      warningVisible: false,
+      showFile: false
     }
   },
   async mounted() {
     const {data} = await getResults()
     this.history = data
   },
+  store,
   computed: {
+    isFinal() {
+      return this.$store.state.stage === "final";
+    },
     tableResults() {
       const photoPuzzles = this.history.filter(({puzzle_type}) => puzzle_type === 'photo')
       return this.titles.map((title, i) => {
@@ -72,13 +167,26 @@ export default {
     },
     brainResults() {
       return this.history.filter(({puzzle_type, skip}) => puzzle_type === 'logic' && !skip)
-    }
+    },
   },
   methods: {
     pluralize (num) {
       if (num === 1) return `${num} тест`
       if (num >=2 && num <5) return `${num} теста`
       return `${num} тестов` 
+    },
+    handleAccess(item) {
+      if(this.history.length < item.condition) 
+        this.warn()
+      else {
+        this.chosenFile = item
+        this.showFile = true
+      }
+    },
+    warn()  {
+      this.warningVisible = true
+      const vue = this
+        setTimeout(()=>{vue.warningVisible = false}, 1500)
     }
   }
 }
@@ -135,6 +243,25 @@ export default {
   .subtitle {
     text-align: center;
     margin-top: 20px;
+  }
+
+  .archive {
+    cursor: pointer;
+  }
+
+  .archive>td {
+    font-size: 16px;
+  }
+  .archive:hover {
+    background-color: #e6e2ddbc;
+  }
+
+  .icon {
+    width: 70px;
+    text-align: center;
+  }
+  .icon>img {
+    height: 50px;
   }
 </style>
  
