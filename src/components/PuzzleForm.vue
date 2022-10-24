@@ -194,7 +194,7 @@ export default {
       return URL.createObjectURL(this.file)
     },
     formattedText() {
-      if (!this.chosenHint) return ''
+      if (this.chosenHint == undefined) return ''
       return this.hintTexts[this.chosenHint].replaceAll('\n','<br>')
     },
   },
@@ -267,7 +267,6 @@ export default {
 
         this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
       }
-      
     },
     openPreview(n) {
       this.dialogVisible = true

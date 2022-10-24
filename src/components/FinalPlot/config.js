@@ -155,7 +155,7 @@ const puzzle4 = {
     },
     {
       component: Picture, // заменить фото
-      src: 'favicon.png'
+      src: '34.png'
     },
     {
       component: Loading,
