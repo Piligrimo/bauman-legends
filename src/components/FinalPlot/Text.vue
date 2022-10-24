@@ -11,7 +11,7 @@
 export default {
   name:  "Text",
   props: {
-    text: Number,
+    text: String,
     character: {
       validator(value) {
         return ['stanley', 'stanford', 'stn-2', 'message'].includes(value)
@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
   .stanley {
-    color: #9c3535;
+    color: #b74f4f;
   }
 
   .stanford {

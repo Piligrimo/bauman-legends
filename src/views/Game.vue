@@ -83,7 +83,6 @@
           <el-button style="width: 100px" class="button" type="primary" @click="plotDialogVisible = false">ОК</el-button>
         </span>
       </el-dialog>
-      <FinalPlot :puzzle="0" :isComplete="done"/>
     </div>
   </div>
 </template>
@@ -94,7 +93,6 @@ import {getTask, getFinalTask, nextTask, nextFinalTask, skipTask, answer, getHin
 import {getTeam} from '@/api/team'
 import { BASEURL } from '@/api/config'
 import plotMessages from '@/assets/plotMessages'
-import FinalPlot from '../components/FinalPlot/index.vue'
 
 const getMinutes = (time) => {
   const minutes = Math.floor(time / 60)
@@ -108,30 +106,30 @@ const getSeconds = (time) => {
 export default {
     name: "Game",
     data() {
-        return {
-            task: null,
-            team: null,
-            hints: [],
-            errorMessages: [],
-            answer: "",
-            timeOnPageLoad: 0,
-            timeRemaining: 0,
-            timer: null,
-            chosenHint: {
-                id: "",
-                cost: ""
-            },
-            money: 0,
-            points: 0,
-            hintDialogVisible: false,
-            isRefreshing: false,
-            factText: "",
-            factDialogVisible: false,
-            plotDialogVisible: false,
-            plotMessage: "",
-            isComplete: false,
-            done: false
-        };
+      return {
+        task: null,
+        team: null,
+        hints: [],
+        errorMessages: [],
+        answer: "",
+        timeOnPageLoad: 0,
+        timeRemaining: 0,
+        timer: null,
+        chosenHint: {
+          id: "",
+          cost: ""
+        },
+        money: 0,
+        points: 0,
+        hintDialogVisible: false,
+        isRefreshing: false,
+        factText: "",
+        factDialogVisible: false,
+        plotDialogVisible: false,
+        plotMessage: "",
+        isComplete: false,
+        done: false
+      };
     },
     async created() {
         await this.refreshTask();
@@ -339,7 +337,6 @@ export default {
             this.hintDialogVisible = false;
         },
     },
-    components: { FinalPlot }
 }
 </script>
 

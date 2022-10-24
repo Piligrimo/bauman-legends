@@ -20,16 +20,4 @@ export default {
 </script>
 
 <style scoped>
-  .stanley {
-    color: #9c3535;
-  }
-
-  .stanford {
-    color: #69ae56;
-  }
-
-  .stn-2 {
-    color: rgb(57, 124, 187);
-  }
- 
 </style>

@@ -14,6 +14,7 @@
         :text="step.text" 
         :character="step.character"
         :src="step.src"
+        :max="step.max"
         @next="next"
       />
     </div>
@@ -51,7 +52,10 @@ export default {
   methods: {
     next() {
       this.stepIndex++
-      if (!this.step) this.dialogVisible = false
+      if (!this.step) { 
+        this.dialogVisible = false
+        this.$emit('ended')
+      }
     }
   }
 

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="overlay"></div>
-    <img style="width: 100%" src="warning.png" alt="" slot="title">
-    <p style="color:red">Ошибка, ошибка, ошибка, КОД КРАСНЫЙ! Запуск системного протокола № 3242…  </p>
+    <img style="width: 100%" src="warning.png" alt="" >
+    <p style="color:red; font-size: 18px;" v-html="text">  </p>
     <el-button type="primary" class="layout__item" @click="$emit('next')">
       Далее
     </el-button>
@@ -13,6 +13,7 @@
 export default {
   name:  "Danger",
   props: {
+    text: String
   }
 };
 </script>

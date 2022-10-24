@@ -25,4 +25,8 @@ export default {
     margin: auto;
   }
  
+  p {
+    font-size: 18px;
+    text-align: center;
+  }
 </style>
