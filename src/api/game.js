@@ -33,18 +33,6 @@ export const answerFinal = async (args) => {
     return await Axios.post(BASEURL+'/final/finish', args, {withCredentials: true})
 }
 
-export const getHints = async () => {
-    return await Axios.get(BASEURL+'/hint/team', {withCredentials: true})
-}
-
 export const buyHint = async (id) => {
-    return await Axios.get(BASEURL+'/hint/buy?hint_id='+id, {withCredentials: true})
-}
-
-export const getFact = async () => {
-    return await Axios.get(BASEURL+'/game/fact', {withCredentials: true})
-}
-
-export const getDocs = async () => {
-    return await Axios.get(BASEURL+'/bauman/fragments', {withCredentials: true})
+    return await Axios.get(BASEURL+'/final/hint/'+id, {withCredentials: true})
 }
