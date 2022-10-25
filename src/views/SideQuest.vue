@@ -82,7 +82,7 @@ export default {
       
      } catch (e) {
       this.$message({
-        message: 'Неправильны QR-код!',
+        message: 'Неправильный QR-код!',
         type: 'error',
         offset: 65
       });
@@ -96,24 +96,6 @@ export default {
 </script>
 
 <style scoped>
- .witness-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #080D38;
- }
-.witness-list {
-  padding: 1rem;
-  background-color: #f8f7f5;
- }
- .witness-item:not(:last-child) {
-  border-bottom: 1px solid #b1b1b1;
- }
-
- .witness-item__title {
-   margin-block-end: 0.5rem;
-   margin-block-start: 0.5rem;
- }
 
  .fade-enter-active, .fade-leave-active {
   transition: opacity .3s ease;
@@ -142,10 +124,15 @@ export default {
 .radar {
   position: relative;
   width: 100%;
-  height: 350px;
   background-image: url('../assets/radar.png');
   background-size: cover;
 }
+
+.radar:after {
+  content: "";
+  padding-top: 85%;
+  display: block;
+} 
 .radar-item {
   position: absolute;
   height: 40px;
