@@ -112,6 +112,8 @@ export default {
     display: inline-block;
     position: relative;
     width: 100%;
+    margin-bottom: 150px;
+
 }
 #dummy {
     margin-top: 100%;

@@ -72,6 +72,7 @@ export default {
     },
     async checkCode (keyword) {
      try {
+      this.errorMessage=keyword
        console.log(keyword)
      } catch (e) {
       console.error(e);
