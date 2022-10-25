@@ -208,7 +208,7 @@ export default {
         this.warn()
         return
       } 
-      if (item.condition.done && !this.history[taskCount-1].end_date){
+      if (item.id === taskCount && item.condition.done && !this.history[taskCount-1].end_date){
         this.warn()
         return
       } 
