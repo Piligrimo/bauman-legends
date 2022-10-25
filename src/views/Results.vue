@@ -97,47 +97,74 @@ export default {
         {
           type: 'video',
           src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
-          condition: 1
+          condition: {
+            task: 1,
+            done: true
+          }
         },
         {
           type: 'doc',
           src: "report.png",
-          condition: 2
+          condition: {
+            task: 2,
+            done: true
+          }
         },
         {
           type: 'video',
           src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
-          condition: 3
+          condition: {
+            task: 3,
+            done: true
+          }
         },
         {
           type: 'doc',
           src: "34.png",
-          condition: 4
+          condition: {
+            task: 4,
+            done: true
+          }
         },
         {
           type: 'sound',
           src: "experiment.wav",
-          condition: 5
+          condition: {
+            task: 5,
+            done: true
+          }
         },
         {
           type: 'doc',
           src: "favicon.png",
-          condition: 6
+          condition: {
+            task: 6,
+            done: true
+          }
         },
         {
           type: 'sound',
           src: "diary.mp3",
-          condition: 7
+          condition: {
+            task: 7,
+            done: false
+          }
         },
         {
           type: 'doc',
           src: "rpeort.png",
-          condition: 7
+          condition: {
+            task: 7,
+            done: true
+          }
         },
         {
           type: 'sound',
           src: "firstflight.mp3",
-          condition: 8
+          condition: {
+            task: 8,
+            done: true
+          }
         },
       ],
       fileComponents,
@@ -176,12 +203,17 @@ export default {
       return `${num} тестов` 
     },
     handleAccess(item) {
-      if(this.history.length < item.condition) 
+      const taskCount = this.history.length
+      if (taskCount < item.condition.task) {
         this.warn()
-      else {
-        this.chosenFile = item
-        this.showFile = true
-      }
+        return
+      } 
+      if (item.condition.done && !this.history[taskCount-1].end_date){
+        this.warn()
+        return
+      } 
+      this.chosenFile = item
+      this.showFile = true
     },
     warn()  {
       this.warningVisible = true
