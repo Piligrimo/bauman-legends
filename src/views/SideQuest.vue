@@ -4,12 +4,17 @@
       <h3  class="layout__title">Радар</h3>
       <transition name="fade" mode="out-in">
         <div v-if="!isReaderOpened" key="list">
-            
-            <div class="action">
-              <el-button type="primary" class="button"  @click="isReaderOpened=true">
-                Cканер
-              </el-button>
+          <div class="radar">
+            <div v-for="i in 11" :key="i" class="radar-item" :style="getRandomPosition()">
+              <img class="char" v-if="characters[11-i]" :src="characters[11-i]"/>
+              <div v-else class="dot"></div>
             </div>
+          </div>
+          <div class="action">
+            <el-button type="primary" class="button"  @click="isReaderOpened=true">
+              Cканер
+            </el-button>
+          </div>
         </div>
         <div v-else key="reader">
           <div class="reader-header">
@@ -35,18 +40,13 @@ export default {
   data () {
     return {
       errorMessage: '',
-      showCanvas: false,
-      timer: null,
       isReaderOpened: false,
-      decision: '',
-      witnesses: [],
-      codeCheckingResult: 'None',
-      results: {
-        NONE: 'None',
-        FAIL: 'Fail',
-        SUCCESS: 'Success'
-      },
-      failText: ''
+      characters: [
+        'char.png',
+        'char.png',
+        'char.png',
+        'char.png',
+      ]
     }
   },
   store,
@@ -59,6 +59,13 @@ export default {
     }
   },
   methods: {
+    getRandomPosition() {
+      const max = 90;
+      return {
+        top: Math.floor(Math.random() * max) + '%',
+        left: Math.floor(Math.random() * max) + '%',
+      }
+    },
     async init() {
       try {
         console.log('inint');
@@ -127,4 +134,33 @@ export default {
   font-size: 30px;
   color: #080D38;
 }
+
+.radar {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  background-image: url('../assets/radar.png');
+  background-size: cover;
+}
+.radar-item {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+}
+
+.dot {
+  background-color: red;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.char {
+  width: 100%;
+  height: 100%;
+}
+
+.radar-item:last-child {
+  position: relative;
+}
+
 </style>
