@@ -5,6 +5,7 @@ import Video from './Video.vue'
 import Process from './Process.vue'
 import Loading from './Loading.vue'
 import Picture from './Picture.vue'
+import Schema from './Schema.vue'
 
 const puzzle1 = {
   before: [
@@ -115,7 +116,7 @@ const puzzle3 = {
     },
     {
       component: Video,
-      src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
+      src: "https://disk.yandex.ru/d/7KvGeQ7Ri7AA5Q/%D0%BA%D0%BE%D0%BD%D1%84%D0%B5%D1%80%D0%B5%D0%BD%D1%86%D0%B8%D1%8F.mp4"
     },
     {
       component: Loading,
@@ -133,8 +134,8 @@ const puzzle3 = {
 const puzzle4 = {
   before: [
     {
-      component: Picture,
-      src: 'schema.png'
+      component: Schema,
+      variant: 1
     },
     {
       component: Text,
@@ -154,7 +155,7 @@ const puzzle4 = {
       character: 'stn-2'
     },
     {
-      component: Picture, // заменить фото
+      component: Picture,
       src: '34.png'
     },
     {
@@ -294,8 +295,8 @@ const puzzle7 = {
       character: 'stanley'
     },
     {
-      component: Picture, // заменить фото
-      src: 'favicon.png'
+      component: Schema,
+      variant: 2,
     },
     {
       component: Text,

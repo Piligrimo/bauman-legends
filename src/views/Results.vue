@@ -95,6 +95,14 @@ export default {
       ],
       finalArchive: [
         {
+          type: 'sound',
+          src: 'soundwakey.wav',
+          condition: {
+            task: 1,
+            done: false
+          }
+        },
+        {
           type: 'video',
           src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
           condition: {
@@ -202,18 +210,19 @@ export default {
       if (num >=2 && num <5) return `${num} теста`
       return `${num} тестов` 
     },
-    handleAccess(item) {
+    isAccessible(item) {
       const taskCount = this.history.length
-      if (taskCount < item.condition.task) {
+      if (taskCount < item.condition.task) return false
+      if (item.id === taskCount && item.condition.done && !this.history[taskCount-1].end_date) return false
+      return true
+    },
+    handleAccess(item) {
+      if (this.isAccessible(item)) {
+        this.chosenFile = item
+        this.showFile = true
+      } else {
         this.warn()
-        return
-      } 
-      if (item.id === taskCount && item.condition.done && !this.history[taskCount-1].end_date){
-        this.warn()
-        return
-      } 
-      this.chosenFile = item
-      this.showFile = true
+      }
     },
     warn()  {
       this.warningVisible = true

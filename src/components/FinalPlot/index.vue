@@ -15,6 +15,7 @@
         :character="step.character"
         :src="step.src"
         :max="step.max"
+        :variant="step.variant"
         @next="next"
       />
     </div>
