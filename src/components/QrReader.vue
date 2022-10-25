@@ -125,22 +125,12 @@ export default {
     border-radius: 15px;
     text-align: center;
     overflow:hidden;
-    background-color: rgb(157, 224, 236);
-    border: 5px solid #141744;
+    background-color: rgb(37, 39, 40);
+    border: 5px solid #1b324e;
     z-index: 1;
   }
   video {
     width: 100%;
-    height: 100%;
-  }
-  #handle {
-    position: relative;
-    transform: rotate(150deg);
-    top: -90px;
-    left: 75%;
-    background-color: #141744;
-    width: 40px;
-    height: 200px;
   }
   #scan {
     position: absolute;

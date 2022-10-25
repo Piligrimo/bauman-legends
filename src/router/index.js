@@ -122,7 +122,8 @@ const routes = [
   {
     path: '/side-quest',
     name: 'SideQuest',
-    component: SideQuest
+    component: SideQuest,
+    beforeEnter: stageGuard(['final'])
   },
   // {
   //   path: '/docs',
