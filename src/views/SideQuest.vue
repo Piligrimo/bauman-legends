@@ -6,7 +6,7 @@
         <div v-if="!isReaderOpened" key="list">
           <div class="radar">
             <div v-for="i in 11" :key="i" class="radar-item" :style="getRandomPosition()">
-              <img class="char" v-if="characters[11-i]" :src="characters[11-i]"/>
+              <img class="char" v-if="characters[11-i]" :src="getUrl(characters[11-i])"/>
               <div v-else class="dot"></div>
             </div>
           </div>
@@ -31,7 +31,9 @@
 <script>
 import store from '@/store'
 import QrReader from '@/components/QrReader.vue'
-// import {getDecision, getWitnesses, checkCode, decide} from '@/api/sidequest'
+import { checkCode } from '../api/sidequest'
+import { getTeam } from '../api/team'
+import { BASEURL } from '../api/config'
 
 
 export default {
@@ -42,16 +44,12 @@ export default {
       errorMessage: '',
       isReaderOpened: false,
       characters: [
-        'char.png',
-        'char.png',
-        'char.png',
-        'char.png',
       ]
     }
   },
   store,
   async created () {
-    await this.init()
+    await this.updateProgress()
   },
   computed: {
     allWitnessesOpened () {
@@ -59,6 +57,14 @@ export default {
     }
   },
   methods: {
+    async updateProgress() {
+      try {
+        const {data} =  await getTeam()
+        this.characters = data.side
+      } catch (e) {
+        this.errorMessage = e.response.data.message
+      }
+    },
     getRandomPosition() {
       const max = 90;
       return {
@@ -66,22 +72,20 @@ export default {
         left: Math.floor(Math.random() * max) + '%',
       }
     },
-    async init() {
-      try {
-        console.log('inint');
-      } catch (e) {
-        if (e.response.status === 400) {
-          this.decision =''
-        } else {
-          this.errorMessage = e.response.data.message
-        }
-      }
+    getUrl(keyword) {
+      return `${BASEURL}/file/${keyword}.png`
     },
     async checkCode (keyword) {
      try {
-      this.errorMessage=keyword
-       console.log(keyword)
+      await checkCode(keyword)
+      await this.updateProgress()
+      
      } catch (e) {
+      this.$message({
+        message: 'Неправильны QR-код!',
+        type: 'error',
+        offset: 65
+      });
       console.error(e);
      } finally {
        this.isReaderOpened = false
@@ -144,8 +148,8 @@ export default {
 }
 .radar-item {
   position: absolute;
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
 }
 
 .dot {
@@ -156,7 +160,6 @@ export default {
 }
 .char {
   width: 100%;
-  height: 100%;
 }
 
 .radar-item:last-child {
