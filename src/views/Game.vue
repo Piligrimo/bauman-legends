@@ -10,13 +10,19 @@
         </div>
         <h3 class="layout__title">{{task === null?'Испытание':'Текущее задание'}}</h3>
 
-        <p v-if="isComplete">
-          Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе
+        <div v-if="isComplete">
+          <p v-if="isFinal">
+            Экипаж, перед Вами стоит поистине самая сложная задача - выбор конечного пути. <br>
+            Помните, что топлива хватит только в один конец. Свой выбор Вы можете подтвердить на капитанском мостике. <br>
+            На нашем корабле он замаскирован под МЗДК. <br>
+            И помните, Вы определяете судьбу человечества. Делайте Выбор рационально. Удачи Вам!
+          </p>
+          <p v-else>Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе</p> 
           <el-button v-if="plotMessage" type="primary" class="layout__item" style="margin-left: 0;"
             @click="plotDialogVisible = true">
             Посмотреть новое сообщение
           </el-button>
-        </p>
+        </div>
         <p v-else-if="!enoughPlayers">
           Упс, чтобы взять задание, в команде должно быть 4-8 участников.
           Найти товарищей по команде можно в <a href="https://vk.com/topic-198373277_49117988">обсуждении в группе</a>
@@ -26,8 +32,8 @@
             Взять следующее задание
           </el-button>
           <p v-else>Попроси капитана, чтоб он взял задание</p>
-          <el-button v-if="plotMessage" type="primary" class="layout__item" style="margin-left: 0;"
-            @click="plotDialogVisible = true">
+          <el-button v-if="plotMessage || isFinal" type="primary" class="layout__item" style="margin-left: 0;"
+            @click="handlePlotMessage">
             Посмотреть новое сообщение
           </el-button>
         </div>
@@ -39,34 +45,28 @@
           <img class="layout__item" v-if="task.filename" :src="photo" />
           <p v-html="formattedText" />
 
-          <template  v-if="isFinal">
+          <template v-if="isFinal">
             <p>Осталось времени: {{prettifyTime(timeRemaining)}}</p>
             <br>
             <h3>Подсказки</h3>
             <div style="display: flex">
-              <p>Энергия:</p> 
+              <p>Энергия:</p>
               <div class="e-container">
-                <div :style="{width: `${energy}%`}" class="e-bar"/>
+                <div :style="{width: `${energy}%`}" class="e-bar" />
                 <p class="e-count">{{team.extra_points}}</p>
               </div>
             </div>
-            
+
             <table>
               <tr v-for="(name, i) in hintNames" :key="i">
                 <td>{{name}}</td>
                 <td> {{(i+1) * 100}} ед. энергии </td>
-                <td> 
-                  <el-button
-                    v-if="!getHint(i)"  
-                    style="width: 100px"  
-                    type="primary" 
-                    size="mini" 
-                    :disabled="team.extra_points < (i+1) * 100"
-                    @click="buyHint(i + 1)"
-                  >
+                <td>
+                  <el-button v-if="!getHint(i)" style="width: 100px" type="primary" size="mini"
+                    :disabled="team.extra_points < (i+1) * 100" @click="buyHint(i + 1)">
                     Взять
                   </el-button>
-                  <el-button  v-else style="width: 100px"  type="primary" size="mini" @click="chooseHint(i)">
+                  <el-button v-else style="width: 100px" type="primary" size="mini" @click="chooseHint(i)">
                     Посмотреть
                   </el-button>
                 </td>
@@ -94,13 +94,14 @@
         </span>
       </el-dialog>
       <el-dialog title="Подсказка" :visible.sync="hintDialogVisible" center width="300px">
-        <img class="layout__item" :src="chosenHint.pic"/>
+        <img class="layout__item" :src="chosenHint.pic" />
         <p v-html="chosenHint.text" class="dialog-body" />
         <span slot="footer">
           <el-button style="width: 100px" class="button" type="primary" @click="hintDialogVisible = false">ОК
           </el-button>
         </span>
       </el-dialog>
+      <FinalPlot v-if="isFinal && showFinalPlot" :puzzle="finalPlotStage" :isComplete="done" @ended="handlePlotStageEnd" />
     </div>
   </div>
 </template>
@@ -111,13 +112,14 @@ import { getTask, getFinalTask, nextTask, nextFinalTask, skipTask, answerFinal, 
 import { getTeam } from '@/api/team'
 import { BASEURL } from '@/api/config'
 import plotMessages from '@/assets/plotMessages'
+import FinalPlot from '../components/FinalPlot/index.vue'
 
 const getMinutes = (time) => {
   const minutes = Math.floor(time / 60000)
   return minutes >= 10 ? minutes : '0' + minutes
 }
 const getSeconds = (time) => {
-  const seconds = Math.floor((time % 60000)/1000)
+  const seconds = Math.floor((time % 60000) / 1000)
   return seconds >= 10 ? seconds : '0' + seconds
 }
 
@@ -142,10 +144,12 @@ export default {
       isComplete: false,
       done: false,
       chosenHint: {
-        pic: '',
-        text:''
+        pic: "",
+        text: ""
       },
-      hintNames: ['Простая', 'Средняя','Сильная']
+      finalPlotStage: 0,
+      showFinalPlot: false,
+      hintNames: ["Простая", "Средняя", "Сильная"]
     };
   },
   async created() {
@@ -154,13 +158,14 @@ export default {
     this.team = data;
     const vue = this;
     window.addEventListener("focus", async () => {
-      await vue.refreshTask();
+      if (!vue.showFinalPlot)
+        await vue.refreshTask();
     });
   },
   store,
   computed: {
     energy() {
-      return this.team.extra_points / 14
+      return this.team.extra_points / 14;
     },
     formattedText() {
       return this.task?.text?.replaceAll("\n", "<br>");
@@ -202,8 +207,8 @@ export default {
     async timeRemaining(val) {
       if (val <= -1) {
         clearInterval(this.timer);
-        const { data } = await getFinalTask();
-        this.task = data;
+        await this.refreshTask()
+        this.handlePlotMessage()
       }
     }
   },
@@ -216,25 +221,51 @@ export default {
       }
       this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
     },
+    async handlePlotStageEnd() {
+      if(this.done) {
+        await this.refreshTask();
+        this.showFinalPlot = false;
+      } else {
+        this.nextFinal()
+      }
+    },
+    handlePlotMessage() {
+      if (this.isFinal) {
+        this.done = true
+        this.finalPlotStage--
+        this.showFinalPlot = true
+      } else {
+        this.plotDialogVisible = true
+      }
+    },
+    async nextFinal() {
+      try {
+        await nextFinalTask();
+        await this.refreshTask();
+        this.timeOnPageLoad = Number(new Date());
+        this.timeRemaining = this.timeRemainedOnPageLoading;
+        const vue = this;
+        clearInterval(this.timer);
+        this.timer = setInterval(() => {
+          vue.timeRemaining -= 1000;
+        }, 1000);
+      } catch (e) {
+        this.handleError(e);
+      }
+    },
     async next() {
       try {
         if (this.isFinal) {
-          await nextFinalTask();
+          this.showFinalPlot = true;
+          this.done = false;
         }
         else {
           await nextTask();
         }
         await this.refreshTask();
-        this.timeOnPageLoad = Number(new Date())
-        this.timeRemaining = this.timeRemainedOnPageLoading
-        const vue = this
-        clearInterval(this.timer)
-        this.timer = setInterval(() => {
-          vue.timeRemaining-=1000
-        }, 1000)
       }
       catch (e) {
-        this.handleError();
+        this.handleError(e);
       }
     },
     async skip() {
@@ -251,16 +282,16 @@ export default {
     async answerToTask() {
       try {
         if (this.isFinal) {
-          const { data } = await answerFinal({ answer: this.answer });
-          console.log(data);
+          await answerFinal({ answer: this.answer });
+          this.done = true
+          this.showFinalPlot = true
         }
         else {
           const { data } = await answer({ answer: this.answer });
           this.plotMessage = plotMessages[data];
           this.plotDialogVisible = !!this.plotMessage;
+          await this.refreshTask();
         }
-        await this.refreshTask();
-
       }
       catch (e) {
         await this.refreshTask();
@@ -292,14 +323,17 @@ export default {
         }
         else {
           this.task = null;
-          this.plotMessage = this.isComplete ? plotMessages[14] : plotMessages[data?.detail];
+          if (this.isFinal)
+            this.finalPlotStage = data.detail
+          else
+            this.plotMessage = this.isComplete ? plotMessages[14] : plotMessages[data?.detail];
         }
         this.timeOnPageLoad = Number(new Date());
-        this.timeRemaining = this.timeRemainedOnPageLoading
-        const vue = this
+        this.timeRemaining = this.timeRemainedOnPageLoading;
+        const vue = this;
         this.timer = setInterval(() => {
-          vue.timeRemaining-=1000
-        }, 1000)
+          vue.timeRemaining -= 1000;
+        }, 1000);
       }
       catch (e) {
         console.error(e);
@@ -330,15 +364,16 @@ export default {
       }
     },
     getHint(index) {
-      const text = this.task?.hint?.[index]
-      const filename = this.task?.hint_files?.[index]
-      const pic = filename && BASEURL + '/file/' + filename
-      if (pic || text) return {pic, text}
-      return null
+      const text = this.task?.hint?.[index];
+      const filename = this.task?.hint_files?.[index];
+      const pic = filename && BASEURL + "/file/" + filename;
+      if (pic || text)
+        return { pic, text };
+      return null;
     },
     chooseHint(index) {
-      this.chosenHint = this.getHint(index)
-      this.hintDialogVisible = true
+      this.chosenHint = this.getHint(index);
+      this.hintDialogVisible = true;
     },
     closeDialog() {
       this.chosenHint = {
@@ -348,6 +383,7 @@ export default {
       this.hintDialogVisible = false;
     },
   },
+  components: { FinalPlot }
 }
 </script>
 
@@ -415,26 +451,33 @@ table {
   width: 100%;
 }
 
+td:last-child {
+  text-align: right;
+}
+
 .e-container {
-    width: 200px;
-    height: 20px;
-    background-color: #694710;
-    border-radius: 2px;
-    margin-top: 15px;
-    margin-left: 10px;
-  }
-  .e-bar {
-    background:#ffac05;
-    height: 100%;
-    transition: all .5s;
-    color: white;
-    border-radius: 2px;
-    text-align: center;
-  }
-  .e-count {
-    margin: -20px 0;
-    text-align: center;
-    color: white;
-  }
+  width: 100%;
+  height: 20px;
+  background-color: #694710;
+  overflow: hidden;
+  border-radius: 2px;
+  margin-top: 15px;
+  margin-left: 30px;
+}
+
+.e-bar {
+  background: #ffac05;
+  height: 100%;
+  transition: all .5s;
+  color: white;
+  border-radius: 2px;
+  text-align: center;
+}
+
+.e-count {
+  margin: -20px 0;
+  text-align: center;
+  color: white;
+}
 </style>
  
