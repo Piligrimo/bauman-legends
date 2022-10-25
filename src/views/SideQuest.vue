@@ -1,23 +1,9 @@
 <template>
   <div class="content info-bg">
     <div class="layout">
+      <h3  class="layout__title">Радар</h3>
       <transition name="fade" mode="out-in">
-        <div v-if="decision" key="decision">
-          <h3>Результат вашего выбора</h3>
-          <p>{{decision}}</p>
-        </div>
-        <div v-else-if="allWitnessesOpened" key="choise">
-          <h3>Выбор судьбы ученого</h3>
-          <p>Настало время принять решение. От вас зависит судьба этого человека. Отпустите ли вы его на свободу, признав вменяемым гением, или навсегда запрёте его в стенах психбольницы?</p>
-          <div  class="layout__actions">
-            <el-button class="layout__action" type="primary"  @click="decide(true)">Отпустить</el-button>
-            <div>
-              <el-button class="layout__action" type="primary"  @click="decide(false)">Признать сумасшедшим</el-button>
-            </div>
-          </div>
-        </div>
-        <div v-else-if="!isReaderOpened" key="list">
-          <h3>Побочное задание</h3>
+        <div v-if="!isReaderOpened" key="list">
           <template v-if="witnesses.length">
             <p>Для вашего удобства предоставлен список людей, имеющих отношение к ученому. Здесь будут появляться отметки после общения с каждым из них</p>
             <div class="witness-list">
@@ -50,7 +36,6 @@
         </div>
         <div v-else key="reader">
           <div class="reader-header">
-            <h3>Допрос</h3>
             <font-awesome-icon class="icon" :icon="['fas', 'reply']" @click="isReaderOpened=false"/>
           </div>
           <qr-reader @read="checkCode"/>
@@ -64,7 +49,7 @@
 <script>
 import store from '@/store'
 import QrReader from '@/components/QrReader.vue'
-import {getDecision, getWitnesses, checkCode, decide} from '@/api/sidequest'
+// import {getDecision, getWitnesses, checkCode, decide} from '@/api/sidequest'
 
 
 export default {
@@ -75,7 +60,7 @@ export default {
       errorMessage: '',
       showCanvas: false,
       timer: null,
-      isReaderOpened: false,
+      isReaderOpened: true,
       decision: '',
       witnesses: [],
       codeCheckingResult: 'None',
@@ -99,13 +84,10 @@ export default {
   methods: {
     async init() {
       try {
-        const {data} = await getDecision()
-        this.decision = data.text
+        console.log('inint');
       } catch (e) {
         if (e.response.status === 400) {
           this.decision =''
-          const {data} = await getWitnesses()
-          this.witnesses = data
         } else {
           this.errorMessage = e.response.data.message
         }
@@ -113,24 +95,13 @@ export default {
     },
     async checkCode (keyword) {
      try {
-       await checkCode({keyword})
-       console.log(data)
-       const {data} = await getWitnesses()
-       this.witnesses = data
-       if (this.allWitnessesOpened)
-        await this.init()
-       this.codeCheckingResult=this.results.SUCCESS
+       console.log(keyword)
      } catch (e) {
-       this.codeCheckingResult=this.results.FAIL
-       this.failText = e?.response?.data?.message || 'Допрос провалился :('
+      console.error(e);
      } finally {
        this.isReaderOpened = false
      }
     },
-    async decide (freedom) {
-      const {data} = await decide({freedom})
-      this.decision = data.text
-    }
   }
 }
 </script>

@@ -11,6 +11,7 @@ import Consult from '../views/Consult.vue'
 import Feed from '../views/Feed.vue'
 import Banner from '../views/Banner.vue'
 import Game from '../views/Game.vue'
+import SideQuest from '../views/SideQuest.vue'
 import StageControl from '../views/admin/StageControl.vue'
 import Results from '../views/Results.vue'
 import List from '../views/admin/puzzles/List.vue'
@@ -118,11 +119,11 @@ const routes = [
     component: StageControl,
     beforeEnter: mainAdminGuard
   },
-  // {
-  //   path: '/side-quest',
-  //   name: 'SideQuest',
-  //   component: SideQuest
-  // },
+  {
+    path: '/side-quest',
+    name: 'SideQuest',
+    component: SideQuest
+  },
   // {
   //   path: '/docs',
   //   name: 'Docs',

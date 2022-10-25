@@ -5,10 +5,10 @@
       <div id="element">
         <h2 id="loading" v-if="!isVideoReady">{{loadingMessage}}</h2>
         <div id="blick"/>
+        <div id="scan"/>
         <video @click="tick" id="camera-stream"></video>
       </div>
     </div>
-    <div id="handle"/>
     <canvas id="canvas" v-show="false"></canvas>
     <div v-if="!isCodeFound" id="outputMessage">QR-code не найден</div>
   </div>
@@ -122,15 +122,16 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    border-radius: 50%;
+    border-radius: 15px;
     text-align: center;
     overflow:hidden;
     background-color: rgb(157, 224, 236);
-    border: 20px solid #141744;
+    border: 5px solid #141744;
     z-index: 1;
   }
   video {
     width: 100%;
+    height: 100%;
   }
   #handle {
     position: relative;
@@ -141,12 +142,34 @@ export default {
     width: 40px;
     height: 200px;
   }
+  #scan {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 50px;
+    background: rgb(148,202,224);
+    background: linear-gradient(0deg, rgba(148,202,224,0) 30%, rgba(165,229,255,1) 49%, rgba(255,255,255,1) 50%, rgba(167,230,255,1) 51%, rgba(148,202,224,0) 70%);
+    animation-name: scan;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  @keyframes scan {
+    0% {
+      top: -10%
+    }
+
+    100% {
+      top: 105% 
+    }
+  }
   #blick {
     position: absolute;
-    top: 20%;
-    left: 20%;
+    top: 10%;
+    left: 10%;
     height: 20px;
-    width: 20px;
+    width: 30px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.822);
   }

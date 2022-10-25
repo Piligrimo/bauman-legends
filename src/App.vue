@@ -48,6 +48,7 @@
             <el-menu-item index="/team" @click="collapsed = true"> <p class="menu-item">Моя команда</p> </el-menu-item>
             <el-menu-item index="/game" @click="collapsed = true"> <p class="menu-item">Бортовой журнал</p></el-menu-item>
             <el-menu-item index="/results" @click="collapsed = true"> <p class="menu-item">Архив</p> </el-menu-item>
+            <el-menu-item index="/side-quest" @click="collapsed = true"> <p class="menu-item">Радар</p> </el-menu-item>
             <el-menu-item index="/consult" @click="collapsed = true"> <p class="menu-item">Связь</p> </el-menu-item>
             <el-menu-item index="/help" @click="collapsed = true"> <p class="menu-item">Справка</p> </el-menu-item>
             <el-menu-item index="/feed" @click="collapsed = true"> <p class="menu-item">Обновления</p> </el-menu-item>
