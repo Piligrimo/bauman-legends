@@ -6,6 +6,7 @@ import Process from './Process.vue'
 import Loading from './Loading.vue'
 import Picture from './Picture.vue'
 import Schema from './Schema.vue'
+import {BASEURL} from '../../api/config'
 
 const puzzle1 = {
   before: [
@@ -116,7 +117,7 @@ const puzzle3 = {
     },
     {
       component: Video,
-      src: "https://disk.yandex.ru/d/7KvGeQ7Ri7AA5Q/%D0%BA%D0%BE%D0%BD%D1%84%D0%B5%D1%80%D0%B5%D0%BD%D1%86%D0%B8%D1%8F.mp4"
+      src: `${BASEURL}/file/конференция.mp4`
     },
     {
       component: Loading,
@@ -255,8 +256,8 @@ const puzzle6 = {
       character: 'stanford'
     },
     {
-      component: Picture, // заменить фото
-      src: 'favicon.png'
+      component: Video,
+      src: `${BASEURL}/file/дневник.mp4`
     },
     {
       component: Loading,
