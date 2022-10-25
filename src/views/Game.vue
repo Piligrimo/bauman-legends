@@ -202,7 +202,7 @@ export default {
     async timeRemaining(val) {
       if (val <= -1) {
         clearInterval(this.timer);
-        const { data } = await getTask();
+        const { data } = await getFinalTask();
         this.task = data;
       }
     }
