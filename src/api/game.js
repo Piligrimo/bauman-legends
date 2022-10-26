@@ -32,6 +32,9 @@ export const answer = async (args) => {
 export const answerFinal = async (args) => {
     return await Axios.post(BASEURL+'/final/finish', args, {withCredentials: true})
 }
+export const answerParnterTask = async (args) => {
+    return await Axios.get(BASEURL+'/final/partner/'+args, {withCredentials: true})
+}
 
 export const buyHint = async (id) => {
     return await Axios.get(BASEURL+'/final/hint/'+id, {withCredentials: true})

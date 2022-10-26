@@ -13,11 +13,12 @@
         <div v-if="isComplete">
           <p v-if="isFinal">
             Экипаж, перед Вами стоит поистине самая сложная задача - выбор конечного пути. <br>
-            Помните, что топлива хватит только в один конец. Свой выбор Вы можете подтвердить на капитанском мостике. <br>
+            Помните, что топлива хватит только в один конец. Свой выбор Вы можете подтвердить на капитанском мостике.
+            <br>
             На нашем корабле он замаскирован под МЗДК. <br>
             И помните, Вы определяете судьбу человечества. Делайте Выбор рационально. Удачи Вам!
           </p>
-          <p v-else>Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе</p> 
+          <p v-else>Все загадки выполнены! Молодцы! Новые загадки будут ждать вас финальном этапе</p>
           <el-button v-if="plotMessage" type="primary" class="layout__item" style="margin-left: 0;"
             @click="plotDialogVisible = true">
             Посмотреть новое сообщение
@@ -32,9 +33,13 @@
             Взять следующее задание
           </el-button>
           <p v-else>Попроси капитана, чтоб он взял задание</p>
-          <el-button v-if="plotMessage || (isFinal && finalPlotStage)" type="primary" class="layout__item" style="margin-left: 0;"
-            @click="handlePlotMessage">
+          <el-button v-if="plotMessage || (isFinal && finalPlotStage)" type="primary" class="layout__item"
+            style="margin-left: 0;" @click="handlePlotMessage">
             Посмотреть новое сообщение
+          </el-button>
+          <el-button v-if="showParnerTaskButton" type="primary" class="layout__item" style="margin-left: 0;"
+            @click="partnerDialogVisible = true">
+            Получить больше энергии
           </el-button>
         </div>
         <div v-else>
@@ -47,6 +52,7 @@
 
           <template v-if="isFinal">
             <p>Осталось времени: {{prettifyTime(timeRemaining)}}</p>
+            <p>Баллы: {{team.points}}</p>
             <br>
             <h3>Подсказки</h3>
             <div style="display: flex">
@@ -97,18 +103,31 @@
         <img class="layout__item" :src="chosenHint.pic" />
         <p v-html="chosenHint.text" class="dialog-body" />
         <span slot="footer">
-          <el-button style="width: 100px" class="button" type="primary" @click="hintDialogVisible = false">ОК
+          <el-button style="width: 100px" class="button" type="primary" @click="hintDialogVisible = false">
+            ОК
           </el-button>
         </span>
       </el-dialog>
-      <FinalPlot v-if="isFinal && showFinalPlot" :puzzle="finalPlotStage" :isComplete="done" @ended="handlePlotStageEnd" />
+      <el-dialog title="Загадка от музея" :visible.sync="partnerDialogVisible" center width="300px">
+        <b>А Вы знали, что у МГТУ есть свой музей в стенах ГЗ? Ну теперь точно знаете! И он тоже подготовил Вам <a href="https://vk.com/wall-198373277_345" target="_blank">загадку</a></b>
+        <p>Разгадайте загадку Музея, чтоб заработать 100 ед. энергии</p>
+        <el-input class="layout__item" placeholder="Oтвет" v-model="partnerAnswer" />
+        <span slot="footer">
+          <el-button class="button" type="primary" :disabled="!partnerAnswer"
+            @click="answerParnterTask">
+            Проверить
+          </el-button>
+        </span>
+      </el-dialog>
+      <FinalPlot v-if="isFinal && showFinalPlot" :puzzle="finalPlotStage" :isComplete="done"
+        @ended="handlePlotStageEnd" />
     </div>
   </div>
 </template>
 
 <script>
 import store from '@/store'
-import { getTask, getFinalTask, nextTask, nextFinalTask, skipTask, answerFinal, answer, buyHint } from '@/api/game'
+import { getTask, getFinalTask, nextTask, nextFinalTask, skipTask, answerFinal, answer, buyHint, answerParnterTask } from '@/api/game'
 import { getTeam } from '@/api/team'
 import { BASEURL } from '@/api/config'
 import plotMessages from '@/assets/plotMessages'
@@ -132,15 +151,17 @@ export default {
       hints: [],
       errorMessages: [],
       answer: "",
+      partnerAnswer: "",
       timeOnPageLoad: 0,
       timeRemaining: 0,
       timer: null,
       money: 0,
       points: 0,
+      partnerDialogVisible: false,
       hintDialogVisible: false,
-      isRefreshing: false,
       plotDialogVisible: false,
       plotMessage: "",
+      isRefreshing: false,
       isComplete: false,
       done: false,
       chosenHint: {
@@ -202,12 +223,14 @@ export default {
     },
     isLogic() {
       return this.task?.puzzle_type === "logic";
+    },
+    showParnerTaskButton() {
+      return this.isFinal && !this.team?.partner && this.isMuseumOpen()
     }
   },
   watch: {
     async timeRemaining(val) {
-      if (val <= -35999 && !this.wrongTimeZone )
-      {
+      if (val <= -35999 && !this.wrongTimeZone) {
         this.errorMessages.push('Проверь настройки времени на своем устройстве')
         this.wrongTimeZone = true
         return
@@ -220,6 +243,31 @@ export default {
     }
   },
   methods: {
+    async answerParnterTask() {
+      try {
+        await answerParnterTask(this.partnerAnswer)
+        const { data } = await getTeam()
+        this.team = data;
+        this.partnerDialogVisible = false
+        this.$message({
+          message: 'Поздравления! Получена дополнительная энергия!',
+          type: 'error',
+          offset: 65
+        });
+      } catch (e) {
+        this.$message({
+          message: e.response?.data?.detail,
+          type: 'error',
+          offset: 65
+        });
+        console.error(e);
+      }
+    },
+    isMuseumOpen() {
+      const hours = new Date().getHours()
+      console.log(hours);
+      return hours >= 10 && hours < 16
+    },
     handleError(e) {
       const detail = e.response?.data?.detail;
       if (detail?.length && typeof detail !== "string") {
@@ -229,7 +277,7 @@ export default {
       this.errorMessages = [e.response.data.detail || "Произошла ошибка"];
     },
     async handlePlotStageEnd() {
-      if(this.done) {
+      if (this.done) {
         await this.refreshTask();
         this.showFinalPlot = false;
       } else {
