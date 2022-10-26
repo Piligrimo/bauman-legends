@@ -60,6 +60,7 @@ import store from '@/store'
 import Video from '@/components/FinalPlot/Video.vue'
 import Picture from '@/components/FinalPlot/Picture.vue'
 import Audio from '@/components/FinalPlot/Audio.vue'
+import { BASEURL } from '../api/config'
 
 const fileComponents = {
   video: Video,
@@ -120,7 +121,7 @@ export default {
         },
         {
           type: 'video',
-          src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
+          src: `${BASEURL}/file/конференция.mp4`,
           condition: {
             task: 3,
             done: true
@@ -143,8 +144,8 @@ export default {
           }
         },
         {
-          type: 'doc',
-          src: "favicon.png",
+          type: 'video',
+          src: `${BASEURL}/file/дневник.mp4`,
           condition: {
             task: 6,
             done: true
