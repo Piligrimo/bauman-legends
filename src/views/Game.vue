@@ -32,7 +32,7 @@
             Взять следующее задание
           </el-button>
           <p v-else>Попроси капитана, чтоб он взял задание</p>
-          <el-button v-if="plotMessage || isFinal" type="primary" class="layout__item" style="margin-left: 0;"
+          <el-button v-if="plotMessage || (isFinal && finalPlotStage)" type="primary" class="layout__item" style="margin-left: 0;"
             @click="handlePlotMessage">
             Посмотреть новое сообщение
           </el-button>
@@ -149,7 +149,8 @@ export default {
       },
       finalPlotStage: 0,
       showFinalPlot: false,
-      hintNames: ["Простая", "Средняя", "Сильная"]
+      hintNames: ["Простая", "Средняя", "Сильная"],
+      wrongTimeZone: false,
     };
   },
   async created() {
@@ -205,6 +206,12 @@ export default {
   },
   watch: {
     async timeRemaining(val) {
+      if (val <= -35999 && !this.wrongTimeZone )
+      {
+        this.errorMessages.push('Проверь настройки времени на своем устройстве')
+        this.wrongTimeZone = true
+        return
+      }
       if (val <= -1) {
         clearInterval(this.timer);
         await this.refreshTask()
@@ -320,6 +327,7 @@ export default {
         this.isComplete = status === 202;
         if (data.id) {
           this.task = data;
+          this.finalPlotStage = data.final_history.length - 1
         }
         else {
           this.task = null;
