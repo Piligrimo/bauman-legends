@@ -578,7 +578,7 @@ const puzzle10 = {
     },
     {
       component: Video,
-      src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
+      src: `${BASEURL}/file/119A3258.mpg`
     },
     {
       component: Text,
