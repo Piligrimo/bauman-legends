@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
-import Sandbox from '../views/Sandbox.vue'
+//import Sandbox from '../views/Sandbox.vue'
 import Team from '../views/Team.vue'
 import Teams from '../views/admin/Teams.vue'
 import Moderators from '../views/admin/Moderators.vue'
@@ -32,11 +32,11 @@ const routes = [
     name: 'Login',
     component: Login
   },
-  {
-    path: '/sb',
-    name: 'Sandbox',
-    component: Sandbox
-  },
+  // {
+  //   path: '/sb',
+  //   name: 'Sandbox',
+  //   component: Sandbox
+  // },
   {
     path: '/sign-up',
     name: 'SignUp',
