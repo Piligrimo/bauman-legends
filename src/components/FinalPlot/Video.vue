@@ -5,6 +5,7 @@
       ref="videoPlayer"
       :options="playerOptions"
     />
+    <p class="hint">(Загрузка видео может занять пару минут)</p>
     <el-button type="primary" class="layout__item" @click="$emit('next')">
       Далее
     </el-button>
@@ -37,6 +38,10 @@ export default {
 <style scoped>
  .video-player-box /deep/ .video-js {
     width: 100%;
+  }
+
+  .hint {
+    margin-top: 1rem;
   }
  
 </style>

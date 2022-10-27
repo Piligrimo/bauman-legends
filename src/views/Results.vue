@@ -42,7 +42,7 @@
         :visible.sync="showFile"
         width="350px"
       >
-        <div class="dialog-body">
+        <div :key="keyHack" class="dialog-body">
           <component
             :is="fileComponents[chosenFile.type]" 
             :src="chosenFile.src"
@@ -75,6 +75,7 @@ export default {
 	data() {
     return {
       tab: 'body',
+      keyHack: 0,
       history: [],
       titles: [
         "Стрессоустойчивость",
@@ -105,7 +106,7 @@ export default {
         },
         {
           type: 'video',
-          src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm",
+          src: `${BASEURL}/file/корабль.mp4`,
           condition: {
             task: 1,
             done: true
@@ -221,6 +222,7 @@ export default {
       if (this.isAccessible(item)) {
         this.chosenFile = item
         this.showFile = true
+        this.keyHack++
       } else {
         this.warn()
       }

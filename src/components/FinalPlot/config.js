@@ -32,7 +32,7 @@ const puzzle1 = {
     },
     {
       component: Video,
-      src: "IGM_2830.mp4"
+      src: `${BASEURL}/file/корабль.mp4`
     },
     {
       component: Text,
@@ -583,7 +583,7 @@ const puzzle10 = {
     },
     {
       component: Video,
-      src: `${BASEURL}/file/119A3258.mpg`
+      src: `${BASEURL}/file/Воспоминания.mp4`
     },
     {
       component: Text,
