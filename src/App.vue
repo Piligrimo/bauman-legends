@@ -6,7 +6,7 @@
         :icon="['fas', 'bars']"
         @click="collapsed = !collapsed"
       />
-      <div class='logo'/>
+      <div class='logo' :class="{final: stage==='final'}"/>
       <font-awesome-icon
         class="icon"
         :icon="['fas', 'sign-out-alt']"
@@ -21,7 +21,7 @@
           class="menu"
           background-color="#10141d"
           active-text-color="#ffffff"
-          text-color="#fbf5c3"
+          :text-color="stage==='final' ? '#b7f7ff' : '#fbf5c3' "
         >
           <template v-if="isAdmin">
             <el-menu-item index="/teams" @click="collapsed = true"> <p class="menu-item">Команды</p> </el-menu-item>
@@ -64,7 +64,7 @@
         </el-menu>
       </div>
     </transition>
-    <router-view/>
+    <router-view :class="{final: stage==='final'}"/>
     <el-dialog
       title="Новое сообщение!"
       :visible.sync="plotDialogVisible"
@@ -258,6 +258,10 @@ export default {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+  }
+
+  .final.logo {
+    background-image: url('./assets/smol-blogo.jpg');
   }
  .header {
    min-height: 60px;

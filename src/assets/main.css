@@ -28,7 +28,10 @@
   padding: 2rem;
   max-width: 350px;
   background-color: #f8efe6de;
-  
+}
+
+.final>.layout{
+  background-color: #e6f6f8de;
 }
 
 .layout.admin {
@@ -86,6 +89,10 @@
 
 .info-bg {
   background-image: url('./info-bg.jpg');
+  background-color: #EFEAE2;
+}
+.final.info-bg {
+  background-image: url('./blinfo-bg.jpg');
   background-color: #EFEAE2;
 }
 

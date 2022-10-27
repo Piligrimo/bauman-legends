@@ -454,14 +454,23 @@ export default {
 .game-bg-1 {
   background-image: url('../assets/game-bg-1.jpg');
 }
-
 .game-bg-2 {
   background-image: url('../assets/game-bg-2.jpg');
 }
-
 .game-bg-3 {
   background-image: url('../assets/game-bg-3.jpg');
 }
+
+.final.game-bg-1 {
+  background-image: url('../assets/blgame-bg-1.jpg');
+}
+.final.game-bg-2 {
+  background-image: url('../assets/blgame-bg-2.jpg');
+}
+.final.game-bg-3 {
+  background-image: url('../assets/blgame-bg-3.jpg');
+}
+
 
 .collapse-title {
   margin-left: 1rem;
