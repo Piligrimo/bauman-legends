@@ -230,15 +230,17 @@ export default {
   },
   watch: {
     async timeRemaining(val) {
-      if (val <= -35999 && !this.wrongTimeZone) {
+      if ((val <= -3599999 || val > 3599999) && !this.wrongTimeZone) {
         this.errorMessages.push('Проверь настройки времени на своем устройстве')
         this.wrongTimeZone = true
         return
       }
-      if (val <= -1) {
+      if (val <= -1 && !this.done) {
         clearInterval(this.timer);
-        await this.refreshTask()
-        this.handlePlotMessage()
+        if(!this.showFinalPlot){
+          await this.refreshTask()
+          this.handlePlotMessage()
+        }
       }
     }
   },
@@ -386,6 +388,7 @@ export default {
         this.timeOnPageLoad = Number(new Date());
         this.timeRemaining = this.timeRemainedOnPageLoading;
         const vue = this;
+        clearInterval(this.timer)
         this.timer = setInterval(() => {
           vue.timeRemaining -= 1000;
         }, 1000);
