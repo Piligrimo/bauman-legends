@@ -36,6 +36,7 @@
             />
           </div> 
         </div>
+        <p><span class="team__stat">Основные баллы: </span>{{team.main_points}}</p>
         <p><span class="team__stat">Экстра-баллы: </span>{{team.extra_points}}</p>
         <template v-if="isCaptain">
           <p>

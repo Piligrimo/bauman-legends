@@ -32,7 +32,7 @@ const puzzle1 = {
     },
     {
       component: Video,
-      src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
+      src: "IGM_2830.mp4"
     },
     {
       component: Text,
@@ -488,8 +488,8 @@ const puzzle9 = {
       character: 'stanley'
     },
     {
-      component: Picture, // заменить фото
-      src: 'favicon.png'
+      component: Picture,
+      src: 'note.jpeg'
     },
     {
       component: Text,

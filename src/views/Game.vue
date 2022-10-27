@@ -52,7 +52,7 @@
 
           <template v-if="isFinal">
             <p>Осталось времени: {{prettifyTime(timeRemaining)}}</p>
-            <p>Баллы: {{team.points}}</p>
+            <p>Баллы: {{team.main_points}}</p>
             <br>
             <h3>Подсказки</h3>
             <div style="display: flex">
