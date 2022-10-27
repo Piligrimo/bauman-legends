@@ -220,7 +220,6 @@ export default {
     deletePhoto(hintIndex) {
       if (hintIndex != undefined)
       {
-        console.log(this.$refs[`upload-${hintIndex-1}`])
         this.hintFiles[hintIndex]= '"delete"'
         if (this.$refs[`upload-${hintIndex-1}`])
           this.$refs[`upload-${hintIndex-1}`].value = null;

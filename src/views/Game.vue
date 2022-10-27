@@ -265,7 +265,6 @@ export default {
     },
     isMuseumOpen() {
       const hours = new Date().getHours()
-      console.log(hours);
       return hours >= 10 && hours < 16
     },
     handleError(e) {
